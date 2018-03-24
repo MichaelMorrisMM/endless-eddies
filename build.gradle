@@ -39,11 +39,19 @@ task cleanAngular(type: Delete) {
     delete "dist"
 }
 
-// TODO Optimize to only move if not already present
+task cleanJavaDeploy(type: Delete) {
+    delete new File(javaDestPath)
+}
+
 task deployLibs(type: Copy) {
     from "libs"
     into serverLibPath
     include "**/*.jar"
+    eachFile {
+        if (it.relativePath.getFile(destinationDir).exists()) {
+            it.exclude()
+        }
+    }
 }
 
 task seedDeployment {
@@ -64,7 +72,7 @@ task deployJava(type: Copy) {
     from sourceSets.main.output.classesDirs
     into javaDestPath
 }
-deployJava.dependsOn deployLibs, seedJava, classes
+deployJava.dependsOn deployLibs, cleanJavaDeploy, seedJava, classes
 
 task buildAngular(type: Exec) {
     if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")) {

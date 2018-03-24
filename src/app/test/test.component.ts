@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {TestService} from "../services/test.service";
 
 @Component({
   selector: 'app-test',
@@ -9,12 +9,13 @@ import {HttpClient} from "@angular/common/http";
 export class TestComponent implements OnInit {
     public message: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private testService: TestService) {
+  }
 
   ngOnInit() {
-      this.http.get("http://localhost:8080/endless-eddies/test").subscribe((result: any) => {
-          this.message = result.message;
-      });
+      this.testService.pingTomcatServer().subscribe((response: any) => {
+          this.message = response.message;
+      })
   }
 
 }
