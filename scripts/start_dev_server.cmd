@@ -1,0 +1,2 @@
+cd ..
+ng serve
