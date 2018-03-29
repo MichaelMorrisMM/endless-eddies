@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
 import {AppRoutingModule} from './app-routing.module';
 import {TestComponent} from './test/test.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -19,6 +20,7 @@ import {ConstantsService} from './services/constants.service';
     AppComponent,
     TestComponent,
     LoginComponent,
+    SignupComponent,
   ],
   imports: [
     BrowserModule,
