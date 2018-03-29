@@ -15,7 +15,7 @@ export class TestComponent implements OnInit {
   ngOnInit() {
       this.testService.pingTomcatServer().subscribe((response: any) => {
           this.message = response.message;
-      })
+      });
   }
 
 }
