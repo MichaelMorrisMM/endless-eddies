@@ -4,13 +4,13 @@
  * This is a general purpose Gradle build.
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds/
  */
-
 plugins {
     id "com.moowork.node" version "1.2.0"
 }
 
 apply plugin: 'java'
 
+def serverDir = System.getenv("CATALINA_HOME")
 def deployPath = serverDir + "/webapps/" + rootProject.name
 def javaDestPath = deployPath + "/WEB-INF/classes"
 def serverLibPath = serverDir + "/lib"
@@ -75,11 +75,7 @@ task deployJava(type: Copy) {
 deployJava.dependsOn deployLibs, cleanJavaDeploy, seedJava, classes
 
 task buildAngular(type: Exec) {
-    if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")) {
-        commandLine "ng.cmd", "build", "--base-href=/endless-eddies/", "--prod"
-    } else {
-        commandLine "ng", "build", "--base-href=/endless-eddies/", "--prod"
-    }
+    commandLine "npm", "run-script", "build"
 }
 buildAngular.dependsOn npmInstall
 
