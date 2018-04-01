@@ -18,9 +18,7 @@
 3. Install Node.js (at least 9.8.0)
     1. Update `PATH` system environment variable to include nodejs
 4. Install Gradle (at least 4.6)
-    1. Make gradle.properties file and save in Gradle user home (defaults to USER_HOME/.gradle)
-    2. Define variable `serverDir` with path to Tomcat folder
-    3. Update `PATH` system environment variable to include gradle/bin
+    1. Update `PATH` system environment variable to include gradle/bin
 5. Install Angular CLI (at least 1.7.3)
 6. Clone repo
 
