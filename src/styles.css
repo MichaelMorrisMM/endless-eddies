@@ -1,1 +1,25 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+.full-height {
+    height: 100%;
+}
+.full-width {
+    width: 100%;
+}
+.flex-container-row {
+    display: flex;
+    flex-direction: row;
+}
+.flex-container-col {
+    display: flex;
+    flex-direction: column;
+}
+.flex-one {
+    flex: 1;
+}
+.flex-two {
+    flex: 2;
+}
+.flex-three {
+    flex: 3;
+}
