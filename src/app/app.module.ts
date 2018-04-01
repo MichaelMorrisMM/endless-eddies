@@ -15,6 +15,7 @@ import {TestComponent} from './test/test.component';
 import {HttpClientModule} from '@angular/common/http';
 import {TestService} from './services/test.service';
 import {ConstantsService} from './services/constants.service';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import {ConstantsService} from './services/constants.service';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     MatFormFieldModule,
