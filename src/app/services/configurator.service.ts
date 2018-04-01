@@ -4,13 +4,13 @@ import {Observable} from "rxjs/Observable";
 import {ConstantsService} from "./constants.service";
 
 @Injectable()
-export class TestService {
+export class ConfiguratorService {
 
     constructor(private http: HttpClient) {
     }
 
-    public pingTomcatServer(): Observable<any> {
-        return this.http.get(ConstantsService.URL_PREFIX + "/test");
+    public getConfiguration(): Observable<any> {
+        return this.http.get(ConstantsService.URL_PREFIX + "/configurator");
     }
 
 

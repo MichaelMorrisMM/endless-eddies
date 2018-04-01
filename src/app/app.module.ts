@@ -11,17 +11,17 @@ import { SignupComponent } from './signup/signup.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 import {AppRoutingModule} from './app-routing.module';
-import {TestComponent} from './test/test.component';
+import {ConfiguratorOverviewComponent} from './configurator/configurator-overview.component';
 import {HttpClientModule} from '@angular/common/http';
-import {TestService} from './services/test.service';
 import {ConstantsService} from './services/constants.service';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ConfiguratorService} from "./services/configurator.service";
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    TestComponent,
+    ConfiguratorOverviewComponent,
     LoginComponent,
     SignupComponent,
     NotFoundComponent,
@@ -36,7 +36,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     MatButtonModule
   ],
   providers: [
-      TestService,
+      ConfiguratorService,
       ConstantsService,
   ],
   bootstrap: [AppComponent]
