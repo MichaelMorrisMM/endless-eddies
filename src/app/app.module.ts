@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+
 import {AppRoutingModule} from './app-routing.module';
 import {TestComponent} from './test/test.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -21,6 +23,7 @@ import {ConstantsService} from './services/constants.service';
     TestComponent,
     LoginComponent,
     SignupComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
