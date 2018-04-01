@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class ConfigSettings {
+    private static final String NODE_SETTINGS = "settings";
     private static final String SETTING_ALLOW_GUEST_MODE = "allow_guest_mode";
     private static final String SETTING_ALLOW_GOOGLE_AUTH = "allow_google_auth";
     private static final String SETTING_ALLOW_GITHUB_AUTH = "allow_github_auth";
@@ -28,18 +29,31 @@ public class ConfigSettings {
     }
 
     private void parseConfigFile(JsonObject config) {
-        for (Entry<String, JsonValue> e : config.entrySet()) {
-            Setting setting = this.settings.get(e.getKey());
-            if (setting != null) {
-                setting.value = e.getValue();
+        JsonArray settingsArray = config.getJsonArray(NODE_SETTINGS);
+        if (settingsArray != null) {
+            for (JsonObject obj : settingsArray.getValuesAs(JsonObject.class)) {
+                Setting setting = this.settings.get(obj.getString("name"));
+                if (setting != null) {
+                    setting.value = obj.get("value");
+                }
             }
         }
     }
 
     public JsonObject getConfig() {
-        JsonObjectBuilder builder = Json.createObjectBuilder();
+        return Json.createObjectBuilder()
+            .add(NODE_SETTINGS, this.getSettings())
+            .build();
+    }
+
+    private JsonArray getSettings() {
+        JsonArrayBuilder builder = Json.createArrayBuilder();
         for (Entry<String, Setting> e : this.settings.entrySet()) {
-            builder = builder.add(e.getKey(), e.getValue().value);
+            builder = builder.add(
+                Json.createObjectBuilder()
+                    .add("name", e.getKey())
+                    .add("value", e.getValue().value)
+                    .build());
         }
         return builder.build();
     }

@@ -1,0 +1,13 @@
+<div class="full-height full-width flex-container-row">
+    <div class="full-height flex-container-col flex-one justify-evenly align-center">
+        <a routerLink="/config">Overview</a>
+        <a routerLink="/config">Program Execution</a>
+        <a routerLink="/config">Parameters</a>
+        <a routerLink="/config">Users</a>
+        <a routerLink="/config">Server</a>
+    </div>
+    <div class="full-height flex-container-col flex-nine">
+        <h1>Overview - All Settings</h1>
+        <label *ngFor="let setting of config.settings">Name: "{{setting.name}}"; Value: "{{setting.value}}"</label>
+    </div>
+</div>

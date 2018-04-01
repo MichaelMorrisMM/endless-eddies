@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ConfiguratorService} from "../services/configurator.service";
 
 @Component({
     selector: 'configurator-overview',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
     `]
 })
 export class ConfiguratorOverviewComponent implements OnInit {
-    constructor() {
+    public config: any;
+
+    constructor(private configuratorService: ConfiguratorService) {
     }
 
     ngOnInit() {
+        this.config = {};
+        this.config.settings = [];
+        this.configuratorService.getConfiguration().subscribe((response: any) => {
+            this.config = response;
+        })
     }
 }
