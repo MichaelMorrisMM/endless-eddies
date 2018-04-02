@@ -77,7 +77,7 @@ deployJava.dependsOn deployLibs, cleanJavaDeploy, seedJava, classes
 npm_run_build {
     args = [rootDir]
 }
-npm_build.dependsOn npmInstall
+npm_run_build.dependsOn npmInstall
 
 task deployAngular(type: Copy) {
     from "dist"
