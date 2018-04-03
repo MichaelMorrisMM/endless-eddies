@@ -16,9 +16,9 @@ public class ConfigSettings {
 
     ConfigSettings() {
         settings = new HashMap<>();
-        settings.put(SETTING_ALLOW_GUEST_MODE, new Setting(JsonValue.FALSE));
-        settings.put(SETTING_ALLOW_GOOGLE_AUTH, new Setting(JsonValue.FALSE));
-        settings.put(SETTING_ALLOW_GITHUB_AUTH, new Setting(JsonValue.FALSE));
+        settings.put(SETTING_ALLOW_GUEST_MODE, new Setting(SETTING_ALLOW_GUEST_MODE, JsonValue.FALSE));
+        settings.put(SETTING_ALLOW_GOOGLE_AUTH, new Setting(SETTING_ALLOW_GOOGLE_AUTH, JsonValue.FALSE));
+        settings.put(SETTING_ALLOW_GITHUB_AUTH, new Setting(SETTING_ALLOW_GITHUB_AUTH, JsonValue.FALSE));
     }
 
     ConfigSettings(File configFile) throws FileNotFoundException {
@@ -32,9 +32,9 @@ public class ConfigSettings {
         JsonArray settingsArray = config.getJsonArray(NODE_SETTINGS);
         if (settingsArray != null) {
             for (JsonObject obj : settingsArray.getValuesAs(JsonObject.class)) {
-                Setting setting = this.settings.get(obj.getString("name"));
+                Setting setting = this.settings.get(obj.getString(Setting.NAME));
                 if (setting != null) {
-                    setting.value = obj.get("value");
+                    setting.updateWith(obj);
                 }
             }
         }
@@ -49,11 +49,7 @@ public class ConfigSettings {
     private JsonArray getSettings() {
         JsonArrayBuilder builder = Json.createArrayBuilder();
         for (Entry<String, Setting> e : this.settings.entrySet()) {
-            builder = builder.add(
-                Json.createObjectBuilder()
-                    .add("name", e.getKey())
-                    .add("value", e.getValue().value)
-                    .build());
+            builder = builder.add(e.getValue().toJsonObject());
         }
         return builder.build();
     }
@@ -65,12 +61,31 @@ public class ConfigSettings {
     }
 
     private class Setting {
+        static final String NAME = "name";
+        static final String VALUE = "value";
+
+        String name;
         JsonValue value;
         final JsonValue defaultValue;
 
-        Setting(JsonValue v) {
+        Setting(String n, JsonValue v) {
+            this.name = n;
             this.value = v;
             this.defaultValue = v;
+        }
+
+        JsonObject toJsonObject() {
+            return Json.createObjectBuilder()
+                .add(NAME, this.name)
+                .add(VALUE, this.value)
+                .build();
+        }
+
+        void updateWith(JsonObject updateObject) {
+            JsonValue newValue = updateObject.get(VALUE);
+            if (newValue != null) {
+                this.value = newValue;
+            }
         }
     }
 }

@@ -8,15 +8,13 @@ import {ConfiguratorService} from "../services/configurator.service";
     `]
 })
 export class ConfiguratorOverviewComponent implements OnInit {
-    public config: any;
+    public config: Config;
 
     constructor(private configuratorService: ConfiguratorService) {
     }
 
     ngOnInit() {
-        this.config = {};
-        this.config.settings = [];
-        this.configuratorService.getConfiguration().subscribe((response: any) => {
+        this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
         })
     }

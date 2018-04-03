@@ -8,6 +8,8 @@
     </div>
     <div class="full-height flex-container-col flex-nine">
         <h1>Overview - All Settings</h1>
-        <label *ngFor="let setting of config.settings">Name: "{{setting.name}}"; Value: "{{setting.value}}"</label>
+        <ng-container *ngIf="config && config.settings">
+            <label *ngFor="let setting of config.settings">Name: "{{setting.name}}"; Value: "{{setting.value}}"</label>
+        </ng-container>
     </div>
 </div>

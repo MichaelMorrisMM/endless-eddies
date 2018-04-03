@@ -9,8 +9,8 @@ export class ConfiguratorService {
     constructor(private http: HttpClient) {
     }
 
-    public getConfiguration(): Observable<any> {
-        return this.http.get(ConstantsService.URL_PREFIX + "/configurator");
+    public getConfiguration(): Observable<Config> {
+        return this.http.get<Config>(ConstantsService.URL_PREFIX + "/configurator");
     }
 
 
