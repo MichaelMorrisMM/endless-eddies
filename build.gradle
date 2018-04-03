@@ -74,17 +74,10 @@ task deployJava(type: Copy) {
 }
 deployJava.dependsOn deployLibs, cleanJavaDeploy, seedJava, classes
 
-task buildAngular(type: Exec) {
-    if (System.getProperty("os.name").toUpperCase().contains("WINDOWS")) {
-        commandLine "npm.cmd", "run-script", "build"
-    } else {
-        commandLine "npm", "run-script", "build"
-    }
-}
-buildAngular.dependsOn npmInstall
+npm_run_build.dependsOn npmInstall
 
 task deployAngular(type: Copy) {
     from "dist"
     into deployPath
 }
-deployAngular.dependsOn seedDeployment, buildAngular
+deployAngular.dependsOn seedDeployment, npm_run_build
