@@ -1,5 +1,5 @@
 <div>
-    <mat-form-field *ngFor="">
-        <input matInput placeholder="Username" type="">
+    <mat-form-field *ngFor="let x of config.settings">
+        <input matInput [placeholder]="x.name">
     </mat-form-field>
 </div>

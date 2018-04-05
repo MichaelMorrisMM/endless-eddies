@@ -14,8 +14,10 @@ import { ConfiguratorService } from '../services/configurator.service';
   `]
 })
 export class RequestsComponent implements OnInit {
+  config: Config;
   constructor(public configuratorService: ConfiguratorService) {
   }
   ngOnInit() {
+    this.configuratorService.getConfiguration().subscribe( con => this.config = con );
   }
 }

@@ -11,12 +11,12 @@ import { SignupComponent } from './signup/signup.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { RequestsComponent } from './requests/requests.component';
 
-import {AppRoutingModule} from './app-routing.module';
-import {ConfiguratorOverviewComponent} from './configurator/configurator-overview.component';
-import {HttpClientModule} from '@angular/common/http';
-import {ConstantsService} from './services/constants.service';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ConfiguratorService} from './services/configurator.service';
+import { AppRoutingModule } from './app-routing.module';
+import { ConfiguratorOverviewComponent } from './configurator/configurator-overview.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ConstantsService } from './services/constants.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ConfiguratorService } from './services/configurator.service';
 
 
 @NgModule({

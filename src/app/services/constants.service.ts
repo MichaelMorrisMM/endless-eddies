@@ -6,6 +6,6 @@ export class ConstantsService {
     constructor() {
     }
 
-    public static readonly URL_PREFIX: string = "http://localhost:8080/endless-eddies";
+    public static readonly URL_PREFIX: string = 'http://localhost:8080/endless-eddies';
 
 }
