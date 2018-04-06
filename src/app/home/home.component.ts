@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ConfiguratorService } from '../services/configurator.service';
 
 @Component({
-  selector: 'app-results',
-  templateUrl: './results.component.html',
+  selector: 'app-home',
+  templateUrl: './home.component.html',
   styles: [`
     div {
       display: flex;
@@ -13,7 +13,7 @@ import { ConfiguratorService } from '../services/configurator.service';
     }
   `]
 })
-export class ResultsComponent implements OnInit {
+export class HomeComponent implements OnInit {
   config: Config;
   constructor(public configuratorService: ConfiguratorService) {
   }

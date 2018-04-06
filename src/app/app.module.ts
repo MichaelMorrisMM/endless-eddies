@@ -11,6 +11,7 @@ import { SignupComponent } from './signup/signup.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { RequestsComponent } from './requests/requests.component';
 import { ResultsComponent } from './results/results.component';
+import { HomeComponent } from './home/home.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { ConfiguratorOverviewComponent } from './configurator/configurator-overview.component';
@@ -29,6 +30,7 @@ import { ConfiguratorService } from './services/configurator.service';
     NotFoundComponent,
     RequestsComponent,
     ResultsComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
