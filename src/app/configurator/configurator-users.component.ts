@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import {ConfiguratorService} from '../services/configurator.service';
 
 @Component({
-    selector: 'configurator-overview',
-    templateUrl: './configurator-overview.component.html',
+    selector: 'configurator-users',
+    templateUrl: './configurator-users.component.html',
     styles: [`
     `]
 })
-export class ConfiguratorOverviewComponent implements OnInit {
+export class ConfiguratorUsersComponent implements OnInit {
     public config: Config;
 
     constructor(private configuratorService: ConfiguratorService) {
@@ -18,5 +18,4 @@ export class ConfiguratorOverviewComponent implements OnInit {
             this.config = response;
         });
     }
-
 }

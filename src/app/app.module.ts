@@ -19,12 +19,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConstantsService } from './services/constants.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfiguratorService } from './services/configurator.service';
+import {SlideMenuModule} from "cuppa-ng2-slidemenu";
+import {ConfiguratorUsersComponent} from "./configurator/configurator-users.component";
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ConfiguratorOverviewComponent,
+    ConfiguratorUsersComponent,
     LoginComponent,
     SignupComponent,
     NotFoundComponent,
@@ -39,7 +42,8 @@ import { ConfiguratorService } from './services/configurator.service';
     HttpClientModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    SlideMenuModule,
   ],
   providers: [
       ConfiguratorService,
