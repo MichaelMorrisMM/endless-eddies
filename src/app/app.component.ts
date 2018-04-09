@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 
 @Component({
@@ -6,10 +6,17 @@ import {Router} from "@angular/router";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-    public title = 'endless eddies';
+export class AppComponent implements OnInit {
+    public title: string = 'endless eddies';
+    public menuConfig: any;
 
     constructor(private router:Router) {
+    }
+
+    ngOnInit() {
+        this.menuConfig = {
+            closeOnCLick: true,
+        };
     }
 
     public menuItemsArray: any[] = [

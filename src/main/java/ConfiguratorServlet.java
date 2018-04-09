@@ -1,5 +1,4 @@
-import javax.json.Json;
-import javax.json.JsonObject;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,5 +24,12 @@ public class ConfiguratorServlet extends HttpServlet {
         }
 
         HttpUtil.printJSONResponse(response, config.getConfig());
+    }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpUtil.doPostSetup(response);
+
+        HttpUtil.printPOSTResult(response, true);
     }
 }

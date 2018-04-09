@@ -1,0 +1,3 @@
+interface PostResult {
+    success: boolean;
+}

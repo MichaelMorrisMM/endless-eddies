@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfiguratorService } from './services/configurator.service';
 import {SlideMenuModule} from "cuppa-ng2-slidemenu";
 import {ConfiguratorUsersComponent} from "./configurator/configurator-users.component";
+import {MatCheckboxModule} from "@angular/material";
 
 
 @NgModule({
@@ -38,11 +39,14 @@ import {ConfiguratorUsersComponent} from "./configurator/configurator-users.comp
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatCheckboxModule,
     SlideMenuModule,
   ],
   providers: [

@@ -17,10 +17,20 @@ export class ConfiguratorService {
         return this.http.get<Config>(ConstantsService.URL_PREFIX + '/configurator');
     }
 
-    /*
-    public saveConfiguration(): Observable<any> {
-        return this.http.post(ConstantsService.URL_PREFIX + '/configurator');
+    public saveConfiguration(config: Config): Observable<PostResult> {
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/configurator', JSON.stringify(config));
     }
-    */
+
+    public static getSetting(name: string, config: Config): any {
+        if (name && config && config.settings) {
+            let trimmedList: Setting[] = config.settings.filter((setting: Setting) => {
+                return setting.name === name;
+            });
+            if (trimmedList.length === 1) {
+                return trimmedList[0].value;
+            }
+        }
+        return null;
+    }
 
 }

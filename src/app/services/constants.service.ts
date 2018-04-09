@@ -7,5 +7,6 @@ export class ConstantsService {
     }
 
     public static readonly URL_PREFIX: string = 'http://localhost:8080/endless-eddies';
+    public static readonly DIRTY_NOTE_MESSAGE: string = "Changes have not been saved";
 
 }

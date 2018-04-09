@@ -1,3 +1,4 @@
+import javax.json.Json;
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -14,6 +15,10 @@ public class HttpUtil {
         setCORSHeaders(response);
     }
 
+    public static void doPostSetup(HttpServletResponse response) {
+        setCORSHeaders(response);
+    }
+
     private static void setCORSHeaders(HttpServletResponse response) {
         if (ALLOW_CORS_LOCALHOST) {
             response.setHeader("Access-Control-Allow-Origin", LOCALHOST_DEV_SERVER);
@@ -26,5 +31,9 @@ public class HttpUtil {
         try (PrintWriter out = response.getWriter()) {
             out.print(o.toString());
         }
+    }
+
+    public static void printPOSTResult(HttpServletResponse response, boolean result) throws IOException {
+        printJSONResponse(response, Json.createObjectBuilder().add("success", result).build());
     }
 }

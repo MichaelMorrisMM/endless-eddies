@@ -1,6 +1,14 @@
 <div class="full-height full-width flex-container-col">
     <h1>Users</h1>
-    <ng-container *ngIf="config && config.settings">
-        <label *ngFor="let setting of config.settings">Name: "{{setting.name}}"; Value: "{{setting.value}}"</label>
+    <ng-container *ngIf="this.config">
+        <form [formGroup]="this.form" class="flex-container-col">
+            <mat-checkbox [formControlName]="'allowGuestMode'">Allow Guest Mode</mat-checkbox>
+            <mat-checkbox [formControlName]="'allowGoogleAuth'">Allow Google Auth</mat-checkbox>
+            <mat-checkbox [formControlName]="'allowGithubAuth'">Allow Github Auth</mat-checkbox>
+        </form>
     </ng-container>
+    <div class="flex-container-row">
+        <button mat-button (click)="this.save()">Save</button>
+        <span *ngIf="this.form.dirty" class="dirty-note">{{this.dirtyNote}}</span>
+    </div>
 </div>

@@ -1,4 +1,8 @@
-<cuppa-slidemenu [menulist]="this.menuItemsArray" (open)="onMenuOpen()"
-                 (close)="onMenuClose()" (onItemSelect)="onItemSelect($event)">
-</cuppa-slidemenu>
-<router-outlet></router-outlet>
+<div class="full-height full-width flex-container-col">
+    <cuppa-slidemenu [menulist]="this.menuItemsArray" [config]="this.menuConfig" (open)="onMenuOpen()"
+                     (close)="onMenuClose()" (onItemSelect)="onItemSelect($event)">
+    </cuppa-slidemenu>
+    <div class="main">
+        <router-outlet></router-outlet>
+    </div>
+</div>
