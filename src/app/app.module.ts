@@ -19,7 +19,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConstantsService } from './services/constants.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfiguratorService } from './services/configurator.service';
-import {SlideMenuModule} from "cuppa-ng2-slidemenu";
 import {ConfiguratorUsersComponent} from "./configurator/configurator-users.component";
 import {MatCheckboxModule} from "@angular/material";
 
@@ -47,7 +46,6 @@ import {MatCheckboxModule} from "@angular/material";
     MatInputModule,
     MatButtonModule,
     MatCheckboxModule,
-    SlideMenuModule,
   ],
   providers: [
       ConfiguratorService,

@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -7,38 +6,19 @@ import {Router} from "@angular/router";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-    public title: string = 'endless eddies';
-    public menuConfig: any;
+    public menuItemsArray: any[] = [];
 
-    constructor(private router:Router) {
+    constructor() {
     }
 
     ngOnInit() {
-        this.menuConfig = {
-            closeOnCLick: true,
-        };
-    }
-
-    public menuItemsArray: any[] = [
-        {"title":"Home", "link":"/"},
-        {"title":"Requests", "link":"/requests"},
-        {"title":"Results", "link":"/results"},
-        {"title":"Configurator",
-            "subItems":[
-                {"title":"Overview", "link":"/config"},
-                {"title":"Users", "link":"/config-users"},
-            ]
-        },
-    ];
-
-    public onMenuClose() {
-    }
-
-    public onMenuOpen() {
-    }
-
-    private onItemSelect(item:any) {
-        this.router.navigateByUrl(item.link);
+        this.menuItemsArray = [
+            {"title":"Home", "link":"/"},
+            {"title":"Requests", "link":"/requests"},
+            {"title":"Results", "link":"/results"},
+            {"title":"Configurator - Overview", "link":"/config"},
+            {"title":"Configurator - Users", "link":"/config-users"},
+        ];
     }
 
 }
