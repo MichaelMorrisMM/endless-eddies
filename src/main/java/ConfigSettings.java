@@ -24,11 +24,11 @@ public class ConfigSettings {
     ConfigSettings(File configFile) throws FileNotFoundException {
         this();
         try (JsonReader reader = Json.createReader(new FileReader(configFile))) {
-            this.parseConfigFile(reader.readObject());
+            this.updateWithConfig(reader.readObject());
         }
     }
 
-    private void parseConfigFile(JsonObject config) {
+    public void updateWithConfig(JsonObject config) {
         JsonArray settingsArray = config.getJsonArray(NODE_SETTINGS);
         if (settingsArray != null) {
             for (JsonObject obj : settingsArray.getValuesAs(JsonObject.class)) {

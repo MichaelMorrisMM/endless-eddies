@@ -21,16 +21,31 @@ export class ConfiguratorService {
         return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/configurator', JSON.stringify(config));
     }
 
-    public static getSetting(name: string, config: Config): any {
+    public static getSetting(name: string, config: Config): Setting {
         if (name && config && config.settings) {
             let trimmedList: Setting[] = config.settings.filter((setting: Setting) => {
                 return setting.name === name;
             });
             if (trimmedList.length === 1) {
-                return trimmedList[0].value;
+                return trimmedList[0];
             }
         }
         return null;
+    }
+
+    public static getSettingValue(name: string, config: Config): any {
+        let setting: Setting = ConfiguratorService.getSetting(name, config);
+        if (setting) {
+            return setting.value;
+        }
+        return null;
+    }
+
+    public static setSettingValue(name: string, value: any, config: Config): void {
+        let setting: Setting = ConfiguratorService.getSetting(name, config);
+        if (setting) {
+            setting.value = value;
+        }
     }
 
 }

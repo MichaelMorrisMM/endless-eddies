@@ -29,9 +29,9 @@ export class ConfiguratorUsersComponent implements OnInit {
             this.config = response;
 
             this.form.setValue({
-                allowGuestMode: ConfiguratorService.getSetting(this.configuratorService.SETTING_ALLOW_GUEST_MODE, this.config),
-                allowGoogleAuth: ConfiguratorService.getSetting(this.configuratorService.SETTING_ALLOW_GOOGLE_AUTH, this.config),
-                allowGithubAuth: ConfiguratorService.getSetting(this.configuratorService.SETTING_ALLOW_GITHUB_AUTH, this.config),
+                allowGuestMode: ConfiguratorService.getSettingValue(this.configuratorService.SETTING_ALLOW_GUEST_MODE, this.config),
+                allowGoogleAuth: ConfiguratorService.getSettingValue(this.configuratorService.SETTING_ALLOW_GOOGLE_AUTH, this.config),
+                allowGithubAuth: ConfiguratorService.getSettingValue(this.configuratorService.SETTING_ALLOW_GITHUB_AUTH, this.config),
             });
         });
 
@@ -39,6 +39,10 @@ export class ConfiguratorUsersComponent implements OnInit {
     }
 
     public save(): void {
+        ConfiguratorService.setSettingValue(this.configuratorService.SETTING_ALLOW_GUEST_MODE, this.form.controls.allowGuestMode.value, this.config);
+        ConfiguratorService.setSettingValue(this.configuratorService.SETTING_ALLOW_GOOGLE_AUTH, this.form.controls.allowGoogleAuth.value, this.config);
+        ConfiguratorService.setSettingValue(this.configuratorService.SETTING_ALLOW_GITHUB_AUTH, this.form.controls.allowGithubAuth.value, this.config);
+
         this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
             if (response.success) {
                 this.form.markAsPristine();
