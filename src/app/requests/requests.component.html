@@ -1,5 +1,15 @@
 <div>
-    <mat-form-field *ngFor="let x of config.settings">
-        <input matInput [placeholder]="x.name">
+    <mat-form-field>
+      <div  *ngFor="let component of configComponents">
+        <label [attr.for]="component"></label>
+
+        <div [ngSwitch]="prop.type">
+          <input *ngSwitchCase="'text'"
+          [formControlName]="prop.key"
+          [id]="prop.key" [type]="prop.type">
+        </div>
+
+        <button type="submit">Submit</button>
+      </div>
     </mat-form-field>
 </div>
