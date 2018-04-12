@@ -1,15 +1,17 @@
 <div>
-    <mat-form-field>
-      <div  *ngFor="let component of configComponents">
-        <label [attr.for]="component"></label>
-
-        <div [ngSwitch]="prop.type">
-          <input *ngSwitchCase="'text'"
-          [formControlName]="prop.key"
-          [id]="prop.key" [type]="prop.type">
-        </div>
-
-        <button type="submit">Submit</button>
-      </div>
-    </mat-form-field>
+  <ng-container *ngIf="this.config">
+    <form>
+      <ng-container  *ngFor="let component of configComponents">
+        <mat-form-field>
+            <label [attr.for]="component"></label>
+            <ng-container [ngSwitch]="prop.type">
+              <input *ngSwitchCase="'text'"
+              [formControlName]="prop.key"
+              [id]="prop.key" [type]="prop.type">
+            </ng-container>
+        </mat-form-field>
+      </ng-container>
+      <button type="submit">Submit</button>
+    </form>
+  </ng-container>
 </div>
