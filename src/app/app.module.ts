@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfiguratorService } from './services/configurator.service';
 import {ConfiguratorUsersComponent} from "./configurator/configurator-users.component";
 import {MatCheckboxModule} from "@angular/material";
+import {ConfiguratorExecutionComponent} from "./configurator/configurator-execution.component";
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import {MatCheckboxModule} from "@angular/material";
     AppComponent,
     ConfiguratorOverviewComponent,
     ConfiguratorUsersComponent,
+    ConfiguratorExecutionComponent,
     LoginComponent,
     SignupComponent,
     NotFoundComponent,

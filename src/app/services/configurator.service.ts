@@ -7,6 +7,9 @@ import {ConstantsService} from './constants.service';
 export class ConfiguratorService {
 
     public readonly TYPE_FLAG: string = "flag";
+    public readonly TYPE_STRING: string = "string";
+    public readonly TYPE_INTEGER: string = "integer";
+    public readonly TYPE_FLOAT: string = "float";
     public readonly GROUP_USERS: string = "users";
     public readonly SETTING_ALLOW_GUEST_MODE: string = "allow_guest_mode";
     public readonly SETTING_ALLOW_GOOGLE_AUTH: string = "allow_google_auth";
