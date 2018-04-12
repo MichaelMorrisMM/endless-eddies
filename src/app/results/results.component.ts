@@ -4,14 +4,7 @@ import { ConfiguratorService } from '../services/configurator.service';
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
-  styles: [`
-    div {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-  `]
+  styles: []
 })
 export class ResultsComponent implements OnInit {
   config: Config;

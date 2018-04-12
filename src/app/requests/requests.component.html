@@ -1,15 +1,17 @@
-<div>
+<div class="full-height full-width flex-container-col">
   <ng-container *ngIf="this.config">
     <form>
       <ng-container  *ngFor="let component of configComponents">
-        <mat-form-field>
-            <label [attr.for]="component"></label>
-            <ng-container [ngSwitch]="prop.type">
-              <input *ngSwitchCase="'text'"
-              [formControlName]="prop.key"
-              [id]="prop.key" [type]="prop.type">
-            </ng-container>
-        </mat-form-field>
+        <div class="flex-container-row">
+          <mat-form-field>
+              <label [attr.for]="component"></label>
+              <ng-container [ngSwitch]="prop.type">
+                <input *ngSwitchCase="'text'"
+                [formControlName]="prop.key"
+                [id]="prop.key" [type]="prop.type">
+              </ng-container>
+          </mat-form-field>
+        </div>
       </ng-container>
       <button type="submit">Submit</button>
     </form>
