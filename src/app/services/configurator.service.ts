@@ -6,6 +6,8 @@ import {ConstantsService} from './constants.service';
 @Injectable()
 export class ConfiguratorService {
 
+    public readonly TYPE_FLAG: string = "flag";
+    public readonly GROUP_USERS: string = "users";
     public readonly SETTING_ALLOW_GUEST_MODE: string = "allow_guest_mode";
     public readonly SETTING_ALLOW_GOOGLE_AUTH: string = "allow_google_auth";
     public readonly SETTING_ALLOW_GITHUB_AUTH: string = "allow_github_auth";
@@ -19,6 +21,15 @@ export class ConfiguratorService {
 
     public saveConfiguration(config: Config): Observable<PostResult> {
         return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/configurator', JSON.stringify(config));
+    }
+
+    public static getGroupSettings(group: string, config: Config): Setting[] {
+        if (group && config && config.settings) {
+            return config.settings.filter((setting: Setting) => {
+                return setting.group === group;
+            });
+        }
+        return [];
     }
 
     public static getSetting(name: string, config: Config): Setting {

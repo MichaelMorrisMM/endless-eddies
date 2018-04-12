@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class ConfigSettings {
+    private static final String TYPE_FLAG = "flag";
+    private static final String GROUP_USERS = "users";
     private static final String NODE_SETTINGS = "settings";
     private static final String SETTING_ALLOW_GUEST_MODE = "allow_guest_mode";
     private static final String SETTING_ALLOW_GOOGLE_AUTH = "allow_google_auth";
@@ -16,9 +18,9 @@ public class ConfigSettings {
 
     ConfigSettings() {
         settings = new HashMap<>();
-        settings.put(SETTING_ALLOW_GUEST_MODE, new Setting(SETTING_ALLOW_GUEST_MODE, JsonValue.FALSE));
-        settings.put(SETTING_ALLOW_GOOGLE_AUTH, new Setting(SETTING_ALLOW_GOOGLE_AUTH, JsonValue.FALSE));
-        settings.put(SETTING_ALLOW_GITHUB_AUTH, new Setting(SETTING_ALLOW_GITHUB_AUTH, JsonValue.FALSE));
+        settings.put(SETTING_ALLOW_GUEST_MODE, new Setting(SETTING_ALLOW_GUEST_MODE, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
+        settings.put(SETTING_ALLOW_GOOGLE_AUTH, new Setting(SETTING_ALLOW_GOOGLE_AUTH, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
+        settings.put(SETTING_ALLOW_GITHUB_AUTH, new Setting(SETTING_ALLOW_GITHUB_AUTH, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
     }
 
     ConfigSettings(File configFile) throws FileNotFoundException {
@@ -63,21 +65,29 @@ public class ConfigSettings {
     private class Setting {
         static final String NAME = "name";
         static final String VALUE = "value";
+        static final String GROUP = "group";
+        static final String TYPE = "type";
 
-        String name;
+        final String name;
         JsonValue value;
         final JsonValue defaultValue;
+        final String type;
+        final String group;
 
-        Setting(String n, JsonValue v) {
+        Setting(String n, JsonValue v, String g, String t) {
             this.name = n;
             this.value = v;
             this.defaultValue = v;
+            this.group = g;
+            this.type = t;
         }
 
         JsonObject toJsonObject() {
             return Json.createObjectBuilder()
                 .add(NAME, this.name)
                 .add(VALUE, this.value)
+                .add(GROUP, this.group)
+                .add(TYPE, this.type)
                 .build();
         }
 

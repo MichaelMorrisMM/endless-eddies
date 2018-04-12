@@ -1,5 +1,5 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
 import {ConfiguratorService} from '../services/configurator.service';
 import {ConstantsService} from "../services/constants.service";
 
@@ -11,37 +11,28 @@ import {ConstantsService} from "../services/constants.service";
 })
 export class ConfiguratorUsersComponent implements OnInit {
     public config: Config;
+    public userSettingsArray: Setting[];
     public form: FormGroup;
-    public dirtyNote: string;
 
     constructor(public configuratorService: ConfiguratorService,
-                @Inject(FormBuilder) fb: FormBuilder) {
-
-        this.form = fb.group({
-            allowGuestMode: false,
-            allowGoogleAuth: false,
-            allowGithubAuth: false,
-        });
+                public constantsService: ConstantsService) {
+        this.form = new FormGroup({});
     }
 
     ngOnInit() {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
-
-            this.form.setValue({
-                allowGuestMode: ConfiguratorService.getSettingValue(this.configuratorService.SETTING_ALLOW_GUEST_MODE, this.config),
-                allowGoogleAuth: ConfiguratorService.getSettingValue(this.configuratorService.SETTING_ALLOW_GOOGLE_AUTH, this.config),
-                allowGithubAuth: ConfiguratorService.getSettingValue(this.configuratorService.SETTING_ALLOW_GITHUB_AUTH, this.config),
+            this.userSettingsArray = ConfiguratorService.getGroupSettings(this.configuratorService.GROUP_USERS, this.config);
+            this.userSettingsArray.forEach((setting: Setting) => {
+                this.form.addControl(setting.name, new FormControl(setting.value));
             });
         });
-
-        this.dirtyNote = ConstantsService.DIRTY_NOTE_MESSAGE;
     }
 
     public save(): void {
-        ConfiguratorService.setSettingValue(this.configuratorService.SETTING_ALLOW_GUEST_MODE, this.form.controls.allowGuestMode.value, this.config);
-        ConfiguratorService.setSettingValue(this.configuratorService.SETTING_ALLOW_GOOGLE_AUTH, this.form.controls.allowGoogleAuth.value, this.config);
-        ConfiguratorService.setSettingValue(this.configuratorService.SETTING_ALLOW_GITHUB_AUTH, this.form.controls.allowGithubAuth.value, this.config);
+        this.userSettingsArray.forEach((setting: Setting) => {
+            ConfiguratorService.setSettingValue(setting.name, this.form.controls[setting.name].value, this.config);
+        });
 
         this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
             if (response.success) {

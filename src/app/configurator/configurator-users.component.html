@@ -2,13 +2,16 @@
     <h1>Users</h1>
     <ng-container *ngIf="this.config">
         <form [formGroup]="this.form" class="flex-container-col">
-            <mat-checkbox [formControlName]="'allowGuestMode'">Allow Guest Mode</mat-checkbox>
-            <mat-checkbox [formControlName]="'allowGoogleAuth'">Allow Google Auth</mat-checkbox>
-            <mat-checkbox [formControlName]="'allowGithubAuth'">Allow Github Auth</mat-checkbox>
+            <ng-container *ngFor="let setting of this.userSettingsArray">
+                <div [ngSwitch]="setting.type">
+                    <mat-checkbox *ngSwitchCase="this.configuratorService.TYPE_FLAG"
+                                  [formControlName]="setting.name">{{setting.name}}</mat-checkbox>
+                </div>
+            </ng-container>
         </form>
     </ng-container>
     <div class="flex-container-row">
         <button mat-button (click)="this.save()">Save</button>
-        <span *ngIf="this.form.dirty" class="dirty-note">{{this.dirtyNote}}</span>
+        <span *ngIf="this.form.dirty" class="dirty-note">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
     </div>
 </div>
