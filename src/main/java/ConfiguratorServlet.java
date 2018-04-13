@@ -6,16 +6,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 @WebServlet("/configurator")
 public class ConfiguratorServlet extends HttpServlet {
 
-    private static final String ROOT_PATH = "C:\\endless-eddies";
-    private static final String CONFIG_FILE_PATH = ROOT_PATH + "\\config.json";
+    public static final String ROOT_PATH = "C:\\endless-eddies";
+    public static final String CONFIG_FILE_PATH = ROOT_PATH + "\\config.json";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

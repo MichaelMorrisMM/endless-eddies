@@ -4,18 +4,12 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 import { ConfiguratorService } from '../services/configurator.service';
+import {Config} from "../configurator/config.interface";
 
 @Component({
   selector: 'app-requests',
   templateUrl: './requests.component.html',
-  styles: [`
-    div {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-  `]
+  styles: []
 })
 export class RequestsComponent implements OnInit {
   @Input() config: Config; // The config file

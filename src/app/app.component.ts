@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
             {"title":"Results", "link":"/results"},
             {"title":"Configurator - Overview", "link":"/config"},
             {"title":"Configurator - Users", "link":"/config-users"},
+            {"title":"Configurator - Execution", "link":"/config-execute"},
         ];
     }
 

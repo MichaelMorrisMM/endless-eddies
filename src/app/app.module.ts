@@ -22,6 +22,7 @@ import { ConfiguratorService } from './services/configurator.service';
 import {ConfiguratorUsersComponent} from "./configurator/configurator-users.component";
 import {MatCheckboxModule} from "@angular/material";
 import { BasicInputComponent } from './components/basic-input/basic-input.component';
+import {ConfiguratorExecutionComponent} from "./configurator/configurator-execution.component";
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { BasicInputComponent } from './components/basic-input/basic-input.compon
     AppComponent,
     ConfiguratorOverviewComponent,
     ConfiguratorUsersComponent,
+    ConfiguratorExecutionComponent,
     LoginComponent,
     SignupComponent,
     NotFoundComponent,
