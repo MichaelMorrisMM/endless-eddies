@@ -1,6 +1,17 @@
 <div class="full-height full-width flex-container-col">
   
-  <app-basic-input></app-basic-input>
+  <!-- This is a test of custom mat-form-field controls -->
+  <form>
+    <mat-form-field>
+      <app-basic-input placeholder="Input"></app-basic-input>
+    </mat-form-field>
+    <br/>
+    <mat-form-field>
+      <app-basic-input placeholder="Input2"></app-basic-input>
+    </mat-form-field>
+  </form>
+  
+  <!-- End test -->
   
   <ng-container *ngIf="this.config">
     <form>
