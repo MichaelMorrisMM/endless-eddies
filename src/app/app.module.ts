@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfiguratorService } from './services/configurator.service';
 import {ConfiguratorUsersComponent} from "./configurator/configurator-users.component";
 import {MatCheckboxModule} from "@angular/material";
+import { BasicInputComponent } from './components/basic-input/basic-input.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import {MatCheckboxModule} from "@angular/material";
     RequestsComponent,
     ResultsComponent,
     HomeComponent,
+    BasicInputComponent,
   ],
   imports: [
     BrowserModule,
