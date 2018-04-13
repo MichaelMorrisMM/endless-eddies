@@ -65,4 +65,13 @@ export class ConfiguratorService {
         }
     }
 
+    public getParameterTypes(): string[] {
+        let types: string[] = [];
+        types.push(this.TYPE_FLAG);
+        types.push(this.TYPE_STRING);
+        types.push(this.TYPE_INTEGER);
+        types.push(this.TYPE_FLOAT);
+        return types;
+    }
+
 }

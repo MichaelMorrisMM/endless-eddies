@@ -1,5 +1,6 @@
 <div class="full-height full-width flex-container-col">
     <h1>Execution</h1>
+    <h2>Parameters</h2>
     <ng-container *ngIf="this.config">
         <form [formGroup]="this.form" class="flex-container-col">
             <div *ngFor="let parameter of this.parameterPlaceholders" class="flex-container-row">
@@ -7,7 +8,11 @@
                     <input matInput placeholder="Name" [formControlName]="parameter.nameKey">
                 </mat-form-field>
                 <mat-form-field class="margin-right">
-                    <input matInput placeholder="Type" [formControlName]="parameter.typeKey">
+                    <mat-select placeholder="Type" [formControlName]="parameter.typeKey">
+                        <mat-option *ngFor="let type of this.configuratorService.getParameterTypes()" [value]="type">
+                            {{type}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
                 <button mat-button (click)="this.deleteParameter(parameter)">Delete</button>
             </div>
