@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {ConstantsService} from './constants.service';
+import {PostResult} from "../configurator/post-result.interface";
+import {Config} from "../configurator/config.interface";
+import {Setting} from "../configurator/setting.interface";
 
 @Injectable()
 export class ConfiguratorService {

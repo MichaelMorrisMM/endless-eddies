@@ -9,28 +9,38 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class ConfigSettings {
-    private static final String TYPE_FLAG = "flag";
-    private static final String TYPE_STRING = "string";
-    private static final String TYPE_INTEGER = "integer";
-    private static final String TYPE_FLOAT = "float";
-    private static final String GROUP_USERS = "users";
-    private static final String NODE_SETTINGS = "settings";
-    private static final String NODE_PARAMETERS = "parameters";
-    private static final String SETTING_ALLOW_GUEST_MODE = "allow_guest_mode";
-    private static final String SETTING_ALLOW_GOOGLE_AUTH = "allow_google_auth";
-    private static final String SETTING_ALLOW_GITHUB_AUTH = "allow_github_auth";
+
+    public static final String TYPE_FLAG = "flag";
+    public static final String TYPE_STRING = "string";
+    public static final String TYPE_INTEGER = "integer";
+    public static final String TYPE_FLOAT = "float";
+    private static Set<String> typeSet;
+    static {
+        typeSet = new HashSet<>(4);
+        typeSet.add(TYPE_FLAG);
+        typeSet.add(TYPE_STRING);
+        typeSet.add(TYPE_INTEGER);
+        typeSet.add(TYPE_FLOAT);
+    }
+
+    public static final String GROUP_USERS = "users";
+    private static Set<String> groupSet;
+    static {
+        groupSet = new HashSet<>(1);
+        groupSet.add(GROUP_USERS);
+    }
+
+    public static final String NODE_SETTINGS = "settings";
+    public static final String NODE_PARAMETERS = "parameters";
+
+    public static final String SETTING_ALLOW_GUEST_MODE = "allow_guest_mode";
+    public static final String SETTING_ALLOW_GOOGLE_AUTH = "allow_google_auth";
+    public static final String SETTING_ALLOW_GITHUB_AUTH = "allow_github_auth";
 
     private Map<String, Setting> settings;
     private Map<String, Parameter> parameters;
-    private Set<String> typeSet;
 
-    ConfigSettings() {
-        this.typeSet = new HashSet<>();
-        this.typeSet.add(TYPE_FLAG);
-        this.typeSet.add(TYPE_STRING);
-        this.typeSet.add(TYPE_INTEGER);
-        this.typeSet.add(TYPE_FLOAT);
-
+    public ConfigSettings() {
         settings = new HashMap<>();
         settings.put(SETTING_ALLOW_GUEST_MODE, new Setting(SETTING_ALLOW_GUEST_MODE, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
         settings.put(SETTING_ALLOW_GOOGLE_AUTH, new Setting(SETTING_ALLOW_GOOGLE_AUTH, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
@@ -39,7 +49,7 @@ public class ConfigSettings {
         parameters = new HashMap<>();
     }
 
-    ConfigSettings(File configFile) throws FileNotFoundException {
+    public ConfigSettings(File configFile) throws FileNotFoundException {
         this();
         try (JsonReader reader = Json.createReader(new FileReader(configFile))) {
             this.updateWithConfig(reader.readObject());
@@ -50,9 +60,9 @@ public class ConfigSettings {
         JsonArray settingsArray = config.getJsonArray(NODE_SETTINGS);
         if (settingsArray != null) {
             for (JsonObject obj : settingsArray.getValuesAs(JsonObject.class)) {
-                Setting setting = this.settings.get(obj.getString(Setting.NAME));
-                if (setting != null) {
-                    setting.updateWith(obj);
+                String name = obj.getString(Setting.NAME);
+                if (name != null) {
+                    this.settings.get(name).updateWith(obj);
                 }
             }
         }
@@ -61,9 +71,9 @@ public class ConfigSettings {
         if (parametersArray != null) {
             this.parameters.clear();
             for (JsonObject obj : parametersArray.getValuesAs(JsonObject.class)) {
-                if (this.isValidParameter(obj)) {
-                    Parameter param = new Parameter(obj);
-                    this.parameters.put(param.name, param);
+                Parameter newParam = new Parameter();
+                if (newParam.updateWith(obj)) {
+                    this.parameters.put(newParam.name, newParam);
                 }
             }
         }
@@ -71,104 +81,25 @@ public class ConfigSettings {
 
     public JsonObject getConfig() {
         return Json.createObjectBuilder()
-            .add(NODE_SETTINGS, this.getSettings())
-            .add(NODE_PARAMETERS, this.getParameters())
+            .add(NODE_SETTINGS, this.getNode(this.settings))
+            .add(NODE_PARAMETERS, this.getNode(this.parameters))
             .build();
     }
 
-    private JsonArray getSettings() {
+    private static JsonArray getNode(Map<String, ? extends ConfigObject> node) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        for (Entry<String, Setting> e : this.settings.entrySet()) {
+        for (Entry<String, ? extends ConfigObject> e : node.entrySet()) {
             builder = builder.add(e.getValue().toJsonObject());
         }
         return builder.build();
     }
 
-    private JsonArray getParameters() {
-        JsonArrayBuilder builder = Json.createArrayBuilder();
-        for (Entry<String, Parameter> e : this.parameters.entrySet()) {
-            builder = builder.add(e.getValue().toJsonObject());
-        }
-        return builder.build();
+    public static boolean isValidType(String s) {
+        return s != null && typeSet.contains(s);
     }
 
-    public void revertToDefaults() {
-        for (Setting setting : this.settings.values()) {
-            setting.value = setting.defaultValue;
-        }
+    public static boolean isValidGroup(String s) {
+        return s != null && groupSet.contains(s);
     }
 
-    private boolean isValidParameter(JsonObject obj) {
-        String name = obj.getString(Parameter.NAME);
-        JsonValue defaultValue = obj.get(Parameter.DEFAULT_VALUE);
-        String type = obj.getString(Parameter.TYPE);
-
-        return name != null && !name.equals("") && defaultValue != null
-            && type != null && this.typeSet.contains(type);
-    }
-
-    private class Setting {
-        static final String NAME = "name";
-        static final String VALUE = "value";
-        static final String GROUP = "group";
-        static final String TYPE = "type";
-
-        final String name;
-        JsonValue value;
-        final JsonValue defaultValue;
-        final String type;
-        final String group;
-
-        Setting(String n, JsonValue v, String g, String t) {
-            this.name = n;
-            this.value = v;
-            this.defaultValue = v;
-            this.group = g;
-            this.type = t;
-        }
-
-        JsonObject toJsonObject() {
-            return Json.createObjectBuilder()
-                .add(NAME, this.name)
-                .add(VALUE, this.value)
-                .add(GROUP, this.group)
-                .add(TYPE, this.type)
-                .build();
-        }
-
-        void updateWith(JsonObject updateObject) {
-            JsonValue newValue = updateObject.get(VALUE);
-            if (newValue != null) {
-                this.value = newValue;
-            }
-        }
-    }
-
-    private class Parameter {
-        static final String NAME = "name";
-        static final String DEFAULT_VALUE = "defaultValue";
-        static final String TYPE = "type";
-
-        final String name;
-        final JsonValue defaultValue;
-        final String type;
-
-        Parameter(String n, JsonValue defVal, String t) {
-            this.name = n;
-            this.defaultValue = defVal;
-            this.type = t;
-        }
-
-        Parameter(JsonObject obj) {
-            this(obj.getString(NAME), obj.get(DEFAULT_VALUE), obj.getString(TYPE));
-        }
-
-        JsonObject toJsonObject() {
-            return Json.createObjectBuilder()
-                .add(NAME, this.name)
-                .add(DEFAULT_VALUE, this.defaultValue)
-                .add(TYPE, this.type)
-                .build();
-        }
-    }
 }

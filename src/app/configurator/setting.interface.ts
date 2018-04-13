@@ -1,4 +1,4 @@
-interface Setting {
+export interface Setting {
     readonly name: string;
     value: any;
     readonly group: string;

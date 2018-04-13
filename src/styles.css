@@ -43,9 +43,11 @@ body {
 .flex-nine {
     flex: 9;
 }
-
 span.dirty-note {
     background: yellow;
     padding: 0.5rem;
     margin-left: 1rem;
+}
+.margin-right {
+    margin-right: 2rem;
 }

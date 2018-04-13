@@ -4,6 +4,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 import { ConfiguratorService } from '../services/configurator.service';
+import {Config} from "../configurator/config.interface";
 
 @Component({
   selector: 'app-requests',

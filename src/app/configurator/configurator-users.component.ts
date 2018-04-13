@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {ConfiguratorService} from '../services/configurator.service';
 import {ConstantsService} from "../services/constants.service";
+import {Setting} from "./setting.interface";
+import {Config} from "./config.interface";
+import {PostResult} from "./post-result.interface";
 
 @Component({
     selector: 'configurator-users',

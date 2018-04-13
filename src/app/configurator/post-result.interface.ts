@@ -1,3 +1,3 @@
-interface PostResult {
+export interface PostResult {
     success: boolean;
 }

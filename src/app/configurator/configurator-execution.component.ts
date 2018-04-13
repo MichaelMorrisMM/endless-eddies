@@ -2,6 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {ConfiguratorService} from '../services/configurator.service';
 import {ConstantsService} from "../services/constants.service";
 import {FormControl, FormGroup} from "@angular/forms";
+import {ParameterPlaceholder} from "./parameter-placeholder.model";
+import {Parameter} from "./parameter.model";
+import {Config} from "./config.interface";
+import {PostResult} from "./post-result.interface";
 
 @Component({
     selector: 'configurator-execution',
@@ -11,7 +15,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 })
 export class ConfiguratorExecutionComponent implements OnInit {
     public config: Config;
-    public parametersArray: ParameterTemp[];
+    public parameterPlaceholders: ParameterPlaceholder[];
     public form: FormGroup;
     private counter: number;
 
@@ -25,50 +29,44 @@ export class ConfiguratorExecutionComponent implements OnInit {
     ngOnInit() {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
-            this.parametersArray = [];
+            this.parameterPlaceholders = [];
             this.config.parameters.forEach((parameter: Parameter) => {
-                let temp = new ParameterTempObject();
-                temp.nameKey = this.counter + "name";
-                temp.defaultValueKey = this.counter + "def";
-                temp.typeKey = this.counter + "type";
-                this.counter = this.counter + 1;
-                this.form.addControl(temp.nameKey, new FormControl(parameter.name));
-                this.form.addControl(temp.defaultValueKey, new FormControl(parameter.defaultValue));
-                this.form.addControl(temp.typeKey, new FormControl(parameter.type));
-                this.parametersArray.push(temp);
+                this.makeNewPlaceholder(parameter);
             });
         });
     }
 
     public addParameter(): void {
-        let temp = new ParameterTempObject();
-        temp.nameKey = this.counter + "name";
-        temp.defaultValueKey = this.counter + "def";
-        temp.typeKey = this.counter + "type";
-        this.counter = this.counter + 1;
-        this.form.addControl(temp.nameKey, new FormControl(""));
-        this.form.addControl(temp.defaultValueKey, new FormControl(""));
-        this.form.addControl(temp.typeKey, new FormControl(""));
-        this.parametersArray.push(temp);
-
+        this.makeNewPlaceholder(null);
         this.form.markAsDirty();
     }
 
-    public deleteParameter(param: ParameterTemp): void {
-        this.parametersArray.splice(this.parametersArray.indexOf(param),1);
-        this.form.removeControl(param.nameKey);
-        this.form.removeControl(param.defaultValueKey);
-        this.form.removeControl(param.typeKey);
+    private makeNewPlaceholder(param: Parameter): void {
+        let placeholder: ParameterPlaceholder = new ParameterPlaceholder(this.counter);
+        this.counter = this.counter + 1;
+        if (param) {
+            this.form.addControl(placeholder.nameKey, new FormControl(param.name));
+            this.form.addControl(placeholder.typeKey, new FormControl(param.type));
+        } else {
+            this.form.addControl(placeholder.nameKey, new FormControl(""));
+            this.form.addControl(placeholder.typeKey, new FormControl(""));
+        }
+        this.parameterPlaceholders.push(placeholder);
+    }
+
+    public deleteParameter(placeholder: ParameterPlaceholder): void {
+        this.parameterPlaceholders.splice(this.parameterPlaceholders.indexOf(placeholder),1);
+        this.form.removeControl(placeholder.nameKey);
+        this.form.removeControl(placeholder.typeKey);
         this.form.markAsDirty();
     }
 
     public save(): void {
         let newParams: Parameter[] = [];
-        this.parametersArray.forEach((tempParam: ParameterTemp) => {
-            newParams.push(new ParameterObject(
-                this.form.controls[tempParam.nameKey].value,
-                this.form.controls[tempParam.defaultValueKey].value,
-                this.form.controls[tempParam.typeKey].value,
+        this.parameterPlaceholders.forEach((placeholder: ParameterPlaceholder) => {
+            newParams.push(new Parameter(
+                this.form.controls[placeholder.nameKey].value,
+                this.form.controls[placeholder.typeKey].value,
             ));
         });
         this.config.parameters = newParams;
@@ -78,26 +76,5 @@ export class ConfiguratorExecutionComponent implements OnInit {
                 this.form.markAsPristine();
             }
         });
-    }
-}
-
-class ParameterObject implements Parameter {
-    readonly name: string;
-    readonly defaultValue: any;
-    readonly type: string;
-
-    constructor(n: string, defVal: any, t: string) {
-        this.name = n;
-        this.defaultValue = defVal;
-        this.type = t;
-    }
-}
-
-class ParameterTempObject implements ParameterTemp {
-    nameKey: string;
-    defaultValueKey: any;
-    typeKey: string;
-
-    constructor() {
     }
 }
