@@ -40,10 +40,10 @@ public class ConfiguratorServlet extends HttpServlet {
             writer.write(config.getConfig().toString());
         }
 
-        HttpUtil.printPOSTResult(response, true);
+        HttpUtil.printPOSTResult(response, true, "");
     }
 
-    private static ConfigSettings getCurrentConfig() throws FileNotFoundException {
+    public static ConfigSettings getCurrentConfig() throws FileNotFoundException {
         File configFile = new File(CONFIG_FILE_PATH);
         if (configFile.exists()) {
             return new ConfigSettings(configFile);

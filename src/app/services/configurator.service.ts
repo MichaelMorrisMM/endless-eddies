@@ -29,6 +29,10 @@ export class ConfiguratorService {
         return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/configurator', JSON.stringify(config));
     }
 
+    public submitRequest(request: any): Observable<PostResult> {
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/execute', JSON.stringify(request));
+    }
+
     public static getGroupSettings(group: string, config: Config): Setting[] {
         if (group && config && config.settings) {
             return config.settings.filter((setting: Setting) => {

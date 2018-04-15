@@ -23,6 +23,7 @@ import {ConfiguratorUsersComponent} from "./configurator/configurator-users.comp
 import {MatCheckboxModule, MatSelectModule} from "@angular/material";
 import { BasicInputComponent } from './components/basic-input/basic-input.component';
 import {ConfiguratorExecutionComponent} from "./configurator/configurator-execution.component";
+import {NewRequestComponent} from "./requests/new-request.component";
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import {ConfiguratorExecutionComponent} from "./configurator/configurator-execut
     ResultsComponent,
     HomeComponent,
     BasicInputComponent,
+    NewRequestComponent,
   ],
   imports: [
     BrowserModule,

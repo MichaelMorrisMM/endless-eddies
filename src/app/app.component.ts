@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         this.menuItemsArray = [
             {"title":"Home", "link":"/"},
+            {"title":"Submit New Request", "link":"/new-request"},
             {"title":"Requests", "link":"/requests"},
             {"title":"Results", "link":"/results"},
             {"title":"Configurator - Overview", "link":"/config"},
