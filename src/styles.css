@@ -51,3 +51,20 @@ span.dirty-note {
 .margin-right {
     margin-right: 2rem;
 }
+
+.title {
+    font-family: Arial;
+    letter-spacing: 1px;
+    color: #424242;
+    text-align: center;
+}
+
+.subtitle {
+    font-family: Arial;
+    letter-spacing: 1px;
+    color: #616161;
+}
+
+.nav {
+    font-size: 20px;
+}

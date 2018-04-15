@@ -1,6 +1,6 @@
 <div class="full-height full-width flex-container-col">
-    <div class="full-width flex-container-row">
-        <a mat-button *ngFor="let item of menuItemsArray" [routerLink]="[item.link]">{{item.title}}</a>
+    <div class="full-width flex-container-row justify-center">
+        <a mat-button class="nav" *ngFor="let item of menuItemsArray" [routerLink]="[item.link]">{{item.title}}</a>
     </div>
     <div class="main">
         <router-outlet></router-outlet>

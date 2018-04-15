@@ -1,12 +1,12 @@
 <div class="full-height full-width flex-container-col">
-    <h1>Execution</h1>
-    <h2>Command</h2>
+    <h1 class="title">Execution</h1>
+    <h2 class="subtitle">Command</h2>
     <div *ngIf="this.config">
         <mat-form-field>
             <input matInput placeholder="Command" [(ngModel)]="this.command">
         </mat-form-field>
     </div>
-    <h2>Parameters</h2>
+    <h2 class="subtitle">Parameters</h2>
     <ng-container *ngIf="this.config">
         <form [formGroup]="this.form" class="flex-container-col">
             <div *ngFor="let parameter of this.parameterPlaceholders" class="flex-container-row">

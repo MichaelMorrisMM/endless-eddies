@@ -1,5 +1,5 @@
 <div class="full-height full-width flex-container-col">
-    <h1>Overview - All Settings</h1>
+    <h1 class="title">Overview - All Settings</h1>
     <ng-container *ngIf="config && config.settings">
         <label *ngFor="let setting of config.settings">Name: "{{setting.name}}"; Value: "{{setting.value}}"</label>
     </ng-container>
