@@ -74,3 +74,8 @@ span.dirty-note {
     font-size: 18px;
     font-weight: normal;
 }
+
+.navbar {
+    background: #303F9F;
+    color: white;
+}
