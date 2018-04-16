@@ -17,7 +17,7 @@ const routes: Routes = [
     { path: 'new-request', component: NewRequestComponent },
     { path: 'requests', component: RequestsComponent },
     { path: 'results', component: ResultsComponent },
-    { path: '', component: HomeComponent },
+    { path: 'home', component: HomeComponent },
     { path: '**', component: NotFoundComponent },
 ];
 

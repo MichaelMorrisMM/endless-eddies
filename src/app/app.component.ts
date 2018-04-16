@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.menuItemsArray = [
-            {"title":"Home", "link":"/"},
+            {"title":"Home", "link":"/home"},
             {"title":"Submit New Request", "link":"/new-request"},
             {"title":"Requests", "link":"/requests"},
             {"title":"Results", "link":"/results"},

@@ -1,6 +1,6 @@
 <div class="full-height full-width flex-container-col">
     <div class="full-width flex-container-row justify-center flex-wrap navbar">
-        <a mat-button class="nav" *ngFor="let item of menuItemsArray" [routerLink]="[item.link]">{{item.title}}</a>
+        <a mat-button class="nav" routerLinkActive="active" *ngFor="let item of menuItemsArray" [routerLink]="[item.link]">{{item.title}}</a>
     </div>
     <div class="main">
         <router-outlet></router-outlet>

@@ -76,6 +76,10 @@ span.dirty-note {
 }
 
 .navbar {
-    background: #303F9F;
+    background: #009688;
     color: white;
+}
+
+.active {
+    background: #004D40;
 }
