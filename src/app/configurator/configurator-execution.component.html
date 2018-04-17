@@ -1,38 +1,36 @@
 <div class="full-height full-width flex-container-col">
     <h1 class="title">Execution</h1>
-    <h2 class="subtitle">Command</h2>
-    <div *ngIf="this.config">
-        <mat-form-field>
-            <input matInput placeholder="Command" [(ngModel)]="this.command">
-        </mat-form-field>
-    </div>
-    <h2 class="subtitle">Parameters</h2>
     <ng-container *ngIf="this.config">
-        <form [formGroup]="this.form" class="flex-container-col">
-            <div *ngFor="let parameter of this.parameterPlaceholders" class="flex-container-row">
-                <mat-form-field class="margin-right">
+        <form [formGroup]="this.form" class="flex-container-col full-width margin-bottom">
+            <h2 class="subtitle">Command</h2>
+            <mat-form-field>
+                <input matInput placeholder="Command" [formControlName]="'command'">
+            </mat-form-field>
+            <h2 class="subtitle">Parameters</h2>
+            <div *ngFor="let parameter of this.parameterPlaceholders" class="flex-container-row full-width margin-bottom">
+                <mat-form-field class="margin-right flex-two">
                     <input matInput placeholder="Name" [formControlName]="parameter.nameKey">
                 </mat-form-field>
-                <mat-form-field class="margin-right">
+                <mat-form-field class="margin-right flex-two">
                     <mat-select placeholder="Type" [formControlName]="parameter.typeKey">
                         <mat-option *ngFor="let type of this.configuratorService.getParameterTypes()" [value]="type">
                             {{type}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="margin-right">
+                <mat-form-field class="margin-right flex-two">
                     <input matInput placeholder="Code" [formControlName]="parameter.codeKey">
                 </mat-form-field>
-                <mat-form-field class="margin-right">
+                <mat-form-field class="margin-right flex-two">
                     <input matInput type="number" placeholder="Sort Order" [formControlName]="parameter.sortOrderKey">
                 </mat-form-field>
-                <button mat-button (click)="this.deleteParameter(parameter)">Delete</button>
+                <button mat-raised-button color="warn" class="flex-one" (click)="this.deleteParameter(parameter)">Delete</button>
             </div>
+            <button mat-raised-button color="accent" (click)="this.addParameter()">Add</button>
         </form>
-        <button mat-button (click)="this.addParameter()">Add</button>
     </ng-container>
     <div class="flex-container-row">
-        <button mat-button (click)="this.save()">Save</button>
+        <button mat-raised-button color="primary" (click)="this.save()">Save</button>
         <span *ngIf="this.form.dirty" class="dirty-note">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
     </div>
 </div>

@@ -14,6 +14,9 @@ body {
 .full-width {
     width: 100%;
 }
+.half-width {
+    width: 50%;
+}
 .flex-container-row {
     display: flex;
     flex-direction: row;
@@ -54,6 +57,9 @@ span.dirty-note {
 }
 .margin-right {
     margin-right: 2rem;
+}
+.margin-bottom {
+    margin-bottom: 2rem;
 }
 
 .title {

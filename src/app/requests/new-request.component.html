@@ -1,23 +1,23 @@
 <div class="full-height full-width flex-container-col">
     <h1 class="title">New Request</h1>
     <ng-container *ngIf="this.config">
-        <form [formGroup]="this.form" class="flex-container-col">
+        <form [formGroup]="this.form" class="flex-container-col full-width">
             <ng-container *ngFor="let param of this.config.parameters">
-                <div [ngSwitch]="param.type">
-                    <mat-checkbox *ngSwitchCase="this.configuratorService.TYPE_FLAG"
+                <div [ngSwitch]="param.type" class="half-width margin-bottom">
+                    <mat-checkbox *ngSwitchCase="this.configuratorService.TYPE_FLAG" class="full-width"
                                   [formControlName]="param.name">{{param.name}}</mat-checkbox>
-                    <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_STRING">
+                    <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_STRING" class="full-width">
                         <input matInput placeholder="{{param.name}}" [formControlName]="param.name">
                     </mat-form-field>
-                    <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_INTEGER">
+                    <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_INTEGER" class="full-width">
                         <input matInput type="number" placeholder="{{param.name}}" [formControlName]="param.name">
                     </mat-form-field>
-                    <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_FLOAT">
+                    <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_FLOAT" class="full-width">
                         <input matInput type="number" placeholder="{{param.name}}" [formControlName]="param.name">
                     </mat-form-field>
                 </div>
             </ng-container>
         </form>
     </ng-container>
-    <button mat-button (click)="this.submit()">Submit</button>
+    <button mat-raised-button color="primary" (click)="this.submit()">Submit</button>
 </div>

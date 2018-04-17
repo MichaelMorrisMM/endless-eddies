@@ -18,20 +18,18 @@ export class ConfiguratorExecutionComponent implements OnInit {
     public parameterPlaceholders: ParameterPlaceholder[];
     public form: FormGroup;
     private counter: number;
-    public command: string;
 
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService) {
         this.form = new FormGroup({});
         this.counter = 1;
-        this.command = "";
     }
 
 
     ngOnInit() {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
-            this.command = this.config.command;
+            this.form.addControl("command", new FormControl(this.config.command));
             this.parameterPlaceholders = [];
             this.config.parameters.forEach((parameter: Parameter) => {
                 this.makeNewPlaceholder(parameter);
@@ -81,7 +79,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
             ));
         });
         this.config.parameters = newParams;
-        this.config.command = this.command;
+        this.config.command = this.form.controls["command"].value;
 
         this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
             if (response.success) {
