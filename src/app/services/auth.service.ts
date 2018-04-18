@@ -14,6 +14,10 @@ export class AuthService {
         this.loggedIn = false;
     }
 
+    public getLoggedIn() {
+        return this.loggedIn;
+    }
+
     constructor() {
     }
 }
