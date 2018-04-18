@@ -6,9 +6,6 @@
         <mat-form-field>
             <input matInput placeholder="Password" type="password">
         </mat-form-field>
-        <button mat-raised-button color="primary">Login</button>
-    </div>
-    <div>
-        <a routerLink="/config">TESTING Configurator TESTING</a>
+        <button mat-raised-button color="primary" (click)="this.doLogIn()">Login</button>
     </div>
 </div>

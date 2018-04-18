@@ -18,6 +18,7 @@ const routes: Routes = [
     { path: 'requests', component: RequestsComponent },
     { path: 'results', component: ResultsComponent },
     { path: 'home', component: HomeComponent },
+    { path: 'login', component: LoginComponent},
     { path: '',   redirectTo: '/home', pathMatch: 'full' },
     { path: '**', component: NotFoundComponent },
 ];
