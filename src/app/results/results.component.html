@@ -1,1 +1,7 @@
-<h1 class="title">Results will be shown here...</h1>
+<h1 class="title">Results</h1>
+<ng-container *ngIf="this.config && this.resultsService.lastResult">
+    <label>Status:</label>
+    <pre>{{this.resultsService.lastResult.success}}</pre>
+    <label>Result:</label>
+    <pre>{{this.resultsService.lastResult.message}}</pre>
+</ng-container>

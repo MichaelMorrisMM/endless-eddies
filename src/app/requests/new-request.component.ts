@@ -4,7 +4,8 @@ import {ConfiguratorService} from '../services/configurator.service';
 import {ConstantsService} from "../services/constants.service";
 import {Config} from "../configurator/config.interface";
 import {Parameter} from "../configurator/parameter.model";
-import {PostResult} from "../configurator/post-result.interface";
+import {ResultsService} from "../services/results.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'new-request',
@@ -17,7 +18,9 @@ export class NewRequestComponent implements OnInit {
     public form: FormGroup;
 
     constructor(public configuratorService: ConfiguratorService,
-                public constantsService: ConstantsService) {
+                public constantsService: ConstantsService,
+                private resultsService: ResultsService,
+                private router: Router) {
         this.form = new FormGroup({});
     }
 
@@ -36,11 +39,8 @@ export class NewRequestComponent implements OnInit {
             request[param.name] = this.form.controls[param.name].value;
         });
 
-        this.configuratorService.submitRequest(request).subscribe((response: PostResult) => {
-            if (response.success) {
-                // TODO
-                alert(response.message);
-            }
+        this.resultsService.submitRequest(request).subscribe(() => {
+            this.router.navigateByUrl("/results");
         });
     }
 }

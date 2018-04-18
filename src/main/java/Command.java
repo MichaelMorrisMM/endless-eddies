@@ -18,10 +18,12 @@ public class Command {
 
     private ProcessBuilder getBuilder() {
         for (Input input : inputs) {
-            if (input.hasCode()) {
+            if (input.hasCodeToInsert()) {
                 this.command.add(input.code);
             }
-            this.command.add(input.value);
+            if (input.hasValue()) {
+                this.command.add(input.value);
+            }
         }
 
         return new ProcessBuilder(command)

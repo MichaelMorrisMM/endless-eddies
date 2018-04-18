@@ -24,6 +24,7 @@ import {MatCheckboxModule, MatSelectModule, MatSidenavModule, MatToolbarModule} 
 import { BasicInputComponent } from './components/basic-input/basic-input.component';
 import {ConfiguratorExecutionComponent} from "./configurator/configurator-execution.component";
 import {NewRequestComponent} from "./requests/new-request.component";
+import {ResultsService} from "./services/results.service";
 
 
 @NgModule({
@@ -59,6 +60,7 @@ import {NewRequestComponent} from "./requests/new-request.component";
   providers: [
       ConfiguratorService,
       ConstantsService,
+      ResultsService,
   ],
   bootstrap: [AppComponent]
 })
