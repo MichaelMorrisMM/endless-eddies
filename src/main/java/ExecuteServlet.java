@@ -14,9 +14,9 @@ import java.util.List;
 @WebServlet("/execute")
 public class ExecuteServlet extends HttpServlet {
 
-    public static final String IN_FILE_PATH = ConfiguratorServlet.ROOT_PATH + "\\in.txt";
-    public static final String OUT_FILE_PATH = ConfiguratorServlet.ROOT_PATH + "\\out.txt";
-    public static final String ERROR_FILE_PATH = ConfiguratorServlet.ROOT_PATH + "\\error.txt";
+    public static final String IN_FILE_PATH = ConfiguratorServlet.ROOT_PATH + File.separator + "in.txt";
+    public static final String OUT_FILE_PATH = ConfiguratorServlet.ROOT_PATH + File.separator + "out.txt";
+    public static final String ERROR_FILE_PATH = ConfiguratorServlet.ROOT_PATH + File.separator + "error.txt";
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
