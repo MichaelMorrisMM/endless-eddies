@@ -1,4 +1,5 @@
 import javax.json.JsonNumber;
+import javax.json.JsonObject;
 import javax.json.JsonValue;
 
 public class Input {
@@ -7,7 +8,7 @@ public class Input {
     public String value;
     public String type;
 
-    public Input(String code, String type, JsonValue value) {
+    public Input(String name, String code, String type, JsonValue value, JsonObject obj) {
         if (code != null) {
             String trimmedCode = code.trim();
             if (!trimmedCode.equals("")) {
@@ -16,14 +17,14 @@ public class Input {
         }
 
         this.type = type;
-        this.value = this.parseValue(value);
+        this.value = this.parseValue(name, value, obj);
     }
 
-    private String parseValue(JsonValue val) {
+    private String parseValue(String name, JsonValue val, JsonObject obj) {
         String codeNonNull = this.code != null ? this.code : "";
         switch (this.type) {
             case ConfigSettings.TYPE_FLAG: return val.equals(JsonValue.TRUE) ? codeNonNull : "";
-            case ConfigSettings.TYPE_STRING: return val.toString();
+            case ConfigSettings.TYPE_STRING: return obj.getString(name);
             case ConfigSettings.TYPE_INTEGER: return "" + ((JsonNumber) val).longValueExact();
             case ConfigSettings.TYPE_FLOAT: return "" + ((JsonNumber) val).doubleValue();
             default: return val.toString();

@@ -33,7 +33,7 @@ public class ExecuteServlet extends HttpServlet {
             for (Parameter param : config.getParameters()) {
                 JsonValue v = requestObject.get(param.name);
                 if (v != null && !v.equals(JsonValue.NULL)) {
-                    inputs.add(new Input(param.code, param.type, v));
+                    inputs.add(new Input(param.name, param.code, param.type, v, requestObject));
                 }
             }
 
