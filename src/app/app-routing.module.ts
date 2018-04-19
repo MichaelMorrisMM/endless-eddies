@@ -7,8 +7,8 @@ import { ResultsComponent } from './results/results.component';
 import { HomeComponent } from './home/home.component';
 import { ConfiguratorOverviewComponent } from './configurator/configurator-overview.component';
 import { ConfiguratorUsersComponent } from './configurator/configurator-users.component';
-import {ConfiguratorExecutionComponent} from "./configurator/configurator-execution.component";
-import {NewRequestComponent} from "./requests/new-request.component";
+import {ConfiguratorExecutionComponent} from './configurator/configurator-execution.component';
+import {NewRequestComponent} from './requests/new-request.component';
 
 const routes: Routes = [
     { path: 'config', component: ConfiguratorOverviewComponent },
@@ -18,6 +18,7 @@ const routes: Routes = [
     { path: 'requests', component: RequestsComponent },
     { path: 'results', component: ResultsComponent },
     { path: 'home', component: HomeComponent },
+    { path: 'login', component: LoginComponent},
     { path: '',   redirectTo: '/home', pathMatch: 'full' },
     { path: '**', component: NotFoundComponent },
 ];

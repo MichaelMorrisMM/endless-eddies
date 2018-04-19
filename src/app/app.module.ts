@@ -19,12 +19,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConstantsService } from './services/constants.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfiguratorService } from './services/configurator.service';
-import {ConfiguratorUsersComponent} from "./configurator/configurator-users.component";
-import {MatCheckboxModule, MatSelectModule, MatSidenavModule, MatToolbarModule} from "@angular/material";
+import {ConfiguratorUsersComponent} from './configurator/configurator-users.component';
+import {MatCheckboxModule, MatSelectModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
 import { BasicInputComponent } from './components/basic-input/basic-input.component';
-import {ConfiguratorExecutionComponent} from "./configurator/configurator-execution.component";
-import {NewRequestComponent} from "./requests/new-request.component";
-import {ResultsService} from "./services/results.service";
+import {ConfiguratorExecutionComponent} from './configurator/configurator-execution.component';
+import {NewRequestComponent} from './requests/new-request.component';
+import {ResultsService} from './services/results.service';
+import {AuthService} from './services/auth.service';
 
 
 @NgModule({
@@ -61,6 +62,7 @@ import {ResultsService} from "./services/results.service";
       ConfiguratorService,
       ConstantsService,
       ResultsService,
+      AuthService,
   ],
   bootstrap: [AppComponent]
 })
