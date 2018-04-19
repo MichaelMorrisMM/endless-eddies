@@ -127,3 +127,7 @@ a.nav-item {
 a.nav-item-active {
     background: lightgrey;
 }
+
+.danger{
+    background: #EF9A9A;
+}
