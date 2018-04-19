@@ -10,8 +10,8 @@ import java.io.*;
 @WebServlet("/configurator")
 public class ConfiguratorServlet extends HttpServlet {
 
-    public static final String ROOT_PATH = "C:\\endless-eddies";
-    public static final String CONFIG_FILE_PATH = ROOT_PATH + "\\config.json";
+    public static final String ROOT_PATH = System.getenv("ENDLESS_EDDIES_CONFIG_DIR") != null ? System.getenv("ENDLESS_EDDIES_CONFIG_DIR") : "C:\\endless-eddies";
+    public static final String CONFIG_FILE_PATH = ROOT_PATH + File.separator + "config.json";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
