@@ -1,5 +1,5 @@
 <ng-container *ngIf="this.config">
-    <form [formGroup]="this.form" class="flex-container-col full-width">
+    <form [formGroup]="this.form" class="flex-container-col full-width margin-bottom">
         <h1 class="title">New Request</h1>
         <ng-container *ngFor="let param of this.config.parameters">
             <div [ngSwitch]="param.type" class="half-width margin-bottom">
