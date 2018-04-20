@@ -2,18 +2,19 @@
     <form [formGroup]="this.form" class="flex-container-col full-width margin-bottom">
         <h1 class="title">New Request</h1>
         <ng-container *ngFor="let param of this.config.parameters">
-            <div [ngSwitch]="param.type" class="half-width margin-bottom">
-                <mat-checkbox *ngSwitchCase="this.configuratorService.TYPE_FLAG" class="full-width"
+            <div [ngSwitch]="param.type" class="full-width flex-container-row margin-bottom align-center">
+                <mat-checkbox *ngSwitchCase="this.configuratorService.TYPE_FLAG" class="half-width"
                               [formControlName]="param.name">{{param.name}}</mat-checkbox>
-                <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_STRING" class="full-width">
+                <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_STRING" class="half-width">
                     <input matInput placeholder="{{param.name}}" [formControlName]="param.name">
                 </mat-form-field>
-                <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_INTEGER" class="full-width">
+                <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_INTEGER" class="half-width">
                     <input matInput type="number" placeholder="{{param.name}}" [formControlName]="param.name">
                 </mat-form-field>
-                <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_FLOAT" class="full-width">
+                <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_FLOAT" class="half-width">
                     <input matInput type="number" placeholder="{{param.name}}" [formControlName]="param.name">
                 </mat-form-field>
+                <span *ngIf="param.toolTip" matTooltip="{{param.toolTip}}" [matTooltipPosition]="'after'" class="margin-left">Info</span>
             </div>
         </ng-container>
         <button mat-raised-button color="primary" (click)="this.submit()">Submit</button>

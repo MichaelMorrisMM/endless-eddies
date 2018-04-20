@@ -49,11 +49,13 @@ export class ConfiguratorExecutionComponent implements OnInit {
             this.form.addControl(placeholder.typeKey, new FormControl(param.type));
             this.form.addControl(placeholder.codeKey, new FormControl(param.code));
             this.form.addControl(placeholder.sortOrderKey, new FormControl(param.sortOrder));
+            this.form.addControl(placeholder.toolTipKey, new FormControl(param.toolTip));
         } else {
             this.form.addControl(placeholder.nameKey, new FormControl(""));
             this.form.addControl(placeholder.typeKey, new FormControl(""));
             this.form.addControl(placeholder.codeKey, new FormControl(""));
             this.form.addControl(placeholder.sortOrderKey, new FormControl(this.counter));
+            this.form.addControl(placeholder.toolTipKey, new FormControl(""));
         }
         this.counter = this.counter + 1;
         this.parameterPlaceholders.push(placeholder);
@@ -65,6 +67,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
         this.form.removeControl(placeholder.typeKey);
         this.form.removeControl(placeholder.codeKey);
         this.form.removeControl(placeholder.sortOrderKey);
+        this.form.removeControl(placeholder.toolTipKey);
         this.form.markAsDirty();
     }
 
@@ -76,6 +79,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
                 this.form.controls[placeholder.typeKey].value,
                 this.form.controls[placeholder.codeKey].value,
                 this.form.controls[placeholder.sortOrderKey].value,
+                this.form.controls[placeholder.toolTipKey].value,
             ));
         });
         this.config.parameters = newParams;
