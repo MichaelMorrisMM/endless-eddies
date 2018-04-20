@@ -1,7 +1,6 @@
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.json.JsonValue;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,10 +30,7 @@ public class ExecuteServlet extends HttpServlet {
         if (requestObject != null) {
             List<Input> inputs = new ArrayList<>();
             for (Parameter param : config.getParameters()) {
-                JsonValue v = requestObject.get(param.name);
-                if (v != null && !v.equals(JsonValue.NULL)) {
-                    inputs.add(new Input(param.name, param.code, param.type, v, requestObject));
-                }
+                inputs.add(new Input(param, requestObject));
             }
 
             File inFile = new File(IN_FILE_PATH);

@@ -30,10 +30,10 @@ public class Setting extends ConfigObject {
 
     public boolean updateWith(JsonObject obj) {
         if (isValidObject(obj)) {
-            this.name = obj.getString(NAME);
+            this.name = Util.getStringSafeNonNull(obj, NAME);
             this.value = obj.get(VALUE);
-            this.group = obj.getString(GROUP);
-            this.type = obj.getString(TYPE);
+            this.group = Util.getStringSafeNonNull(obj, GROUP);
+            this.type = Util.getStringSafeNonNull(obj, TYPE);
             return true;
         }
         return false;
@@ -50,10 +50,10 @@ public class Setting extends ConfigObject {
 
     public static boolean isValidObject(JsonObject obj) {
         if (obj != null) {
-            String name = obj.getString(NAME);
+            String name = Util.getStringSafe(obj, NAME);
             JsonValue value = obj.get(VALUE);
-            String group = obj.getString(GROUP);
-            String type = obj.getString(TYPE);
+            String group = Util.getStringSafe(obj, GROUP);
+            String type = Util.getStringSafe(obj, TYPE);
             return name != null && value != null && group != null && ConfigSettings.isValidGroup(group)
                 && type != null && ConfigSettings.isValidType(type);
         }

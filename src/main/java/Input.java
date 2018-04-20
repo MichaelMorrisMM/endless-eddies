@@ -8,26 +8,34 @@ public class Input {
     public String value;
     public String type;
 
-    public Input(String name, String code, String type, JsonValue value, JsonObject obj) {
-        if (code != null) {
-            String trimmedCode = code.trim();
-            if (!trimmedCode.equals("")) {
-                this.code = trimmedCode;
-            }
-        }
-
-        this.type = type;
-        this.value = this.parseValue(name, value, obj);
+    public Input() {
+        this.code = "";
+        this.value = "";
+        this.type = "";
     }
 
-    private String parseValue(String name, JsonValue val, JsonObject obj) {
-        String codeNonNull = this.code != null ? this.code : "";
-        switch (this.type) {
-            case ConfigSettings.TYPE_FLAG: return val.equals(JsonValue.TRUE) ? codeNonNull : "";
-            case ConfigSettings.TYPE_STRING: return obj.getString(name);
-            case ConfigSettings.TYPE_INTEGER: return "" + ((JsonNumber) val).longValueExact();
-            case ConfigSettings.TYPE_FLOAT: return "" + ((JsonNumber) val).doubleValue();
-            default: return val.toString();
+    public Input(Parameter param, JsonObject requestObject) {
+        this();
+
+        this.code = param.code.trim();
+        this.type = param.type;
+        this.value = parseValue(param, requestObject);
+    }
+
+    private String parseValue(Parameter param, JsonObject obj) {
+        try {
+            JsonValue val = obj.get(param.name);
+            if (val != null && !val.equals(JsonValue.NULL)) {
+                switch (this.type) {
+                    case ConfigSettings.TYPE_FLAG: return val.equals(JsonValue.TRUE) ? this.code : "";
+                    case ConfigSettings.TYPE_STRING: return Util.getStringSafeNonNull(obj, param.name);
+                    case ConfigSettings.TYPE_INTEGER: return "" + ((JsonNumber) val).longValueExact();
+                    case ConfigSettings.TYPE_FLOAT: return "" + ((JsonNumber) val).doubleValue();
+                }
+            }
+            return "";
+        } catch (Exception e) {
+            return "";
         }
     }
 
@@ -36,11 +44,11 @@ public class Input {
             return false;
         }
 
-        return this.code != null;
+        return this.hasValue() && Util.isNonEmpty(this.code);
     }
 
     public boolean hasValue() {
-        return this.value != null && !this.value.equals("");
+        return Util.isNonEmpty(this.value);
     }
 
 }

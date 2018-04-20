@@ -59,44 +59,44 @@ public class ConfigSettings {
     }
 
     public void updateWithConfig(JsonObject config) {
-        JsonArray settingsArray = config.getJsonArray(NODE_SETTINGS);
-        if (settingsArray != null) {
-            for (JsonObject obj : settingsArray.getValuesAs(JsonObject.class)) {
-                String name = obj.getString(Setting.NAME);
-                if (name != null) {
-                    this.settings.get(name).updateWith(obj);
-                }
-            }
-        }
-
-        JsonArray parametersArray = config.getJsonArray(NODE_PARAMETERS);
-        if (parametersArray != null) {
-            this.parameters.clear();
-            for (JsonObject obj : parametersArray.getValuesAs(JsonObject.class)) {
-                Parameter newParam = new Parameter();
-                if (newParam.updateWith(obj)) {
-                    this.parameters.put(newParam.name, newParam);
-                }
-            }
-        }
-
         try {
-            this.command = config.getString(COMMAND);
-        } catch (NullPointerException e) {
+            JsonArray settingsArray = Util.getArraySafe(config, NODE_SETTINGS);
+            if (settingsArray != null) {
+                for (JsonObject obj : settingsArray.getValuesAs(JsonObject.class)) {
+                    String name = Util.getStringSafe(obj, ConfigObject.NAME);
+                    if (name != null && this.settings.containsKey(name)) {
+                        this.settings.get(name).updateWith(obj);
+                    }
+                }
+            }
+
+            JsonArray parametersArray = Util.getArraySafe(config, NODE_PARAMETERS);
+            if (parametersArray != null) {
+                this.parameters.clear();
+                for (JsonObject obj : parametersArray.getValuesAs(JsonObject.class)) {
+                    Parameter newParam = new Parameter();
+                    if (newParam.updateWith(obj)) {
+                        this.parameters.put(newParam.name, newParam);
+                    }
+                }
+            }
+
+            this.command = Util.getStringSafeNonNull(config, COMMAND);
+        } catch (Exception e) {
         }
     }
 
     public JsonObject getConfig() {
         return Json.createObjectBuilder()
-            .add(NODE_SETTINGS, this.getNode(this.settings))
-            .add(NODE_PARAMETERS, this.getSortedNode(this.parameters, new SortOrderComparator()))
+            .add(NODE_SETTINGS, getNode(this.settings))
+            .add(NODE_PARAMETERS, getSortedNode(this.parameters, new SortOrderComparator()))
             .add(COMMAND, this.command)
             .build();
     }
 
     public List<Parameter> getParameters() {
         List<Parameter> list = new ArrayList<>(this.parameters.values());
-        Collections.sort(list, new SortOrderComparator());
+        list.sort(new SortOrderComparator());
         return list;
     }
 
@@ -111,7 +111,7 @@ public class ConfigSettings {
     private static <T extends ConfigObject> JsonArray getSortedNode(Map<String, T> node, Comparator<T> comparator) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
         List<T> list = new ArrayList<>(node.values());
-        Collections.sort(list, comparator);
+        list.sort(comparator);
         for (T obj : list) {
             builder = builder.add(obj.toJsonObject());
         }
