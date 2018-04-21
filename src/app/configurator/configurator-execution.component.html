@@ -12,7 +12,7 @@
                     <input matInput placeholder="Name" [formControlName]="parameter.nameKey">
                 </mat-form-field>
                 <mat-form-field class="margin-right flex-two">
-                    <mat-select placeholder="Type" [formControlName]="parameter.typeKey">
+                    <mat-select placeholder="Type" [formControlName]="parameter.typeKey" (change)="this.resetValidators(parameter)">
                         <mat-option *ngFor="let type of this.configuratorService.getParameterTypes()" [value]="type">
                             {{type}}
                         </mat-option>

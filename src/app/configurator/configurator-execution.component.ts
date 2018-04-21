@@ -98,6 +98,10 @@ export class ConfiguratorExecutionComponent implements OnInit {
         });
     }
 
+    public resetValidators(paramPlaceholder: ParameterPlaceholder) {
+        paramPlaceholder.validators = [];
+    }
+
     public save(): void {
         let newParams: Parameter[] = [];
         this.parameterPlaceholders.forEach((placeholder: ParameterPlaceholder) => {

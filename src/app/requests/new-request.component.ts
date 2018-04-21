@@ -34,13 +34,20 @@ export class NewRequestComponent implements OnInit {
                     let validatorArray: ValidatorFn[] = [];
                     param.validators.forEach((validator: Validator) => {
                         if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REQUIRED) {
-                            validatorArray.push(Validators.required);
+                            if (param.type === this.configuratorService.TYPE_FLAG) {
+                                validatorArray.push(Validators.requiredTrue);
+                            } else {
+                                validatorArray.push(Validators.required);
+                            }
                         } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN) {
                             validatorArray.push(Validators.min(parseInt(validator.value)));
                         }
                     });
                     this.form.controls[param.name].setValidators(validatorArray);
                 }
+            });
+            Object.keys(this.form.controls).forEach(key => {
+                this.form.get(key).markAsTouched();
             });
         });
     }
