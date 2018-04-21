@@ -5,6 +5,7 @@ import {ConstantsService} from './constants.service';
 import {PostResult} from "../configurator/post-result.interface";
 import {Config} from "../configurator/config.interface";
 import {Setting} from "../configurator/setting.interface";
+import {ValidatorBlueprint} from "../configurator/validator-blueprint.interface";
 
 @Injectable()
 export class ConfiguratorService {
@@ -27,6 +28,10 @@ export class ConfiguratorService {
 
     public saveConfiguration(config: Config): Observable<PostResult> {
         return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/configurator', JSON.stringify(config));
+    }
+
+    public getValidatorBlueprints(): Observable<ValidatorBlueprint[]> {
+        return this.http.get<ValidatorBlueprint[]>(ConstantsService.URL_PREFIX + '/validators');
     }
 
     public static getGroupSettings(group: string, config: Config): Setting[] {

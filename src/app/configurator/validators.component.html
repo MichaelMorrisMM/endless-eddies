@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Validation for {{this.paramName}}</h1>
+<mat-dialog-content class="full-height">
+    <form [formGroup]="this.form" class="flex-container-col">
+        <div *ngFor="let blueprint of this.blueprints">
+            <mat-checkbox [formControlName]="blueprint.name" class="margin-right">{{blueprint.name}}</mat-checkbox>
+            <mat-form-field class="margin-right">
+                <input matInput placeholder="Message" [formControlName]="blueprint.name + 'mes'">
+            </mat-form-field>
+            <mat-form-field *ngIf="blueprint.requiresValue">
+                <input matInput placeholder="Value" [formControlName]="blueprint.name + 'val'">
+            </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="this.save()">Save</button>
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

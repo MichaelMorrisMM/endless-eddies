@@ -40,4 +40,8 @@ public class Util {
         }
     }
 
+    public static JsonValue getJsonBoolean(boolean b) {
+        return b ? JsonValue.TRUE : JsonValue.FALSE;
+    }
+
 }

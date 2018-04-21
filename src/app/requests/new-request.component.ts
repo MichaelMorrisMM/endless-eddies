@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {ConfiguratorService} from '../services/configurator.service';
 import {ConstantsService} from "../services/constants.service";
 import {Config} from "../configurator/config.interface";
 import {Parameter} from "../configurator/parameter.model";
 import {ResultsService} from "../services/results.service";
 import {Router} from "@angular/router";
+import {Validator} from "../configurator/validator.model";
 
 @Component({
     selector: 'new-request',
@@ -29,6 +30,17 @@ export class NewRequestComponent implements OnInit {
             this.config = response;
             this.config.parameters.forEach((param: Parameter) => {
                 this.form.addControl(param.name, new FormControl());
+                if (param.validators.length > 0) {
+                    let validatorArray: ValidatorFn[] = [];
+                    param.validators.forEach((validator: Validator) => {
+                        if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REQUIRED) {
+                            validatorArray.push(Validators.required);
+                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN) {
+                            validatorArray.push(Validators.min(parseInt(validator.value)));
+                        }
+                    });
+                    this.form.controls[param.name].setValidators(validatorArray);
+                }
             });
         });
     }

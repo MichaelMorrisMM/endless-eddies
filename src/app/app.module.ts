@@ -21,7 +21,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ConfiguratorService} from './services/configurator.service';
 import {ConfiguratorUsersComponent} from './configurator/configurator-users.component';
 import {
-    MatCheckboxModule, MatSelectModule, MatSidenavModule, MatToolbarModule,
+    MatCheckboxModule, MatDialogModule, MatSelectModule, MatSidenavModule, MatToolbarModule,
     MatTooltipModule
 } from '@angular/material';
 import {BasicInputComponent} from './components/basic-input/basic-input.component';
@@ -29,6 +29,7 @@ import {ConfiguratorExecutionComponent} from './configurator/configurator-execut
 import {NewRequestComponent} from './requests/new-request.component';
 import {ResultsService} from './services/results.service';
 import {AuthService} from './services/auth.service';
+import {ValidatorsComponent} from "./configurator/validators.component";
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import {AuthService} from './services/auth.service';
         HomeComponent,
         BasicInputComponent,
         NewRequestComponent,
+        ValidatorsComponent,
     ],
     imports: [
         BrowserModule,
@@ -61,12 +63,16 @@ import {AuthService} from './services/auth.service';
         MatSidenavModule,
         MatToolbarModule,
         MatTooltipModule,
+        MatDialogModule,
     ],
     providers: [
         ConfiguratorService,
         ConstantsService,
         ResultsService,
         AuthService,
+    ],
+    entryComponents: [
+        ValidatorsComponent,
     ],
     bootstrap: [AppComponent]
 })

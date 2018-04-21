@@ -9,6 +9,11 @@ public abstract class ConfigObject {
     public static final String CODE = "code";
     public static final String SORT_ORDER = "sortOrder";
     public static final String TOOL_TIP = "toolTip";
+    public static final String VALIDATOR_TYPE = "validatorType";
+    public static final String MESSAGE = "message";
+    public static final String APPLIES_TO = "appliesTo";
+    public static final String VALIDATORS = "validators";
+    public static final String REQUIRES_VALUE = "requiresValue";
 
     public static final int DEFAULT_SORT_ORDER = 1;
 

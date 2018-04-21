@@ -6,6 +6,9 @@ import {ParameterPlaceholder} from "./parameter-placeholder.model";
 import {Parameter} from "./parameter.model";
 import {Config} from "./config.interface";
 import {PostResult} from "./post-result.interface";
+import {MatDialog, MatDialogRef} from "@angular/material";
+import {ValidatorsComponent} from "./validators.component";
+import {ValidatorBlueprint} from "./validator-blueprint.interface";
 
 @Component({
     selector: 'configurator-execution',
@@ -18,9 +21,11 @@ export class ConfiguratorExecutionComponent implements OnInit {
     public parameterPlaceholders: ParameterPlaceholder[];
     public form: FormGroup;
     private counter: number;
+    private validatorBlueprints: ValidatorBlueprint[];
 
     constructor(public configuratorService: ConfiguratorService,
-                public constantsService: ConstantsService) {
+                public constantsService: ConstantsService,
+                private dialog: MatDialog) {
         this.form = new FormGroup({});
         this.counter = 1;
     }
@@ -34,6 +39,10 @@ export class ConfiguratorExecutionComponent implements OnInit {
             this.config.parameters.forEach((parameter: Parameter) => {
                 this.makeNewPlaceholder(parameter);
             });
+        });
+
+        this.configuratorService.getValidatorBlueprints().subscribe((response: ValidatorBlueprint[]) => {
+            this.validatorBlueprints = response;
         });
     }
 
@@ -50,6 +59,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
             this.form.addControl(placeholder.codeKey, new FormControl(param.code));
             this.form.addControl(placeholder.sortOrderKey, new FormControl(param.sortOrder));
             this.form.addControl(placeholder.toolTipKey, new FormControl(param.toolTip));
+            placeholder.validators = param.validators;
         } else {
             this.form.addControl(placeholder.nameKey, new FormControl(""));
             this.form.addControl(placeholder.typeKey, new FormControl(""));
@@ -71,6 +81,23 @@ export class ConfiguratorExecutionComponent implements OnInit {
         this.form.markAsDirty();
     }
 
+    public openValidatorsDialog(paramPlaceholder: ParameterPlaceholder) {
+        let dialog: MatDialogRef<ValidatorsComponent> = this.dialog.open(ValidatorsComponent, {
+            data: {
+                paramPlaceholder: paramPlaceholder,
+                name: this.form.controls[paramPlaceholder.nameKey].value,
+                blueprints: this.validatorBlueprints,
+                type: this.form.controls[paramPlaceholder.typeKey].value,
+            }
+        });
+
+        dialog.afterClosed().subscribe((result) => {
+            if (result) {
+                this.form.markAsDirty();
+            }
+        });
+    }
+
     public save(): void {
         let newParams: Parameter[] = [];
         this.parameterPlaceholders.forEach((placeholder: ParameterPlaceholder) => {
@@ -80,6 +107,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
                 this.form.controls[placeholder.codeKey].value,
                 this.form.controls[placeholder.sortOrderKey].value,
                 this.form.controls[placeholder.toolTipKey].value,
+                placeholder.validators
             ));
         });
         this.config.parameters = newParams;

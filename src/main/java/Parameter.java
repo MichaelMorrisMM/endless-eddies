@@ -1,5 +1,9 @@
 import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Parameter extends ConfigObject {
 
@@ -8,6 +12,7 @@ public class Parameter extends ConfigObject {
     public String code;
     public int sortOrder;
     public String toolTip;
+    public List<Validator> validators;
 
     public Parameter() {
         this.name = "";
@@ -15,14 +20,18 @@ public class Parameter extends ConfigObject {
         this.code = "";
         this.sortOrder = DEFAULT_SORT_ORDER;
         this.toolTip = "";
+        this.validators = new ArrayList<>();
     }
 
-    public Parameter(String n, String t, String c, int so, String tt) {
+    public Parameter(String n, String t, String c, int so, String tt, List<Validator> validators) {
         this.name = n;
         this.type = t;
         this.code = c;
         this.sortOrder = so;
         this.toolTip = tt;
+        if (validators != null) {
+            this.validators = validators;
+        }
     }
 
     public Parameter(JsonObject obj) {
@@ -37,18 +46,33 @@ public class Parameter extends ConfigObject {
             this.code = Util.getStringSafeNonNull(obj, CODE);
             this.sortOrder = obj.getInt(SORT_ORDER, DEFAULT_SORT_ORDER);
             this.toolTip = Util.getStringSafeNonNull(obj, TOOL_TIP);
+            JsonArray validatorsArray = Util.getArraySafe(obj, VALIDATORS);
+            if (validatorsArray != null) {
+                for (JsonObject validatorObj : validatorsArray.getValuesAs(JsonObject.class)) {
+                    Validator validator = new Validator(validatorObj);
+                    if (!validator.validatorType.equals("")) {
+                        this.validators.add(validator);
+                    }
+                }
+            }
             return true;
         }
         return false;
     }
 
     public JsonObject toJsonObject() {
+        JsonArrayBuilder validatorsBuilder = Json.createArrayBuilder();
+        for (Validator validator : this.validators) {
+            validatorsBuilder = validatorsBuilder.add(validator.toJsonObject());
+        }
+
         return Json.createObjectBuilder()
             .add(NAME, this.name)
             .add(TYPE, this.type)
             .add(CODE, this.code)
             .add(SORT_ORDER, this.sortOrder)
             .add(TOOL_TIP, this.toolTip)
+            .add(VALIDATORS, validatorsBuilder.build())
             .build();
     }
 
@@ -58,7 +82,6 @@ public class Parameter extends ConfigObject {
             String type = Util.getStringSafe(obj, TYPE);
             String code = Util.getStringSafe(obj, CODE);
             int sortOrder = obj.getInt(SORT_ORDER, DEFAULT_SORT_ORDER);
-            String toolTip = Util.getStringSafe(obj, TOOL_TIP);
             return name != null && type != null && ConfigSettings.isValidType(type) && code != null && sortOrder > 0;
         }
         return false;
@@ -70,7 +93,7 @@ public class Parameter extends ConfigObject {
             Parameter otherAsP = (Parameter) other;
             return this.name.equals(otherAsP.name) && this.type.equals(otherAsP.type)
                 && this.code.equals(otherAsP.code) && this.sortOrder == otherAsP.sortOrder
-                && this.toolTip.equals(otherAsP.toolTip);
+                && this.toolTip.equals(otherAsP.toolTip) && this.validators.equals(otherAsP.validators);
         }
         return false;
     }

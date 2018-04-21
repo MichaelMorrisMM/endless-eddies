@@ -1,9 +1,12 @@
+import {Validator} from "./validator.model";
+
 export class ParameterPlaceholder {
     public nameKey: string;
     public typeKey: string;
     public codeKey: string;
     public sortOrderKey: string;
     public toolTipKey: string;
+    public validators: Validator[];
 
     public constructor(index: number) {
         this.nameKey = index + "name";
@@ -11,5 +14,6 @@ export class ParameterPlaceholder {
         this.codeKey = index + "code";
         this.sortOrderKey = index + "order";
         this.toolTipKey = index + "toolTip";
+        this.validators = [];
     }
 }

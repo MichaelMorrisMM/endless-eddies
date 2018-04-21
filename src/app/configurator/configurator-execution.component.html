@@ -27,9 +27,11 @@
                 <button mat-raised-button color="warn" class="flex-one" (click)="this.deleteParameter(parameter)">Delete</button>
             </div>
             <div class="flex-container-row full-width">
-                <mat-form-field class="half-width">
+                <mat-form-field class="half-width margin-right">
                     <input matInput placeholder="Description" [formControlName]="parameter.toolTipKey">
                 </mat-form-field>
+                <button mat-raised-button (click)="this.openValidatorsDialog(parameter)">Validation</button>
+                <span *ngIf="parameter.validators.length > 0">Validation Present</span>
             </div>
         </div>
         <button mat-raised-button color="accent" (click)="this.addParameter()">Add</button>
