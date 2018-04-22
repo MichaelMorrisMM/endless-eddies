@@ -41,6 +41,12 @@ export class NewRequestComponent implements OnInit {
                             }
                         } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN) {
                             validatorArray.push(Validators.min(parseInt(validator.value)));
+                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX) {
+                            validatorArray.push(Validators.max(parseInt(validator.value)));
+                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN_LENGTH) {
+                            validatorArray.push(Validators.minLength(parseInt(validator.value)));
+                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX_LENGTH) {
+                            validatorArray.push(Validators.maxLength(parseInt(validator.value)));
                         }
                     });
                     this.form.controls[param.name].setValidators(validatorArray);

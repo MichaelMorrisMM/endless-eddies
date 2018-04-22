@@ -12,6 +12,9 @@ import java.util.List;
 public class ValidatorsServlet extends HttpServlet {
     public static final String VALIDATOR_TYPE_REQUIRED = "required";
     public static final String VALIDATOR_TYPE_MIN = "min";
+    public static final String VALIDATOR_TYPE_MAX = "max";
+    public static final String VALIDATOR_TYPE_MIN_LENGTH = "min length";
+    public static final String VALIDATOR_TYPE_MAX_LENGTH = "max length";
 
     public static List<ValidatorBlueprint> blueprints;
     static {
@@ -20,6 +23,12 @@ public class ValidatorsServlet extends HttpServlet {
             ConfigSettings.TYPE_FLAG, ConfigSettings.TYPE_FLOAT, ConfigSettings.TYPE_INTEGER, ConfigSettings.TYPE_STRING));
         blueprints.add(new ValidatorBlueprint("Minimum", VALIDATOR_TYPE_MIN, true,
             ConfigSettings.TYPE_INTEGER, ConfigSettings.TYPE_FLOAT));
+        blueprints.add(new ValidatorBlueprint("Maximum", VALIDATOR_TYPE_MAX, true,
+            ConfigSettings.TYPE_INTEGER, ConfigSettings.TYPE_FLOAT));
+        blueprints.add(new ValidatorBlueprint("Minimum length", VALIDATOR_TYPE_MIN_LENGTH, true,
+            ConfigSettings.TYPE_STRING));
+        blueprints.add(new ValidatorBlueprint("Maximum length", VALIDATOR_TYPE_MAX_LENGTH, true,
+            ConfigSettings.TYPE_STRING));
     }
 
     @Override
