@@ -13,8 +13,8 @@ public class ValidatorsServlet extends HttpServlet {
     public static final String VALIDATOR_TYPE_REQUIRED = "required";
     public static final String VALIDATOR_TYPE_MIN = "min";
     public static final String VALIDATOR_TYPE_MAX = "max";
-    public static final String VALIDATOR_TYPE_MIN_LENGTH = "min length";
-    public static final String VALIDATOR_TYPE_MAX_LENGTH = "max length";
+    public static final String VALIDATOR_TYPE_MIN_LENGTH = "minlength";
+    public static final String VALIDATOR_TYPE_MAX_LENGTH = "maxlength";
 
     public static List<ValidatorBlueprint> blueprints;
     static {

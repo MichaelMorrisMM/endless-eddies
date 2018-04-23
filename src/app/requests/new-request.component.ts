@@ -40,9 +40,9 @@ export class NewRequestComponent implements OnInit {
                                 validatorArray.push(Validators.required);
                             }
                         } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN) {
-                            validatorArray.push(Validators.min(parseInt(validator.value)));
+                            validatorArray.push(Validators.min(parseFloat(validator.value)));
                         } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX) {
-                            validatorArray.push(Validators.max(parseInt(validator.value)));
+                            validatorArray.push(Validators.max(parseFloat(validator.value)));
                         } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN_LENGTH) {
                             validatorArray.push(Validators.minLength(parseInt(validator.value)));
                         } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX_LENGTH) {
