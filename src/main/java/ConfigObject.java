@@ -14,6 +14,7 @@ public abstract class ConfigObject {
     public static final String APPLIES_TO = "appliesTo";
     public static final String VALIDATORS = "validators";
     public static final String REQUIRES_VALUE = "requiresValue";
+    public static final String SELECT_OPTIONS = "selectOptions";
 
     public static final int DEFAULT_SORT_ORDER = 1;
 

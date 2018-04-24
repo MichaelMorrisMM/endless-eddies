@@ -30,6 +30,7 @@ import {NewRequestComponent} from './requests/new-request.component';
 import {ResultsService} from './services/results.service';
 import {AuthService} from './services/auth.service';
 import {ValidatorsComponent} from "./configurator/validators.component";
+import {OptionsComponent} from "./configurator/options.component";
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import {ValidatorsComponent} from "./configurator/validators.component";
         BasicInputComponent,
         NewRequestComponent,
         ValidatorsComponent,
+        OptionsComponent,
     ],
     imports: [
         BrowserModule,
@@ -73,6 +75,7 @@ import {ValidatorsComponent} from "./configurator/validators.component";
     ],
     entryComponents: [
         ValidatorsComponent,
+        OptionsComponent,
     ],
     bootstrap: [AppComponent]
 })

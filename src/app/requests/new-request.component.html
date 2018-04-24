@@ -14,6 +14,12 @@
                 <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_FLOAT" class="half-width">
                     <input matInput type="number" placeholder="{{param.name}}" [formControlName]="param.name">
                 </mat-form-field>
+                <mat-form-field *ngSwitchCase="this.configuratorService.TYPE_SELECT" class="half-width">
+                    <mat-select placeholder="{{param.name}}" [formControlName]="param.name">
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let opt of param.selectOptions" [value]="opt">{{opt}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <span *ngIf="param.toolTip" matTooltip="{{param.toolTip}}" [matTooltipPosition]="'above'" class="margin-left">Info</span>
                 <div *ngFor="let validator of param.validators">
                     <span class="margin-left" *ngIf="validator.message && this.form.controls[param.name].hasError(validator.validatorType)">*{{validator.message}}</span>

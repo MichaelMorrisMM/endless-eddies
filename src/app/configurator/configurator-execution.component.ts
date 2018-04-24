@@ -9,6 +9,7 @@ import {PostResult} from "./post-result.interface";
 import {MatDialog, MatDialogRef} from "@angular/material";
 import {ValidatorsComponent} from "./validators.component";
 import {ValidatorBlueprint} from "./validator-blueprint.interface";
+import {OptionsComponent} from "./options.component";
 
 @Component({
     selector: 'configurator-execution',
@@ -60,6 +61,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
             this.form.addControl(placeholder.sortOrderKey, new FormControl(param.sortOrder));
             this.form.addControl(placeholder.toolTipKey, new FormControl(param.toolTip));
             placeholder.validators = param.validators;
+            placeholder.selectOptions = param.selectOptions;
         } else {
             this.form.addControl(placeholder.nameKey, new FormControl(""));
             this.form.addControl(placeholder.typeKey, new FormControl(""));
@@ -98,8 +100,24 @@ export class ConfiguratorExecutionComponent implements OnInit {
         });
     }
 
-    public resetValidators(paramPlaceholder: ParameterPlaceholder) {
+    public openOptionsDialog(paramPlaceholder: ParameterPlaceholder) {
+        let dialog: MatDialogRef<OptionsComponent> = this.dialog.open(OptionsComponent, {
+            data: {
+                paramPlaceholder: paramPlaceholder,
+                name: this.form.controls[paramPlaceholder.nameKey].value,
+            }
+        });
+
+        dialog.afterClosed().subscribe((result) => {
+            if (result) {
+                this.form.markAsDirty();
+            }
+        });
+    }
+
+    public onTypeChange(paramPlaceholder: ParameterPlaceholder) {
         paramPlaceholder.validators = [];
+        paramPlaceholder.selectOptions = [];
     }
 
     public save(): void {
@@ -111,7 +129,8 @@ export class ConfiguratorExecutionComponent implements OnInit {
                 this.form.controls[placeholder.codeKey].value,
                 this.form.controls[placeholder.sortOrderKey].value,
                 this.form.controls[placeholder.toolTipKey].value,
-                placeholder.validators
+                placeholder.validators,
+                placeholder.selectOptions,
             ));
         });
         this.config.parameters = newParams;

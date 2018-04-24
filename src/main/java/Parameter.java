@@ -1,7 +1,4 @@
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
+import javax.json.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +10,7 @@ public class Parameter extends ConfigObject {
     public int sortOrder;
     public String toolTip;
     public List<Validator> validators;
+    public List<String> selectOptions;
 
     public Parameter() {
         this.name = "";
@@ -21,9 +19,10 @@ public class Parameter extends ConfigObject {
         this.sortOrder = DEFAULT_SORT_ORDER;
         this.toolTip = "";
         this.validators = new ArrayList<>();
+        this.selectOptions = new ArrayList<>();
     }
 
-    public Parameter(String n, String t, String c, int so, String tt, List<Validator> validators) {
+    public Parameter(String n, String t, String c, int so, String tt, List<Validator> validators, List<String> selectOptions) {
         this.name = n;
         this.type = t;
         this.code = c;
@@ -31,6 +30,9 @@ public class Parameter extends ConfigObject {
         this.toolTip = tt;
         if (validators != null) {
             this.validators = validators;
+        }
+        if (selectOptions != null) {
+            this.selectOptions = selectOptions;
         }
     }
 
@@ -55,6 +57,13 @@ public class Parameter extends ConfigObject {
                     }
                 }
             }
+            JsonArray optionsArray = Util.getArraySafe(obj, SELECT_OPTIONS);
+            if (optionsArray != null) {
+                this.selectOptions = new ArrayList<>();
+                for (JsonString opt : optionsArray.getValuesAs(JsonString.class)) {
+                    this.selectOptions.add(opt.getString());
+                }
+            }
             return true;
         }
         return false;
@@ -66,6 +75,11 @@ public class Parameter extends ConfigObject {
             validatorsBuilder = validatorsBuilder.add(validator.toJsonObject());
         }
 
+        JsonArrayBuilder optionsBuilder = Json.createArrayBuilder();
+        for (String opt : this.selectOptions) {
+            optionsBuilder = optionsBuilder.add(opt);
+        }
+
         return Json.createObjectBuilder()
             .add(NAME, this.name)
             .add(TYPE, this.type)
@@ -73,6 +87,7 @@ public class Parameter extends ConfigObject {
             .add(SORT_ORDER, this.sortOrder)
             .add(TOOL_TIP, this.toolTip)
             .add(VALIDATORS, validatorsBuilder.build())
+            .add(SELECT_OPTIONS, optionsBuilder.build())
             .build();
     }
 
@@ -80,6 +95,12 @@ public class Parameter extends ConfigObject {
         if (obj != null) {
             String name = Util.getStringSafe(obj, NAME);
             String type = Util.getStringSafe(obj, TYPE);
+            if (type != null && type.equals(ConfigSettings.TYPE_SELECT)) {
+                JsonArray optionsArray = Util.getArraySafe(obj, SELECT_OPTIONS);
+                if (optionsArray == null || optionsArray.size() < 1) {
+                    return false;
+                }
+            }
             String code = Util.getStringSafe(obj, CODE);
             int sortOrder = obj.getInt(SORT_ORDER, DEFAULT_SORT_ORDER);
             return name != null && type != null && ConfigSettings.isValidType(type) && code != null && sortOrder > 0;
@@ -93,7 +114,8 @@ public class Parameter extends ConfigObject {
             Parameter otherAsP = (Parameter) other;
             return this.name.equals(otherAsP.name) && this.type.equals(otherAsP.type)
                 && this.code.equals(otherAsP.code) && this.sortOrder == otherAsP.sortOrder
-                && this.toolTip.equals(otherAsP.toolTip) && this.validators.equals(otherAsP.validators);
+                && this.toolTip.equals(otherAsP.toolTip) && this.validators.equals(otherAsP.validators)
+                && this.selectOptions.equals(otherAsP.selectOptions);
         }
         return false;
     }

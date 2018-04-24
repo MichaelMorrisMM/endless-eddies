@@ -20,7 +20,7 @@ public class ValidatorsServlet extends HttpServlet {
     static {
         blueprints = new ArrayList<>();
         blueprints.add(new ValidatorBlueprint("Required", VALIDATOR_TYPE_REQUIRED, false,
-            ConfigSettings.TYPE_FLAG, ConfigSettings.TYPE_FLOAT, ConfigSettings.TYPE_INTEGER, ConfigSettings.TYPE_STRING));
+            ConfigSettings.TYPE_FLAG, ConfigSettings.TYPE_FLOAT, ConfigSettings.TYPE_INTEGER, ConfigSettings.TYPE_STRING, ConfigSettings.TYPE_SELECT));
         blueprints.add(new ValidatorBlueprint("Minimum", VALIDATOR_TYPE_MIN, true,
             ConfigSettings.TYPE_INTEGER, ConfigSettings.TYPE_FLOAT));
         blueprints.add(new ValidatorBlueprint("Maximum", VALIDATOR_TYPE_MAX, true,

@@ -7,6 +7,7 @@ export class ParameterPlaceholder {
     public sortOrderKey: string;
     public toolTipKey: string;
     public validators: Validator[];
+    public selectOptions: string[];
 
     public constructor(index: number) {
         this.nameKey = index + "name";
@@ -15,5 +16,6 @@ export class ParameterPlaceholder {
         this.sortOrderKey = index + "order";
         this.toolTipKey = index + "toolTip";
         this.validators = [];
+        this.selectOptions = [];
     }
 }

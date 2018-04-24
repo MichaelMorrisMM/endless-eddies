@@ -31,6 +31,7 @@ public class Input {
                     case ConfigSettings.TYPE_STRING: return Util.getStringSafeNonNull(obj, param.name);
                     case ConfigSettings.TYPE_INTEGER: return "" + ((JsonNumber) val).longValueExact();
                     case ConfigSettings.TYPE_FLOAT: return "" + ((JsonNumber) val).doubleValue();
+                    case ConfigSettings.TYPE_SELECT: return Util.getStringSafeNonNull(obj, param.name);
                 }
             }
             return "";

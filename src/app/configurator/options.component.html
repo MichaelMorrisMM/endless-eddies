@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Options for {{this.paramName}}</h1>
+<mat-dialog-content class="full-height">
+    <form [formGroup]="this.form" class="flex-container-col">
+        <div *ngFor="let key of this.keys">
+            <mat-form-field>
+                <input matInput placeholder="Value" [formControlName]="key">
+            </mat-form-field>
+        </div>
+        <div class="flex-container-row">
+            <button mat-button (click)="this.addOption(null)">Add</button>
+            <button mat-button (click)="this.removeOption()">Remove</button>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button [disabled]="this.form.invalid || this.keys.length < 1" (click)="this.save()">Save</button>
+    <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>

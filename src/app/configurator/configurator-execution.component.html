@@ -12,13 +12,15 @@
                     <input matInput placeholder="Name" [formControlName]="parameter.nameKey">
                 </mat-form-field>
                 <mat-form-field class="margin-right flex-two">
-                    <mat-select placeholder="Type" [formControlName]="parameter.typeKey" (change)="this.resetValidators(parameter)">
+                    <mat-select placeholder="Type" [formControlName]="parameter.typeKey" (change)="this.onTypeChange(parameter)">
                         <mat-option *ngFor="let type of this.configuratorService.getParameterTypes()" [value]="type">
                             {{type}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="margin-right flex-two">
+                <button *ngIf="this.form.controls[parameter.typeKey].value == this.configuratorService.TYPE_SELECT"
+                        mat-raised-button (click)="this.openOptionsDialog(parameter)">Options</button>
+                <mat-form-field class="margin-left margin-right flex-two">
                     <input matInput placeholder="Code" [formControlName]="parameter.codeKey">
                 </mat-form-field>
                 <mat-form-field class="margin-right flex-two">

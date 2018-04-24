@@ -11,13 +11,15 @@ public class ConfigSettings {
     public static final String TYPE_STRING = "string";
     public static final String TYPE_INTEGER = "integer";
     public static final String TYPE_FLOAT = "float";
+    public static final String TYPE_SELECT = "select";
     private static Set<String> typeSet;
     static {
-        typeSet = new HashSet<>(4);
+        typeSet = new HashSet<>();
         typeSet.add(TYPE_FLAG);
         typeSet.add(TYPE_STRING);
         typeSet.add(TYPE_INTEGER);
         typeSet.add(TYPE_FLOAT);
+        typeSet.add(TYPE_SELECT);
     }
 
     public static final String GROUP_USERS = "users";
