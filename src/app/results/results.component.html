@@ -1,4 +1,13 @@
 <h1 class="title">Results</h1>
+<button mat-raised-button (click)="this.toggleGraph()">Show Histogram</button>
+<div *ngIf="this.isGraphShowing">
+    <h1 class="subtitle">U Data</h1>
+    <app-histogram [inputData]="this.u"></app-histogram>
+    <h1 class="subtitle">V Data</h1>
+    <app-histogram [inputData]="this.v"></app-histogram>
+    <h1 class="subtitle">W Data</h1>
+    <app-histogram [inputData]="this.w"></app-histogram>
+</div>
 <ng-container *ngIf="this.config && this.resultsService.lastResult">
     <label>Status:</label>
     <pre>{{this.resultsService.lastResult.success}}</pre>

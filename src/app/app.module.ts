@@ -4,6 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
@@ -12,6 +13,7 @@ import {NotFoundComponent} from './not-found/not-found.component';
 import {RequestsComponent} from './requests/requests.component';
 import {ResultsComponent} from './results/results.component';
 import {HomeComponent} from './home/home.component';
+import {HistogramComponent} from './custom-charts/histogram.component';
 
 import {AppRoutingModule} from './app-routing.module';
 import {ConfiguratorOverviewComponent} from './configurator/configurator-overview.component';
@@ -49,6 +51,7 @@ import {OptionsComponent} from "./configurator/options.component";
         NewRequestComponent,
         ValidatorsComponent,
         OptionsComponent,
+        HistogramComponent,
     ],
     imports: [
         BrowserModule,
@@ -66,6 +69,7 @@ import {OptionsComponent} from "./configurator/options.component";
         MatToolbarModule,
         MatTooltipModule,
         MatDialogModule,
+        NgxChartsModule,
     ],
     providers: [
         ConfiguratorService,
