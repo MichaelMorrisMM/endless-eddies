@@ -5,4 +5,10 @@
     <label>Result:</label>
     <pre>{{this.resultsService.lastResult.message}}</pre>
 </ng-container>
-<app-histogram [inputData]="arr"></app-histogram>
+<button mat-raised-button (click)="this.toggleGraph()">Show Histogram</button>
+<ng-container *ngIf="this.isGraphShowing">
+    <app-histogram [inputData]="this.u" [ran]="2"></app-histogram>
+    <app-histogram [inputData]="this.v" [ran]="2"></app-histogram>
+    <app-histogram [inputData]="this.w" [ran]="2"></app-histogram>
+</ng-container>
+

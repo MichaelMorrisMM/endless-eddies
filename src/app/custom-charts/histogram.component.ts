@@ -10,6 +10,7 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
 export class HistogramComponent implements OnInit {
 
     @Input() inputData: number[];
+    @Input() ran: number;
     // @Input() numRanges: number;
     dataArray: any[] = [];
     view: any[] = [700, 400];
@@ -33,23 +34,40 @@ export class HistogramComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.inputData);
-        const tempObj = {};
-        this.inputData.forEach( x => {
-            if (tempObj['' + x] === 1) {
-                tempObj['' + x] += 1;
-            } else {
-                tempObj['' + x] = 1;
-            }
-        });
-        console.log(tempObj);
-        const objKeys = Object.keys(tempObj);
-        objKeys.forEach(k => {
-            this.dataArray.push({
-                name: k,
-                value: tempObj[k],
+        if ( this.ran < 1) {
+            const tempObj = {};
+            this.inputData.forEach( x => {
+                if (tempObj['' + x] === 1) {
+                    tempObj['' + x] += 1;
+                } else {
+                    tempObj['' + x] = 1;
+                }
             });
-        });
-        console.log(this.dataArray);
+            const objKeys = Object.keys(tempObj);
+            objKeys.forEach(k => {
+                this.dataArray.push({
+                    name: k,
+                    value: tempObj[k],
+                });
+            });
+        } else {
+            const data = this.inputData.map( x => Math.round( 10 * x ) / 10);
+
+            const tempObj = {};
+            data.forEach( x => {
+                if (tempObj['' + x] === 1) {
+                    tempObj['' + x] += 1;
+                } else {
+                    tempObj['' + x] = 1;
+                }
+            });
+            const objKeys = Object.keys(tempObj);
+            objKeys.forEach(k => {
+                this.dataArray.push({
+                    name: k,
+                    value: tempObj[k],
+                });
+            });
+        }
     }
 }
