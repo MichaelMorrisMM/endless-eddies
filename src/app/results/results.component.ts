@@ -28,11 +28,22 @@ export class ResultsComponent implements OnInit {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
         });
+        this.u = [];
+        this.v = [];
+        this.w = [];
 
-        let tempArr: any[] = this.resultsService.lastResult.message.split(' ').slice(13);
+        const tempArr: any[] = this.resultsService
+                                   .lastResult
+                                   .message
+                                   .replace('\r\n', ' ')
+                                   .replace('\n', ' ')
+                                   .split(' ')
+                                   .filter(x => x !== '')
+                                   .map(x => Number(x))
+                                   .map(x => Math.round(x * 100) / 100)
+                                   .filter(x => !isNaN(x));
 
-        tempArr = tempArr.map(x => Number(x));
-
+        console.log(tempArr);
         tempArr.forEach( (x, i) => {
             if (i % 3 === 0) {
                 this.u.push(x);

@@ -1,14 +1,16 @@
 <h1 class="title">Results</h1>
+<button mat-raised-button (click)="this.toggleGraph()">Show Histogram</button>
+<ng-container *ngIf="this.isGraphShowing">
+    <h1 class="subtitle">U</h1>
+    <app-histogram [inputData]="this.u"></app-histogram>
+    <h1 class="subtitle">V</h1>
+    <app-histogram [inputData]="this.v"></app-histogram>
+    <h1 class="subtitle">W</h1>
+    <app-histogram [inputData]="this.w"></app-histogram>
+</ng-container>
 <ng-container *ngIf="this.config && this.resultsService.lastResult">
     <label>Status:</label>
     <pre>{{this.resultsService.lastResult.success}}</pre>
     <label>Result:</label>
     <pre>{{this.resultsService.lastResult.message}}</pre>
 </ng-container>
-<button mat-raised-button (click)="this.toggleGraph()">Show Histogram</button>
-<ng-container *ngIf="this.isGraphShowing">
-    <app-histogram [inputData]="this.u" [ran]="2"></app-histogram>
-    <app-histogram [inputData]="this.v" [ran]="2"></app-histogram>
-    <app-histogram [inputData]="this.w" [ran]="2"></app-histogram>
-</ng-container>
-

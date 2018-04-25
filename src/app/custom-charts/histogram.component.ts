@@ -10,7 +10,6 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
 export class HistogramComponent implements OnInit {
 
     @Input() inputData: number[];
-    @Input() ran: number;
     // @Input() numRanges: number;
     dataArray: any[] = [];
     view: any[] = [700, 400];
@@ -19,9 +18,9 @@ export class HistogramComponent implements OnInit {
     gradient = false;
     showLegend = true;
     showXAxisLabel = true;
-    xAxisLabel = 'Frequency';
+    xAxisLabel = 'Value';
     showYAxisLabel = true;
-    yAxisLabel = 'Value';
+    yAxisLabel = 'Frequency';
     colorScheme = {
       domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
     };
@@ -34,40 +33,20 @@ export class HistogramComponent implements OnInit {
     }
 
     ngOnInit() {
-        if ( this.ran < 1) {
-            const tempObj = {};
-            this.inputData.forEach( x => {
-                if (tempObj['' + x] === 1) {
-                    tempObj['' + x] += 1;
-                } else {
-                    tempObj['' + x] = 1;
-                }
+        const tempObj = {};
+        this.inputData.forEach( x => {
+            if (tempObj['' + x] === 1 || tempObj['' + x] >= 1) {
+                tempObj['' + x] += 1;
+            } else {
+                tempObj['' + x] = 1;
+            }
+        });
+        const objKeys = Object.keys(tempObj);
+        objKeys.forEach(k => {
+            this.dataArray.push({
+                name: k,
+                value: tempObj[k],
             });
-            const objKeys = Object.keys(tempObj);
-            objKeys.forEach(k => {
-                this.dataArray.push({
-                    name: k,
-                    value: tempObj[k],
-                });
-            });
-        } else {
-            const data = this.inputData.map( x => Math.round( 10 * x ) / 10);
-
-            const tempObj = {};
-            data.forEach( x => {
-                if (tempObj['' + x] === 1) {
-                    tempObj['' + x] += 1;
-                } else {
-                    tempObj['' + x] = 1;
-                }
-            });
-            const objKeys = Object.keys(tempObj);
-            objKeys.forEach(k => {
-                this.dataArray.push({
-                    name: k,
-                    value: tempObj[k],
-                });
-            });
-        }
+        });
     }
 }
