@@ -2,12 +2,25 @@
 **Work in Progress**
 
 ## Installation and Deployment (Non-Developers)
-1. Install Java 8 JRE (at least Update 161)
-    1. Define `JRE_HOME` system environment variable (path to JRE folder)
-2. Install Apache Tomcat 9 (at least 9.0.6)
-    1. Define `CATALINA_HOME` system environment variable (path to Tomcat folder)
-3. Download and execute EndlessEddies installer
-4. Configure as desired
+1. Download and execute [Endless Eddies installer](https://github.com/MichaelMorrisMM/endless-eddies/blob/master/scripts/install-endless-eddies.sh)
+    - This will:
+    - Install dependencies:
+        - `openjdk-8-jdk-headless`
+        - `apache-tomcat-9.0.7`
+        - `nodejs`
+        - `git`
+    - Git clone https://github.com/MichaelMorrisMM/endless-eddies
+    - Build and deploy Endless Eddies
+2. Define `CATALINA_HOME` environment variable (path to Tomcat folder)
+    - `/home/<username>/apache-tomcat9`
+3. Define `ENDLESS_EDDIES_CONFIG_DIR` environment variable (path to save configuration files)
+    - `/home/<username>/endless-eddies/conf`
+4. Start Tomcat:
+```
+cd $CATALINA_HOME
+./bin/catalina.sh run
+```
+5. User a browser to navigate to: http://<server-ip-address>:8080/endless-eddies
 
 ## Installation and Deployment (Developers)
 1. Install Java 8 JDK (at least Update 161)
