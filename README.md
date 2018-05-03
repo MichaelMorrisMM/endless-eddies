@@ -20,7 +20,7 @@
 cd $CATALINA_HOME
 ./bin/catalina.sh run
 ```
-5. Use a browser to navigate to: http://<server-ip-address>:8080/endless-eddies
+5. Use a browser to navigate to: `http://<server-ip-address>:8080/endless-eddies`
 
 ## Installation and Deployment (Developers)
 1. Install Java 8 JDK (at least Update 161)
