@@ -24,7 +24,7 @@ public class HttpUtil {
     private static void setCORSHeaders(HttpServletResponse response) {
         if (ALLOW_CORS_LOCALHOST) {
             response.setHeader("Access-Control-Allow-Origin", LOCALHOST_DEV_SERVER);
-            response.setHeader("Vary", LOCALHOST_DEV_SERVER);
+            response.setHeader("Vary", "Origin");
         }
     }
 

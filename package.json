@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --base-href=/endless-eddies/ --proxy-config=proxy.conf.json",
     "build": "ng build --base-href=/endless-eddies/ --prod",
     "test": "ng test",
     "lint": "ng lint",

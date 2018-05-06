@@ -1,2 +1,2 @@
 cd ..
-ng serve
+npm start
