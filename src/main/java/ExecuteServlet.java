@@ -9,13 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @WebServlet("/execute")
 public class ExecuteServlet extends HttpServlet {
-
-    public static final String IN_FILE_PATH = ConfiguratorServlet.ROOT_PATH + File.separator + "in.txt";
-    public static final String OUT_FILE_PATH = ConfiguratorServlet.ROOT_PATH + File.separator + "out.txt";
-    public static final String ERROR_FILE_PATH = ConfiguratorServlet.ROOT_PATH + File.separator + "error.txt";
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -33,16 +30,23 @@ public class ExecuteServlet extends HttpServlet {
                 inputs.add(new Input(param, requestObject));
             }
 
-            File inFile = new File(IN_FILE_PATH);
+            File tmpDir = new File(
+                ConfiguratorServlet.ROOT_PATH
+                    + File.separator
+                    + UUID.randomUUID().toString().replace("-", "")
+            );
+            tmpDir.mkdir();
+
+            File inFile = new File(tmpDir, "in.txt");
             inFile.createNewFile();
-            File outFile = new File(OUT_FILE_PATH);
+            File outFile = new File(tmpDir, "out.txt");
             outFile.createNewFile();
-            File errorFile = new File(ERROR_FILE_PATH);
+            File errorFile = new File(tmpDir, "error.txt");
             errorFile.createNewFile();
 
             try {
                 Command command = new Command(config.command, inputs);
-                Process process = command.execute(inFile, outFile, errorFile);
+                Process process = command.execute(inFile, outFile, errorFile, tmpDir);
                 process.waitFor();
 
                 StringBuilder stringBuilder = new StringBuilder();

@@ -38,11 +38,12 @@ public class Command {
             .start();
     }
 
-    public Process execute(File in, File out, File error) throws IOException {
+    public Process execute(File in, File out, File error, File dir) throws IOException {
         return this.getBuilder()
             .redirectInput(in)
             .redirectOutput(out)
             .redirectError(error)
+            .directory(dir)
             .start();
     }
 
