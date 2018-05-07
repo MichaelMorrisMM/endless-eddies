@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Application Picker</h1>
+<mat-dialog-content>
+    <ng-container *ngIf="this.config && this.config.applications">
+        <div *ngFor="let app of this.config.applications">
+            <button mat-button (click)="this.submit(app)">{{app.name}}</button>
+        </div>
+    </ng-container>
+    <button mat-button color="accent" *ngIf="this.showAdder" (click)="this.submit(null)">Add New Application</button>
+</mat-dialog-content>

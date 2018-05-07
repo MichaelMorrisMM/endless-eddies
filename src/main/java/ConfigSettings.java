@@ -30,17 +30,15 @@ public class ConfigSettings {
     }
 
     public static final String NODE_SETTINGS = "settings";
-    public static final String NODE_PARAMETERS = "parameters";
+    public static final String NODE_APPLICATIONS = "applications";
+    public static final String TARGET_APPLICATION = "targetApplication";
 
     public static final String SETTING_ALLOW_GUEST_MODE = "allow_guest_mode";
     public static final String SETTING_ALLOW_GOOGLE_AUTH = "allow_google_auth";
     public static final String SETTING_ALLOW_GITHUB_AUTH = "allow_github_auth";
 
     private Map<String, Setting> settings;
-    private Map<String, Parameter> parameters;
-
-    public static final String COMMAND = "command";
-    public String command;
+    private List<Application> applications;
 
     public ConfigSettings() {
         this.settings = new HashMap<>();
@@ -48,9 +46,7 @@ public class ConfigSettings {
         this.settings.put(SETTING_ALLOW_GOOGLE_AUTH, new Setting(SETTING_ALLOW_GOOGLE_AUTH, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
         this.settings.put(SETTING_ALLOW_GITHUB_AUTH, new Setting(SETTING_ALLOW_GITHUB_AUTH, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
 
-        this.parameters = new HashMap<>();
-
-        this.command = "";
+        this.applications = new ArrayList<>();
     }
 
     public ConfigSettings(File configFile) throws FileNotFoundException {
@@ -72,37 +68,47 @@ public class ConfigSettings {
                 }
             }
 
-            JsonArray parametersArray = Util.getArraySafe(config, NODE_PARAMETERS);
-            if (parametersArray != null) {
-                this.parameters.clear();
-                for (JsonObject obj : parametersArray.getValuesAs(JsonObject.class)) {
-                    Parameter newParam = new Parameter();
-                    if (newParam.updateWith(obj)) {
-                        this.parameters.put(newParam.name, newParam);
+            JsonArray applicationsArray = Util.getArraySafe(config, NODE_APPLICATIONS);
+            if (applicationsArray != null) {
+                this.applications.clear();
+                for (JsonObject obj : applicationsArray.getValuesAs(JsonObject.class)) {
+                    Application newApp = new Application();
+                    if (newApp.updateWith(obj)) {
+                        this.applications.add(newApp);
                     }
                 }
             }
-
-            this.command = Util.getStringSafeNonNull(config, COMMAND);
         } catch (Exception e) {
         }
+    }
+
+    public Application getApplication(String name) {
+        if (name != null && !name.equals("")) {
+            for (Application a : this.applications) {
+                if (a.name.equals(name)) {
+                    return a;
+                }
+            }
+        }
+        return null;
     }
 
     public JsonObject getConfig() {
         return Json.createObjectBuilder()
             .add(NODE_SETTINGS, getNode(this.settings))
-            .add(NODE_PARAMETERS, getSortedNode(this.parameters, new SortOrderComparator()))
-            .add(COMMAND, this.command)
+            .add(NODE_APPLICATIONS, getNode(this.applications))
             .build();
     }
 
-    public List<Parameter> getParameters() {
-        List<Parameter> list = new ArrayList<>(this.parameters.values());
-        list.sort(new SortOrderComparator());
-        return list;
+    public static <T extends ConfigObject> JsonArray getNode(List<T> node) {
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        for (T e : node) {
+            builder = builder.add(e.toJsonObject());
+        }
+        return builder.build();
     }
 
-    private static <T extends ConfigObject> JsonArray getNode(Map<String, T> node) {
+    public static <T extends ConfigObject> JsonArray getNode(Map<String, T> node) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
         for (Entry<String, T> e : node.entrySet()) {
             builder = builder.add(e.getValue().toJsonObject());
@@ -110,7 +116,7 @@ public class ConfigSettings {
         return builder.build();
     }
 
-    private static <T extends ConfigObject> JsonArray getSortedNode(Map<String, T> node, Comparator<T> comparator) {
+    public static <T extends ConfigObject> JsonArray getSortedNode(Map<String, T> node, Comparator<T> comparator) {
         JsonArrayBuilder builder = Json.createArrayBuilder();
         List<T> list = new ArrayList<>(node.values());
         list.sort(comparator);
@@ -126,13 +132,6 @@ public class ConfigSettings {
 
     public static boolean isValidGroup(String s) {
         return s != null && groupSet.contains(s);
-    }
-
-    public static class SortOrderComparator implements Comparator<Parameter> {
-
-        public int compare(Parameter a, Parameter b) {
-            return a.sortOrder - b.sortOrder;
-        }
     }
 
 }

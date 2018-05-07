@@ -1,8 +1,7 @@
-import {Parameter} from "./parameter.model";
 import {Setting} from "./setting.interface";
+import {Application} from "./application.model";
 
 export interface Config {
     settings: Setting[];
-    parameters: Parameter[];
-    command: string;
+    applications: Application[];
 }

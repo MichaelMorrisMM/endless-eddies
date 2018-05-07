@@ -23,10 +23,11 @@ public class ExecuteServlet extends HttpServlet {
         try (JsonReader reader = Json.createReader(request.getReader())) {
             requestObject = reader.readObject();
         }
+        Application application = config.getApplication(Util.getStringSafe(requestObject, ConfigSettings.TARGET_APPLICATION));
 
-        if (requestObject != null) {
+        if (requestObject != null && application != null) {
             List<Input> inputs = new ArrayList<>();
-            for (Parameter param : config.getParameters()) {
+            for (Parameter param : application.getParameters()) {
                 inputs.add(new Input(param, requestObject));
             }
 
@@ -45,7 +46,7 @@ public class ExecuteServlet extends HttpServlet {
             errorFile.createNewFile();
 
             try {
-                Command command = new Command(config.command, inputs);
+                Command command = new Command(application.command, inputs);
                 Process process = command.execute(inFile, outFile, errorFile, tmpDir);
                 process.waitFor();
 

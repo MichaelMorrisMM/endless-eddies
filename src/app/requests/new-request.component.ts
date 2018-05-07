@@ -7,6 +7,9 @@ import {Parameter} from "../configurator/parameter.model";
 import {ResultsService} from "../services/results.service";
 import {Router} from "@angular/router";
 import {Validator} from "../configurator/validator.model";
+import {Application} from "../configurator/application.model";
+import {ApplicationPickerComponent} from "../configurator/application-picker.component";
+import {MatDialog, MatDialogRef} from "@angular/material";
 
 @Component({
     selector: 'new-request',
@@ -16,51 +19,75 @@ import {Validator} from "../configurator/validator.model";
 })
 export class NewRequestComponent implements OnInit {
     public config: Config;
+    public application: Application;
     public form: FormGroup;
 
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService,
                 private resultsService: ResultsService,
-                private router: Router) {
+                private router: Router,
+                private dialog: MatDialog) {
         this.form = new FormGroup({});
     }
 
     ngOnInit() {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
-            this.config.parameters.forEach((param: Parameter) => {
-                this.form.addControl(param.name, new FormControl());
-                if (param.validators.length > 0) {
-                    let validatorArray: ValidatorFn[] = [];
-                    param.validators.forEach((validator: Validator) => {
-                        if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REQUIRED) {
-                            if (param.type === this.configuratorService.TYPE_FLAG) {
-                                validatorArray.push(Validators.requiredTrue);
-                            } else {
-                                validatorArray.push(Validators.required);
-                            }
-                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN) {
-                            validatorArray.push(Validators.min(parseFloat(validator.value)));
-                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX) {
-                            validatorArray.push(Validators.max(parseFloat(validator.value)));
-                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN_LENGTH) {
-                            validatorArray.push(Validators.minLength(parseInt(validator.value)));
-                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX_LENGTH) {
-                            validatorArray.push(Validators.maxLength(parseInt(validator.value)));
-                        }
-                    });
-                    this.form.controls[param.name].setValidators(validatorArray);
+        });
+    }
+
+    public showAppPicker(): void {
+        if (this.config) {
+            let dialog: MatDialogRef<ApplicationPickerComponent> = this.dialog.open(ApplicationPickerComponent, {
+                data: {
+                    config: this.config,
+                    showAdder: false,
                 }
             });
-            Object.keys(this.form.controls).forEach(key => {
-                this.form.get(key).markAsTouched();
+
+            dialog.afterClosed().subscribe((result) => {
+                if (result) {
+                    this.application = result;
+                } else {
+                    this.application = null;
+                    return;
+                }
+                this.form = new FormGroup({});
+                this.application.parameters.forEach((param: Parameter) => {
+                    this.form.addControl(param.name, new FormControl());
+                    if (param.validators.length > 0) {
+                        let validatorArray: ValidatorFn[] = [];
+                        param.validators.forEach((validator: Validator) => {
+                            if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REQUIRED) {
+                                if (param.type === this.configuratorService.TYPE_FLAG) {
+                                    validatorArray.push(Validators.requiredTrue);
+                                } else {
+                                    validatorArray.push(Validators.required);
+                                }
+                            } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN) {
+                                validatorArray.push(Validators.min(parseFloat(validator.value)));
+                            } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX) {
+                                validatorArray.push(Validators.max(parseFloat(validator.value)));
+                            } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN_LENGTH) {
+                                validatorArray.push(Validators.minLength(parseInt(validator.value)));
+                            } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX_LENGTH) {
+                                validatorArray.push(Validators.maxLength(parseInt(validator.value)));
+                            }
+                        });
+                        this.form.controls[param.name].setValidators(validatorArray);
+                    }
+                });
+                Object.keys(this.form.controls).forEach(key => {
+                    this.form.get(key).markAsTouched();
+                });
             });
-        });
+        }
     }
 
     public submit(): void {
         let request: any = {};
-        this.config.parameters.forEach((param: Parameter) => {
+        request.targetApplication = this.application.name;
+        this.application.parameters.forEach((param: Parameter) => {
             request[param.name] = this.form.controls[param.name].value;
         });
 

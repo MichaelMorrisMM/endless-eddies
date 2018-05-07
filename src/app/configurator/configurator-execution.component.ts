@@ -10,6 +10,8 @@ import {MatDialog, MatDialogRef} from "@angular/material";
 import {ValidatorsComponent} from "./validators.component";
 import {ValidatorBlueprint} from "./validator-blueprint.interface";
 import {OptionsComponent} from "./options.component";
+import {ApplicationPickerComponent} from "./application-picker.component";
+import {Application} from "./application.model";
 
 @Component({
     selector: 'configurator-execution',
@@ -23,6 +25,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
     public form: FormGroup;
     private counter: number;
     private validatorBlueprints: ValidatorBlueprint[];
+    public application: Application;
 
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService,
@@ -35,16 +38,42 @@ export class ConfiguratorExecutionComponent implements OnInit {
     ngOnInit() {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
-            this.form.addControl("command", new FormControl(this.config.command));
-            this.parameterPlaceholders = [];
-            this.config.parameters.forEach((parameter: Parameter) => {
-                this.makeNewPlaceholder(parameter);
-            });
         });
 
         this.configuratorService.getValidatorBlueprints().subscribe((response: ValidatorBlueprint[]) => {
             this.validatorBlueprints = response;
         });
+    }
+
+    public showAppPicker(): void {
+        if (this.config) {
+            let dialog: MatDialogRef<ApplicationPickerComponent> = this.dialog.open(ApplicationPickerComponent, {
+                data: {
+                    config: this.config,
+                    showAdder: true,
+                }
+            });
+
+            dialog.afterClosed().subscribe((result: any) => {
+                if (result === "new") {
+                    this.application = new Application("", [], "");
+                    this.config.applications.push(this.application);
+                } else if (result) {
+                    this.application = result;
+                } else {
+                    this.application = null;
+                    return;
+                }
+                this.form = new FormGroup({});
+                this.counter = 1;
+                this.form.addControl("command", new FormControl(this.application.command));
+                this.form.addControl("applicationName", new FormControl(this.application.name));
+                this.parameterPlaceholders = [];
+                this.application.parameters.forEach((parameter: Parameter) => {
+                    this.makeNewPlaceholder(parameter);
+                });
+            });
+        }
     }
 
     public addParameter(): void {
@@ -93,7 +122,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
             }
         });
 
-        dialog.afterClosed().subscribe((result) => {
+        dialog.afterClosed().subscribe((result: any) => {
             if (result) {
                 this.form.markAsDirty();
             }
@@ -108,7 +137,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
             }
         });
 
-        dialog.afterClosed().subscribe((result) => {
+        dialog.afterClosed().subscribe((result: any) => {
             if (result) {
                 this.form.markAsDirty();
             }
@@ -133,8 +162,9 @@ export class ConfiguratorExecutionComponent implements OnInit {
                 placeholder.selectOptions,
             ));
         });
-        this.config.parameters = newParams;
-        this.config.command = this.form.controls["command"].value;
+        this.application.parameters = newParams;
+        this.application.command = this.form.controls["command"].value;
+        this.application.name = this.form.controls['applicationName'].value;
 
         this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
             if (response.success) {

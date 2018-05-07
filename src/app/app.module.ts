@@ -33,6 +33,7 @@ import {ResultsService} from './services/results.service';
 import {AuthService} from './services/auth.service';
 import {ValidatorsComponent} from "./configurator/validators.component";
 import {OptionsComponent} from "./configurator/options.component";
+import {ApplicationPickerComponent} from "./configurator/application-picker.component";
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import {OptionsComponent} from "./configurator/options.component";
         ValidatorsComponent,
         OptionsComponent,
         HistogramComponent,
+        ApplicationPickerComponent,
     ],
     imports: [
         BrowserModule,
@@ -80,6 +82,7 @@ import {OptionsComponent} from "./configurator/options.component";
     entryComponents: [
         ValidatorsComponent,
         OptionsComponent,
+        ApplicationPickerComponent,
     ],
     bootstrap: [AppComponent]
 })
