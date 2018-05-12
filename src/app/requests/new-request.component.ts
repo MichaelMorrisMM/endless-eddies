@@ -91,7 +91,7 @@ export class NewRequestComponent implements OnInit {
             request[param.name] = this.form.controls[param.name].value;
         });
 
-        this.resultsService.submitRequest(request).subscribe(() => {
+        this.resultsService.submitRequest(this.application, request).subscribe(() => {
             this.router.navigateByUrl("/results");
         });
     }

@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ConfiguratorService} from '../services/configurator.service';
 import {Config} from '../configurator/config.interface';
 import {ResultsService} from '../services/results.service';
+import {ResultFile} from "../configurator/result-file.model";
+import {saveAs} from "../../../node_modules/file-saver";
 
 @Component({
     selector: 'app-results',
@@ -43,7 +45,7 @@ export class ResultsComponent implements OnInit {
                                    .map(x => Math.round(x * 100) / 100)
                                    .filter(x => !isNaN(x));
 
-        console.log(tempArr);
+        //console.log(tempArr);
         tempArr.forEach( (x, i) => {
             if (i % 3 === 0) {
                 this.u.push(x);
@@ -52,6 +54,12 @@ export class ResultsComponent implements OnInit {
             } else {
                 this.w.push(x);
             }
+        });
+    }
+
+    public downloadFile(rf: ResultFile): void {
+        this.resultsService.downloadFile(this.resultsService.lastResult.requestName, rf).subscribe((blob: Blob) => {
+            saveAs(blob, rf.fileName);
         });
     }
 }

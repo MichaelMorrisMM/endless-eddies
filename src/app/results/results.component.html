@@ -8,9 +8,14 @@
     <h1 class="subtitle">W Data</h1>
     <app-histogram [inputData]="this.w"></app-histogram>
 </div>
-<ng-container *ngIf="this.config && this.resultsService.lastResult">
+<ng-container *ngIf="this.config && this.resultsService.lastResult && this.resultsService.lastResultApplication">
     <label>Status:</label>
     <pre>{{this.resultsService.lastResult.success}}</pre>
     <label>Result:</label>
     <pre>{{this.resultsService.lastResult.message}}</pre>
+    <div *ngIf="this.resultsService.lastResultApplication.resultFiles && this.resultsService.lastResultApplication.resultFiles.length > 0">
+        <h2 class="subtitle">Result File(s)</h2>
+        <button *ngFor="let rf of this.resultsService.lastResultApplication.resultFiles"
+                mat-button (click)="this.downloadFile(rf)" matTooltip="{{rf.toolTip}}">{{rf.name}}</button>
+    </div>
 </ng-container>

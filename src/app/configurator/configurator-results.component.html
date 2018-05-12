@@ -1,0 +1,35 @@
+<button mat-button (click)="this.showAppPicker()">Pick Application</button>
+<ng-container *ngIf="this.config && this.application">
+    <form [formGroup]="this.form" class="flex-container-col full-width margin-bottom">
+        <h1 class="title">Results</h1>
+        <mat-accordion class="margin-bottom">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Result Files</mat-panel-title>
+                    <mat-panel-description>Downloadable files created during execution</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div *ngFor="let rf of this.resultFiles" class="flex-container-col full-width margin-bottom">
+                    <div class="flex-container-row full-width">
+                        <mat-form-field class="margin-right flex-one">
+                            <input matInput placeholder="Name" [formControlName]="rf.keyName">
+                        </mat-form-field>
+                        <mat-form-field class="flex-one">
+                            <input matInput placeholder="Filename" [formControlName]="rf.keyFilename">
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-container-row full-width">
+                        <mat-form-field class="flex-four margin-right">
+                            <input matInput placeholder="Description" [formControlName]="rf.keyTooltip">
+                        </mat-form-field>
+                        <button mat-raised-button color="warn" class="flex-one" (click)="this.deleteResultFile(rf)">Delete</button>
+                    </div>
+                </div>
+                <button mat-raised-button color="accent" (click)="this.addResultFile()">Add</button>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <div class="flex-container-row">
+            <button mat-raised-button color="primary" (click)="this.save()">Save</button>
+            <span *ngIf="this.form.dirty" class="dirty-note">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
+        </div>
+    </form>
+</ng-container>

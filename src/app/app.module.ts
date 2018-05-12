@@ -23,7 +23,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ConfiguratorService} from './services/configurator.service';
 import {ConfiguratorUsersComponent} from './configurator/configurator-users.component';
 import {
-    MatCheckboxModule, MatDialogModule, MatSelectModule, MatSidenavModule, MatToolbarModule,
+    MatCheckboxModule, MatDialogModule, MatExpansionModule, MatSelectModule, MatSidenavModule, MatToolbarModule,
     MatTooltipModule
 } from '@angular/material';
 import {BasicInputComponent} from './components/basic-input/basic-input.component';
@@ -34,6 +34,7 @@ import {AuthService} from './services/auth.service';
 import {ValidatorsComponent} from "./configurator/validators.component";
 import {OptionsComponent} from "./configurator/options.component";
 import {ApplicationPickerComponent} from "./configurator/application-picker.component";
+import {ConfiguratorResultsComponent} from "./configurator/configurator-results.component";
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import {ApplicationPickerComponent} from "./configurator/application-picker.comp
         ConfiguratorOverviewComponent,
         ConfiguratorUsersComponent,
         ConfiguratorExecutionComponent,
+        ConfiguratorResultsComponent,
         LoginComponent,
         SignupComponent,
         NotFoundComponent,
@@ -71,6 +73,7 @@ import {ApplicationPickerComponent} from "./configurator/application-picker.comp
         MatToolbarModule,
         MatTooltipModule,
         MatDialogModule,
+        MatExpansionModule,
         NgxChartsModule,
     ],
     providers: [

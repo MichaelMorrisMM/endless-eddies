@@ -64,6 +64,10 @@ body {
     flex: 3;
 }
 
+.flex-four {
+    flex: 4;
+}
+
 .flex-nine {
     flex: 9;
 }

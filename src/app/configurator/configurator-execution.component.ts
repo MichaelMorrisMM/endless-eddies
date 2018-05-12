@@ -56,7 +56,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
 
             dialog.afterClosed().subscribe((result: any) => {
                 if (result === "new") {
-                    this.application = new Application("", [], "");
+                    this.application = new Application("", [], "", []);
                     this.config.applications.push(this.application);
                 } else if (result) {
                     this.application = result;

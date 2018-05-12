@@ -13,10 +13,14 @@ public class Application extends ConfigObject {
     public static final String COMMAND = "command";
     public String command;
 
+    public static final String NODE_RESULT_FILES = "resultFiles";
+    public List<ResultFile> resultFiles;
+
     public Application() {
         this.name = "";
         this.parameters = new HashMap<>();
         this.command = "";
+        this.resultFiles = new ArrayList<>();
     }
 
     public boolean updateWith(JsonObject obj) {
@@ -28,6 +32,17 @@ public class Application extends ConfigObject {
                     Parameter newParam = new Parameter();
                     if (newParam.updateWith(paramObj)) {
                         this.parameters.put(newParam.name, newParam);
+                    }
+                }
+            }
+
+            JsonArray resultFilesArray = Util.getArraySafe(obj, NODE_RESULT_FILES);
+            if (resultFilesArray != null) {
+                this.resultFiles.clear();
+                for (JsonObject resultFileObj : resultFilesArray.getValuesAs(JsonObject.class)) {
+                    ResultFile newResultFile = new ResultFile();
+                    if (newResultFile.updateWith(resultFileObj)) {
+                        this.resultFiles.add(newResultFile);
                     }
                 }
             }
@@ -50,6 +65,7 @@ public class Application extends ConfigObject {
         return Json.createObjectBuilder()
             .add(NAME, this.name)
             .add(NODE_PARAMETERS, ConfigSettings.getNode(this.parameters))
+            .add(NODE_RESULT_FILES, ConfigSettings.getNode(this.resultFiles))
             .add(COMMAND, this.command)
             .build();
     }

@@ -31,10 +31,11 @@ public class ExecuteServlet extends HttpServlet {
                 inputs.add(new Input(param, requestObject));
             }
 
+            String requestName = UUID.randomUUID().toString().replace("-", "");
             File tmpDir = new File(
                 ConfiguratorServlet.ROOT_PATH
                     + File.separator
-                    + UUID.randomUUID().toString().replace("-", "")
+                    + requestName
             );
             tmpDir.mkdir();
 
@@ -58,7 +59,7 @@ public class ExecuteServlet extends HttpServlet {
                     stringBuilder.append(System.lineSeparator());
                 }
 
-                HttpUtil.printPOSTResult(response, true, stringBuilder.toString());
+                HttpUtil.printPOSTResult(response, requestName, true, stringBuilder.toString());
             } catch (Exception e) {
                 HttpUtil.printPOSTResult(response, false, "");
             }
