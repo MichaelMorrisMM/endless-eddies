@@ -10,6 +10,8 @@ import java.io.*;
 @WebServlet("/configurator")
 public class ConfiguratorServlet extends HttpServlet {
 
+    private static ConfigSettings currentConfig;
+
     public static final String ENV_VAR_CONFIG_DIR = "ENDLESS_EDDIES_CONFIG_DIR";
     public static final String ROOT_PATH = System.getenv(ENV_VAR_CONFIG_DIR);
     public static final String CONFIG_FILE_PATH = ROOT_PATH + File.separator + "config.json";
@@ -45,11 +47,18 @@ public class ConfiguratorServlet extends HttpServlet {
     }
 
     public static ConfigSettings getCurrentConfig() throws FileNotFoundException {
-        File configFile = new File(CONFIG_FILE_PATH);
-        if (configFile.exists()) {
-            return new ConfigSettings(configFile);
+        if (ConfiguratorServlet.currentConfig != null) {
+            return ConfiguratorServlet.currentConfig;
         } else {
-            return new ConfigSettings();
+            File configFile = new File(CONFIG_FILE_PATH);
+            ConfigSettings config;
+            if (configFile.exists()) {
+                config = new ConfigSettings(configFile);
+            } else {
+                config = new ConfigSettings();
+            }
+            ConfiguratorServlet.currentConfig = config;
+            return config;
         }
     }
 }

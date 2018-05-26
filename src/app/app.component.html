@@ -2,15 +2,18 @@
     <mat-sidenav-container class="container">
         <mat-sidenav #sidenav mode="over" class="side-nav">
             <div class="margin-bottom flex-container-row justify-flex-end">
-                <button mat-button class="danger" (click)="this.authService.logOut()">Logout</button>
-                <button mat-button (click)="sidenav.toggle()">Close</button>
+                <button mat-button (click)="sidenav.toggle()"><img src="./assets/icons/icons8-close-window-50.png" class="embeddedIconNoMargin"></button>
             </div>
             <a mat-button class="nav-item" (click)="sidenav.toggle()" routerLinkActive="nav-item-active"
-            *ngFor="let item of menuItemsArray" [routerLink]="[item.link]">{{item.title}}</a>
+            *ngFor="let item of menuItemsArray" [routerLink]="[item.link]"><img src="{{item.icon}}" class="embeddedIcon">{{item.title}}</a>
         </mat-sidenav>
         <mat-sidenav-content class="main">
-            <mat-toolbar color="primary">
-                <button mat-raised-button color="accent" (click)="sidenav.toggle()">Menu</button>
+            <mat-toolbar color="primary" class="justify-space-between">
+                <button mat-raised-button color="accent" (click)="sidenav.toggle()"><img src="./assets/icons/icons8-menu-50.png" class="embeddedIcon">Menu</button>
+                <div>
+                    <button mat-raised-button color="accent"><img src="./assets/icons/icons8-account-50.png" class="embeddedIcon">My Account</button>
+                    <button mat-raised-button color="warn" (click)="this.authService.logOut()"><img src="./assets/icons/icons8-sign-out-50.png" class="embeddedIcon">Logout</button>
+                </div>
             </mat-toolbar>
             <router-outlet></router-outlet>
         </mat-sidenav-content>

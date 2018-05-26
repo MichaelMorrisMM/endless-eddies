@@ -16,6 +16,8 @@
     <div *ngIf="this.resultsService.lastResultApplication.resultFiles && this.resultsService.lastResultApplication.resultFiles.length > 0">
         <h2 class="subtitle">Result File(s)</h2>
         <button *ngFor="let rf of this.resultsService.lastResultApplication.resultFiles"
-                mat-button (click)="this.downloadFile(rf)" matTooltip="{{rf.toolTip}}">{{rf.name}}</button>
+                mat-button (click)="this.downloadFile(rf)" matTooltip="{{rf.toolTip}}">
+            <img src="./assets/icons/icons8-download-50.png" class="embeddedIcon">{{rf.name}}
+        </button>
     </div>
 </ng-container>

@@ -10,7 +10,6 @@ import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
 import {SignupComponent} from './signup/signup.component';
 import {NotFoundComponent} from './not-found/not-found.component';
-import {RequestsComponent} from './requests/requests.component';
 import {ResultsComponent} from './results/results.component';
 import {HomeComponent} from './home/home.component';
 import {HistogramComponent} from './custom-charts/histogram.component';
@@ -47,7 +46,6 @@ import {ConfiguratorResultsComponent} from "./configurator/configurator-results.
         LoginComponent,
         SignupComponent,
         NotFoundComponent,
-        RequestsComponent,
         ResultsComponent,
         HomeComponent,
         BasicInputComponent,

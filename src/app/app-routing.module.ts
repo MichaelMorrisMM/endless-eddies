@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { RequestsComponent } from './requests/requests.component';
 import { ResultsComponent } from './results/results.component';
 import { HomeComponent } from './home/home.component';
 import { ConfiguratorOverviewComponent } from './configurator/configurator-overview.component';
@@ -17,7 +16,6 @@ const routes: Routes = [
     { path: 'config-execute', component: ConfiguratorExecutionComponent },
     { path: 'config-results', component: ConfiguratorResultsComponent },
     { path: 'new-request', component: NewRequestComponent },
-    { path: 'requests', component: RequestsComponent },
     { path: 'results', component: ResultsComponent },
     { path: 'home', component: HomeComponent },
     { path: 'login', component: LoginComponent},

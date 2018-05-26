@@ -33,6 +33,7 @@ export class NewRequestComponent implements OnInit {
     ngOnInit() {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
+            this.showAppPicker();
         });
     }
 

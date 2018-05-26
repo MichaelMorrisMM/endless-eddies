@@ -5,7 +5,7 @@
         <mat-accordion class="margin-bottom">
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
-                    <mat-panel-title>Result Files</mat-panel-title>
+                    <mat-panel-title><img src="./assets/icons/icons8-copy-50.png" class="embeddedIcon">Result Files</mat-panel-title>
                     <mat-panel-description>Downloadable files created during execution</mat-panel-description>
                 </mat-expansion-panel-header>
                 <div *ngFor="let rf of this.resultFiles" class="flex-container-col full-width margin-bottom">
@@ -21,15 +21,17 @@
                         <mat-form-field class="flex-four margin-right">
                             <input matInput placeholder="Description" [formControlName]="rf.keyTooltip">
                         </mat-form-field>
-                        <button mat-raised-button color="warn" class="flex-one" (click)="this.deleteResultFile(rf)">Delete</button>
+                        <button mat-raised-button color="warn" class="flex-one" (click)="this.deleteResultFile(rf)">
+                            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
+                        </button>
                     </div>
                 </div>
-                <button mat-raised-button color="accent" (click)="this.addResultFile()">Add</button>
+                <button mat-raised-button color="accent" (click)="this.addResultFile()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add</button>
             </mat-expansion-panel>
         </mat-accordion>
         <div class="flex-container-row">
-            <button mat-raised-button color="primary" (click)="this.save()">Save</button>
-            <span *ngIf="this.form.dirty" class="dirty-note">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
+            <button mat-raised-button color="primary" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
+            <span *ngIf="this.form.dirty" class="dirty-note"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
         </div>
     </form>
 </ng-container>

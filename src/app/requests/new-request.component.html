@@ -21,12 +21,16 @@
                         <mat-option *ngFor="let opt of param.selectOptions" [value]="opt">{{opt}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <span *ngIf="param.toolTip" matTooltip="{{param.toolTip}}" [matTooltipPosition]="'above'" class="margin-left">Info</span>
+                <span *ngIf="param.toolTip" matTooltip="{{param.toolTip}}" [matTooltipPosition]="'above'" class="margin-left">
+                    <img src="./assets/icons/icons8-info-popup-50.png" class="embeddedIconNoMargin">
+                </span>
                 <div *ngFor="let validator of param.validators">
                     <span class="margin-left" *ngIf="validator.message && this.form.controls[param.name].hasError(validator.validatorType)">*{{validator.message}}</span>
                 </div>
             </div>
         </ng-container>
-        <button mat-raised-button color="primary" [disabled]="this.form.invalid" (click)="this.submit()">Submit</button>
+        <button mat-raised-button color="primary" [disabled]="this.form.invalid" (click)="this.submit()">
+            <img src="./assets/icons/icons8-upload-to-cloud-50.png" class="embeddedIcon">Submit
+        </button>
     </form>
 </ng-container>

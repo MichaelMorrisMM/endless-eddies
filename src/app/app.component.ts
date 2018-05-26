@@ -7,22 +7,27 @@ import {AuthService} from './services/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-    public menuItemsArray: any[] = [];
+    public menuItemsArray: MenuItem[] = [];
 
     constructor(public authService: AuthService) {
     }
 
     ngOnInit() {
         this.menuItemsArray = [
-            {'title': 'Home', 'link': '/home'},
-            {'title': "Submit New Request", "link":"/new-request"},
-            {'title': "Requests", "link":"/requests"},
-            {'title': "Results", "link":"/results"},
-            {'title': "Configurator - Overview", "link":"/config"},
-            {'title': "Configurator - Users", "link":"/config-users"},
-            {'title': "Configurator - Execution", "link":"/config-execute"},
-            {'title': "Configurator - Results", "link":"/config-results"},
+            {'title': 'Home', 'link': '/home', icon: './assets/icons/icons8-home-50.png'},
+            {'title': "Submit New Request", "link":"/new-request", icon: './assets/icons/icons8-upload-50.png'},
+            {'title': "Results", "link":"/results", icon: './assets/icons/icons8-database-50.png'},
+            {'title': "Configurator - Overview", "link":"/config", icon: './assets/icons/icons8-settings-50.png'},
+            {'title': "Configurator - Users", "link":"/config-users", icon: './assets/icons/icons8-people-50.png'},
+            {'title': "Configurator - Execution", "link":"/config-execute", icon: './assets/icons/icons8-system-task-50.png'},
+            {'title': "Configurator - Results", "link":"/config-results", icon: './assets/icons/icons8-informatics-50.png'},
         ];
     }
 
+}
+
+interface MenuItem {
+    readonly title: string;
+    readonly link: string;
+    readonly icon: string;
 }

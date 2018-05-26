@@ -38,6 +38,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
     ngOnInit() {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
+            this.showAppPicker();
         });
 
         this.configuratorService.getValidatorBlueprints().subscribe((response: ValidatorBlueprint[]) => {

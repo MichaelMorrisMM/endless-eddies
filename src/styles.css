@@ -48,6 +48,10 @@ body {
     justify-content: flex-end;
 }
 
+.justify-space-between {
+    justify-content: space-between;
+}
+
 .align-center {
     align-items: center;
 }
@@ -138,4 +142,13 @@ a.nav-item-active {
 
 .danger{
     background: #EF9A9A;
+}
+
+img.embeddedIcon {
+    margin-right: 0.5em;
+    max-height: 20px;
+}
+
+img.embeddedIconNoMargin {
+    max-height: 20px;
 }
