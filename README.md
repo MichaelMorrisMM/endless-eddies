@@ -33,8 +33,9 @@ cd $CATALINA_HOME
 4. Install Gradle (at least 4.6)
     1. Update `PATH` system environment variable to include gradle/bin
 5. Install Angular CLI (at least 1.7.3)
-6. Clone repo
-7. Define `ENDLESS_EDDIES_CONFIG_DIR` system environment variable (path to working directory for application)
+6. Download SQLite 3 and run `make_database` script after defining `ENDLESS_EDDIES_CONFIG_DIR` (specified below)
+7. Clone repo
+8. Define `ENDLESS_EDDIES_CONFIG_DIR` system environment variable (path to working directory for application)
 
 `gradle deployAll` will deploy the entire application to the Tomcat webapps folder. 
 To start the Tomcat server, `start_tomcat.cmd` has been provided in the "scripts" folder (Windows users). 
