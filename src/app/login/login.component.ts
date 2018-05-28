@@ -1,38 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styles: [`
-    .Column {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .Container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border: #BDBDBD 1px solid;
-      padding: 50px;
-    }
-  `]
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styles: [`
+    `]
 })
 export class LoginComponent implements OnInit {
-  constructor(public authService: AuthService,
-              public router: Router) {
-  }
+    constructor(public authService: AuthService,
+                public router: Router) {
+    }
 
-  public doLogIn() {
-    this.authService.logIn();
-    this.router.navigateByUrl('/home');
-  }
+    public doLogIn() {
+        this.authService.logIn();
+        this.router.navigateByUrl('/home');
+    }
 
-  ngOnInit() {
-  }
+    public redirectToSignup() {
+        // TODO this needs to be fixed when proper route guards are in place and log in is fixed
+        this.authService.logIn();
+        this.router.navigateByUrl('/sign-up');
+    }
+
+    ngOnInit() {
+    }
 }

@@ -9,6 +9,7 @@ import { ConfiguratorUsersComponent } from './configurator/configurator-users.co
 import {ConfiguratorExecutionComponent} from './configurator/configurator-execution.component';
 import {NewRequestComponent} from './requests/new-request.component';
 import {ConfiguratorResultsComponent} from "./configurator/configurator-results.component";
+import {SignupComponent} from "./signup/signup.component";
 
 const routes: Routes = [
     { path: 'config', component: ConfiguratorOverviewComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
     { path: 'results', component: ResultsComponent },
     { path: 'home', component: HomeComponent },
     { path: 'login', component: LoginComponent},
+    { path: 'sign-up', component: SignupComponent},
     { path: '',   redirectTo: '/home', pathMatch: 'full' },
     { path: '**', component: NotFoundComponent },
 ];

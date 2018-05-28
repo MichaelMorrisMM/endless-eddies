@@ -1,11 +1,20 @@
-<div class="Column">
-    <div class="Container">
+<div class="userFormContainer">
+    <form class="userForm">
         <mat-form-field>
-            <input matInput placeholder="Username">
+            <input matInput placeholder="Email">
         </mat-form-field>
         <mat-form-field>
             <input matInput placeholder="Password" type="password">
         </mat-form-field>
-        <button mat-raised-button color="primary" (click)="this.doLogIn()"><img src="./assets/icons/icons8-login-50.png" class="embeddedIcon">Login</button>
-    </div>
+        <div class="margin-bottom">
+            <button mat-raised-button color="accent" (click)="this.redirectToSignup()">
+                <img src="./assets/icons/icons8-add-user-group-woman-man-50.png" class="embeddedIcon">Create New Account
+            </button>
+        </div>
+        <div>
+            <button mat-raised-button color="primary" (click)="this.doLogIn()">
+                <img src="./assets/icons/icons8-login-50.png" class="embeddedIcon">Login
+            </button>
+        </div>
+    </form>
 </div>
