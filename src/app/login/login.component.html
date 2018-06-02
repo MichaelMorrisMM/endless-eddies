@@ -1,20 +1,26 @@
-<div class="userFormContainer">
-    <form class="userForm">
+<div *ngIf="!this.showCreateAccount" class="userFormContainer">
+    <form [formGroup]="this.form" class="userForm">
         <mat-form-field>
-            <input matInput placeholder="Email">
+            <input matInput placeholder="Email" [formControlName]="'email'">
         </mat-form-field>
         <mat-form-field>
-            <input matInput placeholder="Password" type="password">
+            <input matInput placeholder="Password" type="password" [formControlName]="'password'">
         </mat-form-field>
         <div class="margin-bottom">
-            <button mat-raised-button color="accent" (click)="this.redirectToSignup()">
+            <button mat-raised-button color="accent" (click)="this.toggleSignup()">
                 <img src="./assets/icons/icons8-add-user-group-woman-man-50.png" class="embeddedIcon">Create New Account
             </button>
         </div>
         <div>
-            <button mat-raised-button color="primary" (click)="this.doLogIn()">
+            <button mat-raised-button color="primary" (click)="this.doLogIn()" [disabled]="this.form.invalid">
                 <img src="./assets/icons/icons8-login-50.png" class="embeddedIcon">Login
             </button>
         </div>
     </form>
+</div>
+<div *ngIf="this.showCreateAccount" class="padded">
+    <button mat-raised-button color="accent" (click)="this.toggleSignup()">
+        <img src="./assets/icons/icons8-back-50.png" class="embeddedIcon">Back to Sign In
+    </button>
+    <app-sign-up (accountCreated)="this.toggleSignup()"></app-sign-up>
 </div>

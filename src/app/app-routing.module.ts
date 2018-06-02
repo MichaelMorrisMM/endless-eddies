@@ -19,8 +19,6 @@ const routes: Routes = [
     { path: 'new-request', component: NewRequestComponent },
     { path: 'results', component: ResultsComponent },
     { path: 'home', component: HomeComponent },
-    { path: 'login', component: LoginComponent},
-    { path: 'sign-up', component: SignupComponent},
     { path: '',   redirectTo: '/home', pathMatch: 'full' },
     { path: '**', component: NotFoundComponent },
 ];

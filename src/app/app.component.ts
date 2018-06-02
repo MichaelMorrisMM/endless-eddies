@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from './services/auth.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,8 @@ import {AuthService} from './services/auth.service';
 export class AppComponent implements OnInit {
     public menuItemsArray: MenuItem[] = [];
 
-    constructor(public authService: AuthService) {
+    constructor(public authService: AuthService,
+                private router: Router) {
     }
 
     ngOnInit() {
@@ -22,6 +24,8 @@ export class AppComponent implements OnInit {
             {'title': "Configurator - Execution", "link":"/config-execute", icon: './assets/icons/icons8-system-task-50.png'},
             {'title': "Configurator - Results", "link":"/config-results", icon: './assets/icons/icons8-informatics-50.png'},
         ];
+
+        this.router.navigateByUrl('/sign-in');
     }
 
 }

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpParams} from "@angular/common/http";
 import {AuthService} from "../services/auth.service";
@@ -12,6 +12,7 @@ import {PostResult} from "../configurator/post-result.interface";
 })
 export class SignupComponent implements OnInit {
     public form: FormGroup;
+    @Output() accountCreated: EventEmitter<any> = new EventEmitter();
 
     constructor(@Inject(FormBuilder) fb: FormBuilder,
                 private authService: AuthService) {
@@ -33,6 +34,7 @@ export class SignupComponent implements OnInit {
             this.authService.createUser(params).subscribe((result: PostResult) => {
                 if (result.success) {
                     alert("User created");
+                    this.accountCreated.emit(null);
                 } else {
                     alert(result.message);
                 }

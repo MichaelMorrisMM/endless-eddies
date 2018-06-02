@@ -47,4 +47,19 @@ public class DatabaseConnector {
         }
     }
 
+    public static User getUserByEmail(String email) {
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM user WHERE email = ?;");
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new User(rs);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
 }

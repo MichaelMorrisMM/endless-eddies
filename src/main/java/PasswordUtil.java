@@ -34,6 +34,10 @@ public class PasswordUtil {
         }
     }
 
+    public static boolean verifyPassword(final String enteredPassword, final String hashedPassword, final String salt) {
+        return hashedPassword.equals(hashPassword(enteredPassword, salt));
+    }
+
     private static String formatAsString(byte[] bytes) {
         return String.format("%x", new BigInteger(bytes));
     }

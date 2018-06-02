@@ -169,3 +169,7 @@ form.userForm {
     border: gray 1px solid;
     padding: 50px;
 }
+
+.padded {
+    padding: 2em;
+}

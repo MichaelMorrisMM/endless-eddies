@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 import {Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {HttpParams} from "@angular/common/http";
 
 @Component({
     selector: 'app-login',
@@ -9,19 +11,29 @@ import {Router} from '@angular/router';
     `]
 })
 export class LoginComponent implements OnInit {
+    public showCreateAccount: boolean = false;
+    public form: FormGroup;
+
     constructor(public authService: AuthService,
-                public router: Router) {
+                private router: Router,
+                @Inject(FormBuilder) fb: FormBuilder) {
+        this.form = fb.group({
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', Validators.required]
+        });
     }
 
     public doLogIn() {
-        this.authService.logIn();
-        this.router.navigateByUrl('/home');
+        if (this.form.valid) {
+            let params: HttpParams = new HttpParams()
+                .set("email", this.form.controls['email'].value)
+                .set("password", this.form.controls['password'].value);
+            this.authService.logIn(params);
+        }
     }
 
-    public redirectToSignup() {
-        // TODO this needs to be fixed when proper route guards are in place and log in is fixed
-        this.authService.logIn();
-        this.router.navigateByUrl('/sign-up');
+    public toggleSignup() {
+        this.showCreateAccount = !this.showCreateAccount;
     }
 
     ngOnInit() {
