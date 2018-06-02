@@ -15,8 +15,13 @@ def deployPath = serverDir + "/webapps/" + rootProject.name
 def javaDestPath = deployPath + "/WEB-INF/classes"
 def serverLibPath = serverDir + "/lib"
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile fileTree(dir: "libs", include: "**/*.jar")
+    compile 'com.auth0:java-jwt:3.3.0'
 }
 
 task deployAll(type: GradleBuild) {

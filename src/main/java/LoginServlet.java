@@ -33,7 +33,11 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        HttpUtil.printPOSTResult(response, true, "Login successful");
+        if (SessionManager.createSession(user, response)) {
+            HttpUtil.printPOSTResult(response, true, "Login successful");
+        } else {
+            HttpUtil.printPOSTResult(response, false, "Unable to create session");
+        }
     }
 
 }
