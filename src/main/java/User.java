@@ -1,3 +1,5 @@
+import javax.json.Json;
+import javax.json.JsonObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -19,5 +21,14 @@ public class User implements DatabaseObject {
         this.password = rs.getString("password");
         this.salt = rs.getString("salt");
         this.isAdmin = rs.getString("isAdmin").equals("Y");
+    }
+
+    @Override
+    public JsonObject toJsonObject() {
+        return Json.createObjectBuilder()
+            .add("idUser", "" + this.idUser)
+            .add("email", this.email)
+            .add("isAdmin", this.isAdmin)
+            .build();
     }
 }

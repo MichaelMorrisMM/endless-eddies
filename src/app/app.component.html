@@ -1,4 +1,4 @@
-<ng-container *ngIf="this.authService.getLoggedIn()">
+<ng-container *ngIf="this.authService.getCurrentUser()">
     <mat-sidenav-container class="container">
         <mat-sidenav #sidenav mode="over" class="side-nav">
             <div class="margin-bottom flex-container-row justify-flex-end">
@@ -19,6 +19,6 @@
         </mat-sidenav-content>
     </mat-sidenav-container>
 </ng-container>
-<ng-container *ngIf="!this.authService.getLoggedIn()">
+<ng-container *ngIf="!this.authService.getCurrentUser()">
     <app-login></app-login>
 </ng-container>

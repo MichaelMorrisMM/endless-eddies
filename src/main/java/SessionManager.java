@@ -28,7 +28,7 @@ public class SessionManager {
             String jwt = JWT.create()
                 .withIssuedAt(Date.from(now))
                 .withExpiresAt(Date.from(now.plus(1, ChronoUnit.HOURS)))
-                .withClaim("email", user.email)
+                .withClaim("idUser", user.idUser)
                 .sign(ALGORITHM);
             Cookie sessionCookie = new Cookie(SESSION_COOKIE_NAME, jwt);
             // TODO add secure when https is working
@@ -40,7 +40,7 @@ public class SessionManager {
         }
     }
 
-    public static User getSession(HttpServletRequest request) {
+    public static User checkSession(HttpServletRequest request) {
         try {
             Cookie[] cookies = request.getCookies();
             for (Cookie cookie : cookies) {
@@ -48,7 +48,7 @@ public class SessionManager {
                     DecodedJWT jwt = JWT.require(ALGORITHM).build().verify(cookie.getValue());
                     Instant now = Instant.now();
                     if (now.compareTo(jwt.getIssuedAt().toInstant()) > 0 && now.compareTo(jwt.getExpiresAt().toInstant()) < 0) {
-                        return DatabaseConnector.getUserByEmail(jwt.getClaim("email").asString());
+                        return DatabaseConnector.getUserById(jwt.getClaim("idUser").asString());
                     }
                 }
             }
@@ -56,6 +56,15 @@ public class SessionManager {
             return null;
         }
         return null;
+    }
+
+    public static User checkAdminSession(HttpServletRequest request) {
+        User user = checkSession(request);
+        if (user != null && user.isAdmin) {
+            return user;
+        } else {
+            return null;
+        }
     }
 
 }

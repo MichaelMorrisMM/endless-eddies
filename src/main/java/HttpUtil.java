@@ -37,6 +37,14 @@ public class HttpUtil {
             .build());
     }
 
+    public static void printPOSTResult(HttpServletResponse response, User user, String message) throws IOException {
+        printJSONResponse(response, Json.createObjectBuilder()
+            .add("success", true)
+            .add("message", message)
+            .add("user", user.toJsonObject())
+            .build());
+    }
+
     public static void printPOSTResult(HttpServletResponse response, String requestName, boolean result, String message) throws IOException {
         printJSONResponse(response, Json.createObjectBuilder()
             .add("requestName", requestName)

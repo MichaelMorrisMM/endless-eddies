@@ -34,6 +34,8 @@ import {ValidatorsComponent} from "./configurator/validators.component";
 import {OptionsComponent} from "./configurator/options.component";
 import {ApplicationPickerComponent} from "./configurator/application-picker.component";
 import {ConfiguratorResultsComponent} from "./configurator/configurator-results.component";
+import {AuthGuardService} from "./services/auth-guard.service";
+import {AuthGuardAdminService} from "./services/auth-guard-admin.service";
 
 
 @NgModule({
@@ -60,7 +62,6 @@ import {ConfiguratorResultsComponent} from "./configurator/configurator-results.
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
-        AppRoutingModule,
         HttpClientModule,
         MatFormFieldModule,
         MatInputModule,
@@ -73,12 +74,15 @@ import {ConfiguratorResultsComponent} from "./configurator/configurator-results.
         MatDialogModule,
         MatExpansionModule,
         NgxChartsModule,
+        AppRoutingModule,
     ],
     providers: [
         ConfiguratorService,
         ConstantsService,
         ResultsService,
         AuthService,
+        AuthGuardService,
+        AuthGuardAdminService,
     ],
     entryComponents: [
         ValidatorsComponent,

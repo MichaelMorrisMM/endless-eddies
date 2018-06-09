@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ResultsComponent } from './results/results.component';
 import { HomeComponent } from './home/home.component';
@@ -9,16 +8,17 @@ import { ConfiguratorUsersComponent } from './configurator/configurator-users.co
 import {ConfiguratorExecutionComponent} from './configurator/configurator-execution.component';
 import {NewRequestComponent} from './requests/new-request.component';
 import {ConfiguratorResultsComponent} from "./configurator/configurator-results.component";
-import {SignupComponent} from "./signup/signup.component";
+import {AuthGuardAdminService} from "./services/auth-guard-admin.service";
+import {AuthGuardService} from "./services/auth-guard.service";
 
 const routes: Routes = [
-    { path: 'config', component: ConfiguratorOverviewComponent },
-    { path: 'config-users', component: ConfiguratorUsersComponent },
-    { path: 'config-execute', component: ConfiguratorExecutionComponent },
-    { path: 'config-results', component: ConfiguratorResultsComponent },
-    { path: 'new-request', component: NewRequestComponent },
-    { path: 'results', component: ResultsComponent },
-    { path: 'home', component: HomeComponent },
+    { path: 'config', component: ConfiguratorOverviewComponent, canActivate: [AuthGuardAdminService] },
+    { path: 'config-users', component: ConfiguratorUsersComponent, canActivate: [AuthGuardAdminService] },
+    { path: 'config-execute', component: ConfiguratorExecutionComponent, canActivate: [AuthGuardAdminService] },
+    { path: 'config-results', component: ConfiguratorResultsComponent, canActivate: [AuthGuardAdminService] },
+    { path: 'new-request', component: NewRequestComponent, canActivate: [AuthGuardService] },
+    { path: 'results', component: ResultsComponent, canActivate: [AuthGuardService] },
+    { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
     { path: '',   redirectTo: '/home', pathMatch: 'full' },
     { path: '**', component: NotFoundComponent },
 ];
