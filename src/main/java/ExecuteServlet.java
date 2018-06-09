@@ -38,7 +38,7 @@ public class ExecuteServlet extends HttpServlet {
                 inputs.add(new Input(param, requestObject));
             }
 
-            String requestName = UUID.randomUUID().toString().replace("-", "");
+            String requestName = "" + user.idUser + "_" + UUID.randomUUID().toString().replace("-", "");
             File tmpDir = new File(
                 ConfiguratorServlet.ROOT_PATH
                     + File.separator
@@ -65,6 +65,8 @@ public class ExecuteServlet extends HttpServlet {
                     stringBuilder.append(line);
                     stringBuilder.append(System.lineSeparator());
                 }
+
+                DatabaseConnector.createNewRequest(requestName, user.idUser);
 
                 HttpUtil.printPOSTResult(response, requestName, true, stringBuilder.toString());
             } catch (Exception e) {

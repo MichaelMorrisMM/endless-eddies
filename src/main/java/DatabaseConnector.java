@@ -37,6 +37,18 @@ public class DatabaseConnector {
         }
     }
 
+    public static boolean createNewRequest(String name, int idUser) {
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, ?);");
+            pstmt.setString(1, name);
+            pstmt.setInt(2, idUser);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
     public static boolean isFirstUser() {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             Statement stmt = conn.createStatement();
