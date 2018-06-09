@@ -9,6 +9,7 @@ public class User implements DatabaseObject {
     public String password;
     public String salt;
     public boolean isAdmin;
+    public String currentXSRFToken;
 
     public User(ResultSet rs) throws SQLException {
         this.setValues(rs);
@@ -21,6 +22,7 @@ public class User implements DatabaseObject {
         this.password = rs.getString("password");
         this.salt = rs.getString("salt");
         this.isAdmin = rs.getString("isAdmin").equals("Y");
+        this.currentXSRFToken = "";
     }
 
     @Override
@@ -29,6 +31,7 @@ public class User implements DatabaseObject {
             .add("idUser", "" + this.idUser)
             .add("email", this.email)
             .add("isAdmin", this.isAdmin)
+            .add("xsrfToken", this.currentXSRFToken)
             .build();
     }
 }

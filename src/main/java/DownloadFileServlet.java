@@ -1,6 +1,4 @@
 import javax.json.Json;
-import javax.json.JsonReader;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +11,14 @@ public class DownloadFileServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            HttpUtil.doGetSetup(response);
-            ConfigSettings config = ConfiguratorServlet.getCurrentConfig();
+            User user = SessionManager.checkSession(request);
+            if (user == null) {
+                HttpUtil.printJSONResponse(response, Json.createObjectBuilder()
+                    .add("result", "NO USER SESSION")
+                    .build());
+                return;
+            }
+
             String requestName = request.getParameter("requestName");
             String filename = request.getParameter("filename");
             if (Util.isNonEmpty(requestName) && Util.isNonEmpty(filename)) {

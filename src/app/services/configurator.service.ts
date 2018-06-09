@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {ConstantsService} from './constants.service';
 import {PostResult} from "../configurator/post-result.interface";
 import {Config} from "../configurator/config.interface";
 import {Setting} from "../configurator/setting.interface";
 import {ValidatorBlueprint} from "../configurator/validator-blueprint.interface";
+import {AuthService} from "./auth.service";
 
 @Injectable()
 export class ConfiguratorService {
@@ -20,7 +21,8 @@ export class ConfiguratorService {
     public readonly SETTING_ALLOW_GOOGLE_AUTH: string = "allow_google_auth";
     public readonly SETTING_ALLOW_GITHUB_AUTH: string = "allow_github_auth";
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,
+                private authService: AuthService) {
     }
 
     public getConfiguration(): Observable<Config> {
@@ -28,7 +30,8 @@ export class ConfiguratorService {
     }
 
     public saveConfiguration(config: Config): Observable<PostResult> {
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/configurator', JSON.stringify(config));
+        let params: HttpParams = this.authService.setXSRFPayloadToken(new HttpParams());
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/configurator', JSON.stringify(config), {params: params});
     }
 
     public getValidatorBlueprints(): Observable<ValidatorBlueprint[]> {

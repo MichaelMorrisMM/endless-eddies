@@ -6,6 +6,7 @@ import {ConstantsService} from './constants.service';
 import {PostResult} from "../configurator/post-result.interface";
 import {Application} from "../configurator/application.model";
 import {ResultFile} from "../configurator/result-file.model";
+import {AuthService} from "./auth.service";
 
 @Injectable()
 export class ResultsService {
@@ -13,11 +14,13 @@ export class ResultsService {
     public lastResult: PostResult;
     public lastResultApplication: Application;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,
+                private authService: AuthService) {
     }
 
     public submitRequest(application: Application, request: any): Observable<PostResult> {
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/execute', JSON.stringify(request)).pipe(map((result: PostResult) => {
+        let params: HttpParams = this.authService.setXSRFPayloadToken(new HttpParams());
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/execute', JSON.stringify(request), {params: params}).pipe(map((result: PostResult) => {
             this.lastResult = result;
             this.lastResultApplication = application;
             return result;

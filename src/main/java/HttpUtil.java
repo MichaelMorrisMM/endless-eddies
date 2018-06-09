@@ -10,12 +10,6 @@ public class HttpUtil {
     private static final String CONTENT_TYPE_MIME_JSON = "application/json";
     private static final String CONTENT_TYPE_MIME_OCTET_STREAM = "application/octet-stream";
 
-    public static void doGetSetup(HttpServletResponse response) {
-    }
-
-    public static void doPostSetup(HttpServletResponse response) {
-    }
-
     public static void printJSONResponse(HttpServletResponse response, JsonObject o) throws IOException {
         response.setContentType(CONTENT_TYPE_MIME_JSON);
         try (PrintWriter out = response.getWriter()) {

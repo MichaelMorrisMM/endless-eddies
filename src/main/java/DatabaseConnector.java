@@ -62,10 +62,10 @@ public class DatabaseConnector {
         }
     }
 
-    public static User getUserById(String idUser) {
+    public static User getUserById(int idUser) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM user WHERE idUser = ?;");
-            pstmt.setString(1, idUser);
+            pstmt.setInt(1, idUser);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return new User(rs);

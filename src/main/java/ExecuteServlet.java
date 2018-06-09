@@ -1,7 +1,6 @@
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +14,16 @@ import java.util.UUID;
 public class ExecuteServlet extends HttpServlet {
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpUtil.doPostSetup(response);
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        User user = SessionManager.checkSession(request);
+        if (user == null) {
+            HttpUtil.printPOSTResult(response, false, "No user session");
+            return;
+        }
+        if (!SessionManager.checkXSRFToken(request)) {
+            HttpUtil.printPOSTResult(response, false, "Invalid XSRF token");
+            return;
+        }
 
         ConfigSettings config = ConfiguratorServlet.getCurrentConfig();
         JsonObject requestObject;

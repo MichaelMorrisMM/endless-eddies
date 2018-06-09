@@ -13,6 +13,7 @@ import java.util.Date;
 public class SessionManager {
 
     private static final String SESSION_COOKIE_NAME = "SESSION";
+    private static final String XSRF_TOKEN = "xsrfToken";
     private static Algorithm ALGORITHM;
 
     static {
@@ -24,16 +25,21 @@ public class SessionManager {
 
     public static boolean createSession(User user, HttpServletResponse response) {
         try {
+            String xsrfToken = PasswordUtil.createSalt();
+            user.currentXSRFToken = xsrfToken;
+
             Instant now = Instant.now();
             String jwt = JWT.create()
                 .withIssuedAt(Date.from(now))
                 .withExpiresAt(Date.from(now.plus(1, ChronoUnit.HOURS)))
                 .withClaim("idUser", user.idUser)
+                .withClaim(XSRF_TOKEN, xsrfToken)
                 .sign(ALGORITHM);
             Cookie sessionCookie = new Cookie(SESSION_COOKIE_NAME, jwt);
             // TODO add secure when https is working
             sessionCookie.setHttpOnly(true);
             response.addCookie(sessionCookie);
+
             return true;
         } catch (Exception e) {
             return false;
@@ -42,15 +48,10 @@ public class SessionManager {
 
     public static User checkSession(HttpServletRequest request) {
         try {
-            Cookie[] cookies = request.getCookies();
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(SESSION_COOKIE_NAME) && cookie.getValue() != null) {
-                    DecodedJWT jwt = JWT.require(ALGORITHM).build().verify(cookie.getValue());
-                    Instant now = Instant.now();
-                    if (now.compareTo(jwt.getIssuedAt().toInstant()) > 0 && now.compareTo(jwt.getExpiresAt().toInstant()) < 0) {
-                        return DatabaseConnector.getUserById(jwt.getClaim("idUser").asString());
-                    }
-                }
+            DecodedJWT jwt = getJWT(request);
+            Instant now = Instant.now();
+            if (now.compareTo(jwt.getIssuedAt().toInstant()) > 0 && now.compareTo(jwt.getExpiresAt().toInstant()) < 0) {
+                return DatabaseConnector.getUserById(jwt.getClaim("idUser").asInt());
             }
         } catch (Exception e) {
             return null;
@@ -65,6 +66,33 @@ public class SessionManager {
         } else {
             return null;
         }
+    }
+
+    public static boolean checkXSRFToken(HttpServletRequest request) {
+        try {
+            String jwtToken = getJWT(request).getClaim(XSRF_TOKEN).asString();
+            String payloadToken = request.getParameter(XSRF_TOKEN);
+            if (jwtToken != null && payloadToken != null) {
+                return jwtToken.equals(payloadToken);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+    }
+
+    private static DecodedJWT getJWT(HttpServletRequest request) {
+        try {
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(SESSION_COOKIE_NAME) && cookie.getValue() != null) {
+                    return JWT.require(ALGORITHM).build().verify(cookie.getValue());
+                }
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
     }
 
 }

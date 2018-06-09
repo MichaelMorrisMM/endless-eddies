@@ -18,16 +18,21 @@ public class ConfiguratorServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpUtil.doGetSetup(response);
-
         ConfigSettings config = getCurrentConfig();
-
         HttpUtil.printJSONResponse(response, config.getConfig());
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpUtil.doPostSetup(response);
+        User user = SessionManager.checkAdminSession(request);
+        if (user == null) {
+            HttpUtil.printPOSTResult(response, false, "Invalid permissions");
+            return;
+        }
+        if (!SessionManager.checkXSRFToken(request)) {
+            HttpUtil.printPOSTResult(response, false, "Invalid XSRF token");
+            return;
+        }
 
         ConfigSettings config = getCurrentConfig();
         try (JsonReader reader = Json.createReader(request.getReader())) {

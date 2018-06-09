@@ -42,4 +42,8 @@ export class AuthService {
         return this.currentUser;
     }
 
+    public setXSRFPayloadToken(params: HttpParams): HttpParams {
+        return params.set(ConstantsService.XSRF_TOKEN, this.currentUser ? this.currentUser.xsrfToken : "");
+    }
+
 }

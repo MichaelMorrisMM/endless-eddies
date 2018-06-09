@@ -9,8 +9,6 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpUtil.doPostSetup(response);
-
         String email = request.getParameter("email");
         if (!Util.isNonEmpty(email)) {
             HttpUtil.printPOSTResult(response, false, "Email must be specified");

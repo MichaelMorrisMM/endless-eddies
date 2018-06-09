@@ -33,7 +33,11 @@ public class ValidatorsServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpUtil.doGetSetup(response);
+        User user = SessionManager.checkAdminSession(request);
+        if (user == null) {
+            HttpUtil.printJSONArray(response, Json.createArrayBuilder().build());
+            return;
+        }
 
         JsonArrayBuilder builder = Json.createArrayBuilder();
         for (ValidatorBlueprint blueprint : blueprints) {
