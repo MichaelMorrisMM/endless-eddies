@@ -5,6 +5,7 @@ import {PostResult} from "../configurator/post-result.interface";
 import {ConstantsService} from "./constants.service";
 import {Router} from "@angular/router";
 import {User} from "../login/user.interface";
+import {map} from "rxjs/operators";
 
 @Injectable()
 export class AuthService {
@@ -36,6 +37,33 @@ export class AuthService {
     public logOut(): void {
         this.currentUser = null;
         this.onLogOut.emit(null);
+    }
+
+    public updateMyAccount(params: HttpParams): Observable<boolean> {
+        params = this.setXSRFPayloadToken(params);
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/manage-my-account', null, {params: params}).pipe(map((result: PostResult) => {
+            if (result && result.success && result.user) {
+                let xsrfToken: string = this.currentUser.xsrfToken;
+                this.currentUser = result.user;
+                this.currentUser.xsrfToken = xsrfToken;
+                return true;
+            } else {
+                alert(result.message);
+                return false;
+            }
+        }));
+    }
+
+    public deleteAccount(params: HttpParams): Observable<boolean> {
+        params = this.setXSRFPayloadToken(params);
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/delete-account', null, {params: params}).pipe(map((result: PostResult) => {
+            if (result && result.success) {
+                return true;
+            } else {
+                alert(result.message);
+                return false;
+            }
+        }));
     }
 
     public getCurrentUser(): User {

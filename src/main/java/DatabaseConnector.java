@@ -37,6 +37,38 @@ public class DatabaseConnector {
         }
     }
 
+    public static boolean updateUser(User user) {
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("UPDATE user SET email = ?, password = ?, salt = ? WHERE idUser = ?;");
+            pstmt.setString(1, user.email);
+            pstmt.setString(2, user.password);
+            pstmt.setString(3, user.salt);
+            pstmt.setInt(4, user.idUser);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public static boolean deleteUser(int idUser) {
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM request WHERE idUser = ?;");
+            pstmt.setInt(1, idUser);
+            pstmt.executeUpdate();
+
+            // TODO delete requests off disk
+
+            pstmt = conn.prepareStatement("DELETE FROM user WHERE idUser = ?;");
+            pstmt.setInt(1, idUser);
+            pstmt.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
     public static boolean createNewRequest(String name, int idUser) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, ?);");

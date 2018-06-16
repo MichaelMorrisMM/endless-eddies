@@ -10,6 +10,7 @@ import {NewRequestComponent} from './requests/new-request.component';
 import {ConfiguratorResultsComponent} from "./configurator/configurator-results.component";
 import {AuthGuardAdminService} from "./services/auth-guard-admin.service";
 import {AuthGuardService} from "./services/auth-guard.service";
+import {MyAccountComponent} from "./users/my-account.component";
 
 const routes: Routes = [
     { path: 'config', component: ConfiguratorOverviewComponent, canActivate: [AuthGuardAdminService] },
@@ -18,6 +19,7 @@ const routes: Routes = [
     { path: 'config-results', component: ConfiguratorResultsComponent, canActivate: [AuthGuardAdminService] },
     { path: 'new-request', component: NewRequestComponent, canActivate: [AuthGuardService] },
     { path: 'results', component: ResultsComponent, canActivate: [AuthGuardService] },
+    { path: 'my-account', component: MyAccountComponent, canActivate: [AuthGuardService] },
     { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
     { path: '',   redirectTo: '/home', pathMatch: 'full' },
     { path: '**', component: NotFoundComponent },

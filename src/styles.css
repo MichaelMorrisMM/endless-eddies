@@ -173,3 +173,11 @@ form.userForm {
 .padded {
     padding: 2em;
 }
+
+.padded-top {
+    padding-top: 1em;
+}
+
+span.spacer {
+    width: 1em;
+}

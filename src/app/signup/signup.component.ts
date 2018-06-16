@@ -27,6 +27,10 @@ export class SignupComponent implements OnInit {
     }
 
     public submit(): void {
+        if (this.form.controls['password'].value !== this.form.controls['passwordConfirm'].value) {
+            alert("Passwords must match");
+            return;
+        }
         if (this.form.valid) {
             let params: HttpParams = new HttpParams()
                 .set("email", this.form.controls['email'].value)

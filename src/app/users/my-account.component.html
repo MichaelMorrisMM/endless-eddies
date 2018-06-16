@@ -1,0 +1,30 @@
+<ng-container *ngIf="this.authService.getCurrentUser()">
+    <h1 class="title">My Account - {{this.authService.getCurrentUser().isAdmin ? 'Admin User' : 'Normal User'}}</h1>
+    <div>
+        <mat-form-field class="half-width">
+            <input matInput placeholder="Email" [formControl]="this.emailControl">
+        </mat-form-field>
+    </div>
+    <button mat-button color="accent" (click)="this.toggleChangePassword()">{{this.showChangePassword ? 'Cancel' : 'Change Password'}}</button>
+    <div [hidden]="!this.showChangePassword" class="padded-top">
+        <mat-form-field class="half-width">
+            <input matInput placeholder="New Password" type="password" [formControl]="this.passwordControl">
+        </mat-form-field>
+        <mat-form-field class="half-width">
+            <input matInput placeholder="Confirm New Password" type="password" [formControl]="this.passwordConfirmControl">
+        </mat-form-field>
+    </div>
+    <div class="flex-container-row padded-top">
+        <button mat-raised-button color="primary" (click)="this.save()"
+                [disabled]="this.form.invalid || !this.form.dirty">
+            <img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save
+        </button>
+        <span class="spacer"></span>
+        <button mat-raised-button color="warn" (click)="this.deleteAccount()">
+            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete Account
+        </button>
+        <span [hidden]="!this.form.dirty" class="dirty-note">
+            <img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}
+        </span>
+    </div>
+</ng-container>

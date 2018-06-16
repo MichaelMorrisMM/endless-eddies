@@ -36,6 +36,7 @@ import {ApplicationPickerComponent} from "./configurator/application-picker.comp
 import {ConfiguratorResultsComponent} from "./configurator/configurator-results.component";
 import {AuthGuardService} from "./services/auth-guard.service";
 import {AuthGuardAdminService} from "./services/auth-guard-admin.service";
+import {MyAccountComponent} from "./users/my-account.component";
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import {AuthGuardAdminService} from "./services/auth-guard-admin.service";
         OptionsComponent,
         HistogramComponent,
         ApplicationPickerComponent,
+        MyAccountComponent,
     ],
     imports: [
         BrowserModule,
