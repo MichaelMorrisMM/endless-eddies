@@ -2,6 +2,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
+import java.io.File;
 
 public class Util {
 
@@ -42,6 +43,22 @@ public class Util {
 
     public static JsonValue getJsonBoolean(boolean b) {
         return b ? JsonValue.TRUE : JsonValue.FALSE;
+    }
+
+    public static void deleteRequestFiles(String requestName) {
+        recursivelyDeleteFile(new File(ConfiguratorServlet.ROOT_PATH + File.separator + requestName));
+    }
+
+    public static void recursivelyDeleteFile(File file) {
+        if (file.isDirectory()) {
+            File[] children = file.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    recursivelyDeleteFile(child);
+                }
+            }
+        }
+        file.delete();
     }
 
 }

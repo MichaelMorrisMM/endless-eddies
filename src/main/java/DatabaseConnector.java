@@ -53,11 +53,20 @@ public class DatabaseConnector {
 
     public static boolean deleteUser(int idUser) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
-            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM request WHERE idUser = ?;");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT name FROM request WHERE idUser = ?;");
+            pstmt.setInt(1, idUser);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                try {
+                    Util.deleteRequestFiles(rs.getString("name"));
+                } catch (Exception e) {
+                    // Continue attempting to delete user
+                }
+            }
+
+            pstmt = conn.prepareStatement("DELETE FROM request WHERE idUser = ?;");
             pstmt.setInt(1, idUser);
             pstmt.executeUpdate();
-
-            // TODO delete requests off disk
 
             pstmt = conn.prepareStatement("DELETE FROM user WHERE idUser = ?;");
             pstmt.setInt(1, idUser);
