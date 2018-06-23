@@ -26,6 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
             if (user.isAdmin) {
                 this.menuItemsArray.push(
+                    {'title': "Manage Users", "link":"/manage-users", icon: './assets/icons/icons8-inspection-50.png'},
                     {'title': "Configurator - Overview", "link":"/config", icon: './assets/icons/icons8-settings-50.png'},
                     {'title': "Configurator - Users", "link":"/config-users", icon: './assets/icons/icons8-people-50.png'},
                     {'title': "Configurator - Execution", "link":"/config-execute", icon: './assets/icons/icons8-system-task-50.png'},

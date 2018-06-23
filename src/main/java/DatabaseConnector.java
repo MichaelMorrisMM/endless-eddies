@@ -1,5 +1,7 @@
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseConnector {
     private static final String connectionUrl = "jdbc:sqlite:" + ConfiguratorServlet.ROOT_PATH + File.separator + "endless_eddies.db";
@@ -128,6 +130,21 @@ public class DatabaseConnector {
         } catch (SQLException e) {
             return null;
         }
+    }
+
+    public static List<User> getManageUsersList(int idUser) {
+        List<User> users = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT idUser, email, isAdmin FROM user WHERE idUser != ?;");
+            pstmt.setInt(1, idUser);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                users.add(new User(rs, true));
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+        return users;
     }
 
 }

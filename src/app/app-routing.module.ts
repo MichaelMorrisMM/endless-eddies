@@ -11,12 +11,14 @@ import {ConfiguratorResultsComponent} from "./configurator/configurator-results.
 import {AuthGuardAdminService} from "./services/auth-guard-admin.service";
 import {AuthGuardService} from "./services/auth-guard.service";
 import {MyAccountComponent} from "./users/my-account.component";
+import {ManageUsersComponent} from "./users/manage-users.component";
 
 const routes: Routes = [
     { path: 'config', component: ConfiguratorOverviewComponent, canActivate: [AuthGuardAdminService] },
     { path: 'config-users', component: ConfiguratorUsersComponent, canActivate: [AuthGuardAdminService] },
     { path: 'config-execute', component: ConfiguratorExecutionComponent, canActivate: [AuthGuardAdminService] },
     { path: 'config-results', component: ConfiguratorResultsComponent, canActivate: [AuthGuardAdminService] },
+    { path: 'manage-users', component: ManageUsersComponent, canActivate: [AuthGuardAdminService] },
     { path: 'new-request', component: NewRequestComponent, canActivate: [AuthGuardService] },
     { path: 'results', component: ResultsComponent, canActivate: [AuthGuardService] },
     { path: 'my-account', component: MyAccountComponent, canActivate: [AuthGuardService] },

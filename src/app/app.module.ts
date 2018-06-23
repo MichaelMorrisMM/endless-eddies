@@ -37,6 +37,9 @@ import {ConfiguratorResultsComponent} from "./configurator/configurator-results.
 import {AuthGuardService} from "./services/auth-guard.service";
 import {AuthGuardAdminService} from "./services/auth-guard-admin.service";
 import {MyAccountComponent} from "./users/my-account.component";
+import {ManageUsersComponent} from "./users/manage-users.component";
+import {AgGridModule} from "ag-grid-angular";
+import {UsersService} from "./services/users.service";
 
 
 @NgModule({
@@ -58,6 +61,7 @@ import {MyAccountComponent} from "./users/my-account.component";
         HistogramComponent,
         ApplicationPickerComponent,
         MyAccountComponent,
+        ManageUsersComponent,
     ],
     imports: [
         BrowserModule,
@@ -77,6 +81,7 @@ import {MyAccountComponent} from "./users/my-account.component";
         MatExpansionModule,
         NgxChartsModule,
         AppRoutingModule,
+        AgGridModule.withComponents([]),
     ],
     providers: [
         ConfiguratorService,
@@ -85,6 +90,7 @@ import {MyAccountComponent} from "./users/my-account.component";
         AuthService,
         AuthGuardService,
         AuthGuardAdminService,
+        UsersService,
     ],
     entryComponents: [
         ValidatorsComponent,
