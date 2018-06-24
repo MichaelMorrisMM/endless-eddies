@@ -80,6 +80,19 @@ public class DatabaseConnector {
         }
     }
 
+    public static boolean setUserPermissions(int idUser, boolean isAdmin) {
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("UPDATE user SET isAdmin = ? WHERE idUser = ?;");
+            pstmt.setString(1, isAdmin ? "Y" : "N");
+            pstmt.setInt(2, idUser);
+            pstmt.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
     public static boolean createNewRequest(String name, int idUser) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, ?);");

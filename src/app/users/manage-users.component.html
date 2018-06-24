@@ -1,9 +1,21 @@
 <h1 class="title">Manage Users</h1>
-<div class="full-width grid-div">
-    <ag-grid-angular
-        class="ag-theme-material full-height full-width"
-        [rowData]="this.userList"
-        [columnDefs]="this.gridColumnDefs"
-    >
-    </ag-grid-angular>
+<div class="flex-container-col align-center full-width">
+    <div class="grid-div half-width">
+        <ag-grid-angular
+            class="ag-theme-material full-height full-width"
+            (gridReady)="this.onGridReady($event)"
+            (selectionChanged)="this.onGridSelectionChanged($event)"
+            [rowSelection]="'multiple'"
+            [rowMultiSelectWithClick]="true"
+            [rowData]="this.userList"
+            [columnDefs]="this.gridColumnDefs"
+        >
+        </ag-grid-angular>
+    </div>
+    <div>
+        <label>{{this.selectedList.length}} selected</label>
+        <button mat-raised-button [disabled]="this.disableNormal" color="primary" (click)="this.giveNormal()">Give Normal Permissions</button>
+        <button mat-raised-button [disabled]="this.disableAdmin" color="accent" (click)="this.giveAdmin()">Give Admin Permissions</button>
+        <button mat-raised-button [disabled]="this.disableDelete" color="warn" (click)="this.deleteUsers()">Delete</button>
+    </div>
 </div>
