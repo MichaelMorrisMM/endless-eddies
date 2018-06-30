@@ -59,11 +59,12 @@ public class ExecuteServlet extends HttpServlet {
                 process.waitFor();
 
                 StringBuilder stringBuilder = new StringBuilder();
-                BufferedReader reader = new BufferedReader(new FileReader(outFile));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line);
-                    stringBuilder.append(System.lineSeparator());
+                try (BufferedReader reader = new BufferedReader(new FileReader(outFile))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        stringBuilder.append(line);
+                        stringBuilder.append(System.lineSeparator());
+                    }
                 }
 
                 DatabaseConnector.createNewRequest(requestName, user.idUser);

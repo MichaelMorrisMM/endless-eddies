@@ -3,6 +3,7 @@ import {GridReadyEvent, SelectionChangedEvent} from "ag-grid";
 import {ResultsService} from "../services/results.service";
 import {Request} from "../requests/request.interface";
 import {PostResult} from "../configurator/post-result.interface";
+import {AuthService} from "../services/auth.service";
 
 @Component({
     selector: 'all-results',
@@ -18,14 +19,21 @@ export class AllResultsComponent implements OnInit {
     public selectedRequest: Request;
     public gridColumnDefs: any[] = [];
 
-    constructor(private resultsService: ResultsService) {
+    constructor(private resultsService: ResultsService,
+                private authService: AuthService) {
     }
 
     ngOnInit() {
         this.gridColumnDefs = [
             {headerName: 'ID', field: 'idRequest', checkboxSelection: true},
             {headerName: 'Name', field: 'name'},
+            {headerName: 'Size (bytes)', field: 'size', type: "numericColumn"},
         ];
+        if (this.authService.getCurrentUser().isAdmin) {
+            this.gridColumnDefs.push(
+                {headerName: 'User Email', field: 'userEmail'}
+            );
+        }
         this.loadRequests();
     }
 

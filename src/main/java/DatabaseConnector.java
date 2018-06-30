@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class DatabaseConnector {
             while (rs.next()) {
                 try {
                     Util.deleteRequestFiles(rs.getString("name"));
-                } catch (Exception e) {
+                } catch (IOException e) {
                     // Continue attempting to delete user
                 }
             }
@@ -139,7 +140,7 @@ public class DatabaseConnector {
             if (rs.next()) {
                 try {
                     Util.deleteRequestFiles(rs.getString("name"));
-                } catch (Exception e) {
+                } catch (IOException e) {
                     return false;
                 }
             }
@@ -204,9 +205,9 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt;
             if (user.isAdmin) {
-                pstmt = conn.prepareStatement("SELECT idRequest, name, idUser FROM request;");
+                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email FROM request JOIN user ON request.idUser = user.idUser;");
             } else {
-                pstmt = conn.prepareStatement("SELECT idRequest, name, idUser FROM request WHERE idUser = ?;");
+                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email FROM request JOIN user ON request.idUser = user.idUser WHERE request.idUser = ?;");
                 pstmt.setInt(1, user.idUser);
             }
             ResultSet rs = pstmt.executeQuery();
