@@ -40,6 +40,7 @@ import {MyAccountComponent} from "./users/my-account.component";
 import {ManageUsersComponent} from "./users/manage-users.component";
 import {AgGridModule} from "ag-grid-angular";
 import {UsersService} from "./services/users.service";
+import {AllResultsComponent} from "./results/all-results.component";
 
 
 @NgModule({
@@ -62,6 +63,7 @@ import {UsersService} from "./services/users.service";
         ApplicationPickerComponent,
         MyAccountComponent,
         ManageUsersComponent,
+        AllResultsComponent,
     ],
     imports: [
         BrowserModule,

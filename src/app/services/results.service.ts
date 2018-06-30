@@ -7,6 +7,7 @@ import {PostResult} from "../configurator/post-result.interface";
 import {Application} from "../configurator/application.model";
 import {ResultFile} from "../configurator/result-file.model";
 import {AuthService} from "./auth.service";
+import {Request} from "../requests/request.interface";
 
 @Injectable()
 export class ResultsService {
@@ -32,6 +33,18 @@ export class ResultsService {
             .set("requestName", requestName)
             .set("filename", rf.fileName);
         return this.http.get(ConstantsService.URL_PREFIX + '/download-file', {params: params, responseType: 'blob'});
+    }
+
+    public getAllRequests(): Observable<Request[]> {
+        return this.http.get<Request[]>(ConstantsService.URL_PREFIX + '/get-requests');
+    }
+
+    public deleteRequest(idRequest: string): Observable<PostResult> {
+        let params: HttpParams = new HttpParams()
+            .set("idRequest", idRequest);
+        params = this.authService.setXSRFPayloadToken(params);
+
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/delete-request', null, {params: params});
     }
 
 }

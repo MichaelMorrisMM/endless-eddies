@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.menuItemsArray = [
                 {'title': 'Home', 'link': '/home', icon: './assets/icons/icons8-home-50.png'},
                 {'title': "Submit New Request", "link":"/new-request", icon: './assets/icons/icons8-upload-50.png'},
-                {'title': "Results", "link":"/results", icon: './assets/icons/icons8-database-50.png'},
+                {'title': "Results", "link":"/all-results", icon: './assets/icons/icons8-database-50.png'},
             ];
 
             if (user.isAdmin) {

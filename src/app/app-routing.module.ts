@@ -12,6 +12,7 @@ import {AuthGuardAdminService} from "./services/auth-guard-admin.service";
 import {AuthGuardService} from "./services/auth-guard.service";
 import {MyAccountComponent} from "./users/my-account.component";
 import {ManageUsersComponent} from "./users/manage-users.component";
+import {AllResultsComponent} from "./results/all-results.component";
 
 const routes: Routes = [
     { path: 'config', component: ConfiguratorOverviewComponent, canActivate: [AuthGuardAdminService] },
@@ -21,6 +22,7 @@ const routes: Routes = [
     { path: 'manage-users', component: ManageUsersComponent, canActivate: [AuthGuardAdminService] },
     { path: 'new-request', component: NewRequestComponent, canActivate: [AuthGuardService] },
     { path: 'results', component: ResultsComponent, canActivate: [AuthGuardService] },
+    { path: 'all-results', component: AllResultsComponent, canActivate: [AuthGuardService] },
     { path: 'my-account', component: MyAccountComponent, canActivate: [AuthGuardService] },
     { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
     { path: '',   redirectTo: '/home', pathMatch: 'full' },

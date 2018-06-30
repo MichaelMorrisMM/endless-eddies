@@ -115,6 +115,45 @@ public class DatabaseConnector {
         }
     }
 
+    public static boolean userCanManageRequest(User user, int idRequest) {
+        if (user.isAdmin) {
+            return true;
+        }
+
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest FROM request WHERE idRequest = ? AND idUser = ?;");
+            pstmt.setInt(1, idRequest);
+            pstmt.setInt(2, user.idUser);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public static boolean deleteRequest(int idRequest) {
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT name FROM request WHERE idRequest = ?;");
+            pstmt.setInt(1, idRequest);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                try {
+                    Util.deleteRequestFiles(rs.getString("name"));
+                } catch (Exception e) {
+                    return false;
+                }
+            }
+
+            pstmt = conn.prepareStatement("DELETE FROM request WHERE idRequest = ?;");
+            pstmt.setInt(1, idRequest);
+            pstmt.executeUpdate();
+
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
     public static User getUserByEmail(String email) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM user WHERE email = ?;");
@@ -158,6 +197,26 @@ public class DatabaseConnector {
             return null;
         }
         return users;
+    }
+
+    public static List<Request> getRequestsList(User user) {
+        List<Request> requests = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt;
+            if (user.isAdmin) {
+                pstmt = conn.prepareStatement("SELECT idRequest, name, idUser FROM request;");
+            } else {
+                pstmt = conn.prepareStatement("SELECT idRequest, name, idUser FROM request WHERE idUser = ?;");
+                pstmt.setInt(1, user.idUser);
+            }
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                requests.add(new Request(rs));
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+        return requests;
     }
 
 }
