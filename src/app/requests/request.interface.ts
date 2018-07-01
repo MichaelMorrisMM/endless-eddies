@@ -3,5 +3,6 @@ export interface Request {
     readonly name: string;
     readonly idUser: string;
     readonly userEmail: string;
+    readonly date: string;
     readonly size: number;
 }

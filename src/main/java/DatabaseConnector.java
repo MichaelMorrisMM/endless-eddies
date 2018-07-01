@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 public class DatabaseConnector {
     private static final String connectionUrl = "jdbc:sqlite:" + ConfiguratorServlet.ROOT_PATH + File.separator + "endless_eddies.db";
@@ -96,9 +97,10 @@ public class DatabaseConnector {
 
     public static boolean createNewRequest(String name, int idUser) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, ?);");
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, ?, ?);");
             pstmt.setString(1, name);
             pstmt.setInt(2, idUser);
+            pstmt.setString(3, new Date().toString());
             pstmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -205,9 +207,9 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt;
             if (user.isAdmin) {
-                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email FROM request JOIN user ON request.idUser = user.idUser;");
+                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date FROM request JOIN user ON request.idUser = user.idUser;");
             } else {
-                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email FROM request JOIN user ON request.idUser = user.idUser WHERE request.idUser = ?;");
+                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date FROM request JOIN user ON request.idUser = user.idUser WHERE request.idUser = ?;");
                 pstmt.setInt(1, user.idUser);
             }
             ResultSet rs = pstmt.executeQuery();

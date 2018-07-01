@@ -11,5 +11,6 @@ CREATE TABLE request(
     idRequest   INTEGER         PRIMARY KEY,
     name        VARCHAR(100)    NOT NULL UNIQUE,
     idUser      INTEGER,
+    date        VARCHAR(30),
     FOREIGN KEY(idUser) REFERENCES user(idUser)
 );

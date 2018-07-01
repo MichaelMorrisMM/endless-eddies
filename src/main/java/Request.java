@@ -9,6 +9,7 @@ public class Request implements DatabaseObject {
     public String name;
     public int idUser;
     public String userEmail;
+    public String date;
 
     public Request(ResultSet rs) throws SQLException {
         this.setValues(rs);
@@ -20,6 +21,7 @@ public class Request implements DatabaseObject {
         this.name = rs.getString("name");
         this.idUser = rs.getInt("idUser");
         this.userEmail = rs.getString("email");
+        this.date = rs.getString("date");
     }
 
     @Override
@@ -29,6 +31,7 @@ public class Request implements DatabaseObject {
             .add("name", this.name)
             .add("idUser", "" + this.idUser)
             .add("userEmail", this.userEmail)
+            .add("date", this.date)
             .add("size", this.getSize())
             .build();
     }

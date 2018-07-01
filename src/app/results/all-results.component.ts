@@ -11,6 +11,7 @@ import {AuthService} from "../services/auth.service";
     styles: [`
         div.grid-div {
             height: 600px;
+            width: 75%;
         }
     `]
 })
@@ -27,6 +28,7 @@ export class AllResultsComponent implements OnInit {
         this.gridColumnDefs = [
             {headerName: 'ID', field: 'idRequest', checkboxSelection: true},
             {headerName: 'Name', field: 'name'},
+            {headerName: 'Date', field: 'date'},
             {headerName: 'Size (bytes)', field: 'size', type: "numericColumn"},
         ];
         if (this.authService.getCurrentUser().isAdmin) {
