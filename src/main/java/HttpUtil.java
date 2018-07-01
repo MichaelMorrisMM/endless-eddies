@@ -39,14 +39,6 @@ public class HttpUtil {
             .build());
     }
 
-    public static void printPOSTResult(HttpServletResponse response, String requestName, boolean result, String message) throws IOException {
-        printJSONResponse(response, Json.createObjectBuilder()
-            .add("requestName", requestName)
-            .add("success", result)
-            .add("message", message)
-            .build());
-    }
-
     public static void downloadFile(HttpServletResponse response, File file) throws IOException {
         response.setContentType(CONTENT_TYPE_MIME_OCTET_STREAM);
         response.setContentLength((int) file.length());

@@ -8,16 +8,15 @@
     <h1 class="subtitle">W Data</h1>
     <app-histogram [inputData]="this.w"></app-histogram>
 </div>
-<ng-container *ngIf="this.config && this.resultsService.lastResult && this.resultsService.lastResultApplication">
-    <label>Status:</label>
-    <pre>{{this.resultsService.lastResult.success}}</pre>
-    <label>Result:</label>
-    <pre>{{this.resultsService.lastResult.message}}</pre>
-    <div *ngIf="this.resultsService.lastResultApplication.resultFiles && this.resultsService.lastResultApplication.resultFiles.length > 0">
+<div *ngIf="this.config && this.result && this.request && this.application">
+    <label>System Out:</label>
+    <pre>{{this.result.systemOut}}</pre>
+    <div *ngIf="this.application.resultFiles && this.application.resultFiles.length > 0">
         <h2 class="subtitle">Result File(s)</h2>
-        <button *ngFor="let rf of this.resultsService.lastResultApplication.resultFiles"
+        <button *ngFor="let rf of this.application.resultFiles"
                 mat-button (click)="this.downloadFile(rf)" matTooltip="{{rf.toolTip}}">
             <img src="./assets/icons/icons8-download-50.png" class="embeddedIcon">{{rf.name}}
         </button>
     </div>
-</ng-container>
+</div>
+<button mat-raised-button color="primary" (click)="this.backToAllResults()"><img src="./assets/icons/icons8-back-50.png" class="embeddedIcon">Back</button>

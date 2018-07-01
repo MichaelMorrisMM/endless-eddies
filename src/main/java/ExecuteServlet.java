@@ -46,30 +46,27 @@ public class ExecuteServlet extends HttpServlet {
             );
             tmpDir.mkdir();
 
-            File inFile = new File(tmpDir, "in.txt");
+            File inFile = new File(tmpDir, GetRequestServlet.IN_FILE);
             inFile.createNewFile();
-            File outFile = new File(tmpDir, "out.txt");
+            File outFile = new File(tmpDir, GetRequestServlet.OUT_FILE);
             outFile.createNewFile();
-            File errorFile = new File(tmpDir, "error.txt");
+            File errorFile = new File(tmpDir, GetRequestServlet.ERROR_FILE);
             errorFile.createNewFile();
+            File applicationDefinitionFile = new File(tmpDir, GetRequestServlet.APPLICATION_DEFINITION_FILE);
+            applicationDefinitionFile.createNewFile();
 
             try {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(applicationDefinitionFile))) {
+                    writer.write(application.toJsonObject().toString());
+                }
+
                 Command command = new Command(application.command, inputs);
                 Process process = command.execute(inFile, outFile, errorFile, tmpDir);
                 process.waitFor();
 
-                StringBuilder stringBuilder = new StringBuilder();
-                try (BufferedReader reader = new BufferedReader(new FileReader(outFile))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        stringBuilder.append(line);
-                        stringBuilder.append(System.lineSeparator());
-                    }
-                }
-
                 DatabaseConnector.createNewRequest(requestName, user.idUser);
 
-                HttpUtil.printPOSTResult(response, requestName, true, stringBuilder.toString());
+                HttpUtil.printPOSTResult(response, true, "");
             } catch (Exception e) {
                 HttpUtil.printPOSTResult(response, false, "");
             }

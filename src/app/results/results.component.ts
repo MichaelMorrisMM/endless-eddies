@@ -4,6 +4,10 @@ import {Config} from '../configurator/config.interface';
 import {ResultsService} from '../services/results.service';
 import {ResultFile} from "../configurator/result-file.model";
 import {saveAs} from "../../../node_modules/file-saver";
+import {ActivatedRoute, ParamMap, Router} from "@angular/router";
+import {GetRequestResult} from "../requests/get-request-result.interface";
+import {Request} from "../requests/request.interface";
+import {Application} from "../configurator/application.model";
 
 @Component({
     selector: 'app-results',
@@ -13,13 +17,18 @@ import {saveAs} from "../../../node_modules/file-saver";
 
 export class ResultsComponent implements OnInit {
     public config: Config;
-    u: Number[];
-    v: Number[];
-    w: Number[];
-    isGraphShowing = false;
+    public request: Request;
+    public application: Application;
+    public result: GetRequestResult;
+    public u: Number[];
+    public v: Number[];
+    public w: Number[];
+    public isGraphShowing: boolean = false;
 
-    constructor(public configuratorService: ConfiguratorService,
-                public resultsService: ResultsService) {
+    constructor(private configuratorService: ConfiguratorService,
+                private resultsService: ResultsService,
+                private route: ActivatedRoute,
+                private router: Router) {
     }
 
     toggleGraph() {
@@ -30,36 +39,59 @@ export class ResultsComponent implements OnInit {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
         });
-        this.u = [];
-        this.v = [];
-        this.w = [];
 
-        const tempArr: any[] = this.resultsService
-                                   .lastResult
-                                   .message
-                                   .replace('\r\n', ' ')
-                                   .replace('\n', ' ')
-                                   .split(' ')
-                                   .filter(x => x !== '')
-                                   .map(x => Number(x))
-                                   .map(x => Math.round(x * 100) / 100)
-                                   .filter(x => !isNaN(x));
+        this.route.paramMap.forEach((map: ParamMap) => {
+            let idRequest: string = map.get("idRequest");
 
-        //console.log(tempArr);
-        tempArr.forEach( (x, i) => {
-            if (i % 3 === 0) {
-                this.u.push(x);
-            } else if (i % 3 === 1) {
-                this.v.push(x);
-            } else {
-                this.w.push(x);
-            }
+            this.request = null;
+            this.application = null;
+            this.result = null;
+
+            this.u = [];
+            this.v = [];
+            this.w = [];
+
+            this.resultsService.getRequest(idRequest).subscribe((result: GetRequestResult) => {
+                if (result.success && result.request && result.application && result.systemOut) {
+                    this.result = result;
+                    this.request = result.request;
+                    this.application = result.application;
+
+                    const tempArr: any[] = result
+                        .systemOut
+                        .replace('\r\n', ' ')
+                        .replace('\n', ' ')
+                        .split(' ')
+                        .filter(x => x !== '')
+                        .map(x => Number(x))
+                        .map(x => Math.round(x * 100) / 100)
+                        .filter(x => !isNaN(x));
+
+                    tempArr.forEach( (x, i) => {
+                        if (i % 3 === 0) {
+                            this.u.push(x);
+                        } else if (i % 3 === 1) {
+                            this.v.push(x);
+                        } else {
+                            this.w.push(x);
+                        }
+                    });
+                } else {
+                    alert(result.message);
+                }
+            });
         });
     }
 
     public downloadFile(rf: ResultFile): void {
-        this.resultsService.downloadFile(this.resultsService.lastResult.requestName, rf).subscribe((blob: Blob) => {
-            saveAs(blob, rf.fileName);
-        });
+        if (this.request) {
+            this.resultsService.downloadFile(this.request.name, rf).subscribe((blob: Blob) => {
+                saveAs(blob, rf.fileName);
+            });
+        }
+    }
+
+    public backToAllResults(): void {
+        this.router.navigateByUrl('/all-results');
     }
 }

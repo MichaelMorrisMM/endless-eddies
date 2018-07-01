@@ -1,19 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
-import {map} from "rxjs/operators";
 import {ConstantsService} from './constants.service';
 import {PostResult} from "../configurator/post-result.interface";
 import {Application} from "../configurator/application.model";
 import {ResultFile} from "../configurator/result-file.model";
 import {AuthService} from "./auth.service";
 import {Request} from "../requests/request.interface";
+import {GetRequestResult} from "../requests/get-request-result.interface";
 
 @Injectable()
 export class ResultsService {
-
-    public lastResult: PostResult;
-    public lastResultApplication: Application;
 
     constructor(private http: HttpClient,
                 private authService: AuthService) {
@@ -21,11 +18,7 @@ export class ResultsService {
 
     public submitRequest(application: Application, request: any): Observable<PostResult> {
         let params: HttpParams = this.authService.setXSRFPayloadToken(new HttpParams());
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/execute', JSON.stringify(request), {params: params}).pipe(map((result: PostResult) => {
-            this.lastResult = result;
-            this.lastResultApplication = application;
-            return result;
-        }));
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/execute', JSON.stringify(request), {params: params});
     }
 
     public downloadFile(requestName: string, rf: ResultFile): Observable<Blob> {
@@ -33,6 +26,11 @@ export class ResultsService {
             .set("requestName", requestName)
             .set("filename", rf.fileName);
         return this.http.get(ConstantsService.URL_PREFIX + '/download-file', {params: params, responseType: 'blob'});
+    }
+
+    public getRequest(idRequest: string): Observable<GetRequestResult> {
+        let params: HttpParams = new HttpParams().set("idRequest", idRequest);
+        return this.http.get<GetRequestResult>(ConstantsService.URL_PREFIX + '/get-request', {params: params});
     }
 
     public getAllRequests(): Observable<Request[]> {

@@ -12,7 +12,11 @@
         </ag-grid-angular>
     </div>
     <div>
-        <button mat-raised-button [disabled]="!this.selectedRequest" color="primary" (click)="this.viewRequest()">View</button>
-        <button mat-raised-button [disabled]="!this.selectedRequest" color="warn" (click)="this.deleteRequest()">Delete</button>
+        <button mat-raised-button [disabled]="!this.selectedRequest" color="primary" (click)="this.viewRequest()">
+            <img src="./assets/icons/icons8-search-50.png" class="embeddedIcon">View
+        </button>
+        <button mat-raised-button [disabled]="!this.selectedRequest" color="warn" (click)="this.deleteRequest()">
+            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
+        </button>
     </div>
 </div>

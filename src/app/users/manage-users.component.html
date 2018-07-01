@@ -14,8 +14,14 @@
     </div>
     <div>
         <label>{{this.selectedList.length}} selected</label>
-        <button mat-raised-button [disabled]="this.disableNormal" color="primary" (click)="this.giveNormal()">Give Normal Permissions</button>
-        <button mat-raised-button [disabled]="this.disableAdmin" color="accent" (click)="this.giveAdmin()">Give Admin Permissions</button>
-        <button mat-raised-button [disabled]="this.disableDelete" color="warn" (click)="this.deleteUsers()">Delete</button>
+        <button mat-raised-button [disabled]="this.disableNormal" color="primary" (click)="this.giveNormal()">
+            <img src="./assets/icons/icons8-chevron-down-50.png" class="embeddedIcon">Give Normal Permissions
+        </button>
+        <button mat-raised-button [disabled]="this.disableAdmin" color="accent" (click)="this.giveAdmin()">
+            <img src="./assets/icons/icons8-chevron-up-50.png" class="embeddedIcon">Give Admin Permissions
+        </button>
+        <button mat-raised-button [disabled]="this.disableDelete" color="warn" (click)="this.deleteUsers()">
+            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
+        </button>
     </div>
 </div>

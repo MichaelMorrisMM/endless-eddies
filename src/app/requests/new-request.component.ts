@@ -10,6 +10,7 @@ import {Validator} from "../configurator/validator.model";
 import {Application} from "../configurator/application.model";
 import {ApplicationPickerComponent} from "../configurator/application-picker.component";
 import {MatDialog, MatDialogRef} from "@angular/material";
+import {PostResult} from "../configurator/post-result.interface";
 
 @Component({
     selector: 'new-request',
@@ -92,8 +93,12 @@ export class NewRequestComponent implements OnInit {
             request[param.name] = this.form.controls[param.name].value;
         });
 
-        this.resultsService.submitRequest(this.application, request).subscribe(() => {
-            this.router.navigateByUrl("/results");
+        this.resultsService.submitRequest(this.application, request).subscribe((result: PostResult) => {
+            if (result.success) {
+                this.router.navigateByUrl("/all-results");
+            } else {
+                alert(result.message);
+            }
         });
     }
 }

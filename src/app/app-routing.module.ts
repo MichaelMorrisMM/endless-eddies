@@ -21,7 +21,7 @@ const routes: Routes = [
     { path: 'config-results', component: ConfiguratorResultsComponent, canActivate: [AuthGuardAdminService] },
     { path: 'manage-users', component: ManageUsersComponent, canActivate: [AuthGuardAdminService] },
     { path: 'new-request', component: NewRequestComponent, canActivate: [AuthGuardService] },
-    { path: 'results', component: ResultsComponent, canActivate: [AuthGuardService] },
+    { path: 'results/:idRequest', component: ResultsComponent, canActivate: [AuthGuardService] },
     { path: 'all-results', component: AllResultsComponent, canActivate: [AuthGuardService] },
     { path: 'my-account', component: MyAccountComponent, canActivate: [AuthGuardService] },
     { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },

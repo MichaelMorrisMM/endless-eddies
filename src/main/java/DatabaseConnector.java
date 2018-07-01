@@ -118,6 +118,17 @@ public class DatabaseConnector {
         }
     }
 
+    public static boolean doesRequestExist(int idRequest) {
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest FROM request WHERE idRequest = ?;");
+            pstmt.setInt(1, idRequest);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
     public static boolean userCanManageRequest(User user, int idRequest) {
         if (user.isAdmin) {
             return true;
@@ -220,6 +231,21 @@ public class DatabaseConnector {
             return null;
         }
         return requests;
+    }
+
+    public static Request getRequest(int idRequest) {
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date FROM request JOIN user ON request.idUser = user.idUser WHERE idRequest = ?;");
+            pstmt.setInt(1, idRequest);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new Request(rs);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
 }

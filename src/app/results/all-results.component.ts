@@ -4,6 +4,7 @@ import {ResultsService} from "../services/results.service";
 import {Request} from "../requests/request.interface";
 import {PostResult} from "../configurator/post-result.interface";
 import {AuthService} from "../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'all-results',
@@ -21,7 +22,8 @@ export class AllResultsComponent implements OnInit {
     public gridColumnDefs: any[] = [];
 
     constructor(private resultsService: ResultsService,
-                private authService: AuthService) {
+                private authService: AuthService,
+                private router: Router) {
     }
 
     ngOnInit() {
@@ -62,7 +64,7 @@ export class AllResultsComponent implements OnInit {
 
     public viewRequest(): void {
         if (this.selectedRequest) {
-            // TODO
+            this.router.navigate(['/results', this.selectedRequest.idRequest]);
         }
     }
 
