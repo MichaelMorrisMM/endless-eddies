@@ -40,6 +40,9 @@ public class ConfigSettings {
     private Map<String, Setting> settings;
     private List<Application> applications;
 
+    public static final String RESULT_LIFESPAN = "resultLifespanInDays";
+    public int resultLifespan;
+
     public ConfigSettings() {
         this.settings = new HashMap<>();
         this.settings.put(SETTING_ALLOW_GUEST_MODE, new Setting(SETTING_ALLOW_GUEST_MODE, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
@@ -47,6 +50,8 @@ public class ConfigSettings {
         this.settings.put(SETTING_ALLOW_GITHUB_AUTH, new Setting(SETTING_ALLOW_GITHUB_AUTH, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
 
         this.applications = new ArrayList<>();
+
+        this.resultLifespan = 0;
     }
 
     public ConfigSettings(File configFile) throws FileNotFoundException {
@@ -78,6 +83,10 @@ public class ConfigSettings {
                     }
                 }
             }
+
+            if (config.get(RESULT_LIFESPAN) != null) {
+                this.resultLifespan = config.getInt(RESULT_LIFESPAN);
+            }
         } catch (Exception e) {
         }
     }
@@ -97,6 +106,7 @@ public class ConfigSettings {
         return Json.createObjectBuilder()
             .add(NODE_SETTINGS, getNode(this.settings))
             .add(NODE_APPLICATIONS, getNode(this.applications))
+            .add(RESULT_LIFESPAN, this.resultLifespan)
             .build();
     }
 

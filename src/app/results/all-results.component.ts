@@ -22,7 +22,7 @@ export class AllResultsComponent implements OnInit {
     public gridColumnDefs: any[] = [];
 
     constructor(private resultsService: ResultsService,
-                private authService: AuthService,
+                public authService: AuthService,
                 private router: Router) {
     }
 
@@ -31,6 +31,7 @@ export class AllResultsComponent implements OnInit {
             {headerName: 'ID', field: 'idRequest', checkboxSelection: true},
             {headerName: 'Name', field: 'name'},
             {headerName: 'Date', field: 'date'},
+            {headerName: 'Expires', field: 'expiration'},
             {headerName: 'Size (bytes)', field: 'size', type: "numericColumn"},
         ];
         if (this.authService.getCurrentUser().isAdmin) {
@@ -76,6 +77,17 @@ export class AllResultsComponent implements OnInit {
                 } else {
                     alert(result.message);
                 }
+            });
+        }
+    }
+
+    public deleteExpiredResults(): void {
+        if (this.authService.getCurrentUser().isAdmin) {
+            this.resultsService.deleteExpiredResults().subscribe((result: PostResult) => {
+                if (result.success) {
+                    this.loadRequests();
+                }
+                alert(result.message);
             });
         }
     }

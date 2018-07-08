@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ConfiguratorService} from '../services/configurator.service';
 import {ConstantsService} from "../services/constants.service";
 import {Setting} from "./setting.interface";
@@ -18,8 +18,11 @@ export class ConfiguratorUsersComponent implements OnInit {
     public form: FormGroup;
 
     constructor(public configuratorService: ConfiguratorService,
-                public constantsService: ConstantsService) {
-        this.form = new FormGroup({});
+                public constantsService: ConstantsService,
+                @Inject(FormBuilder) private fb: FormBuilder) {
+        this.form = fb.group({
+            resultLifespan: [0, [Validators.required, Validators.min(0)]]
+        });
     }
 
     ngOnInit() {
@@ -29,6 +32,7 @@ export class ConfiguratorUsersComponent implements OnInit {
             this.userSettingsArray.forEach((setting: Setting) => {
                 this.form.addControl(setting.name, new FormControl(setting.value));
             });
+            this.form.controls['resultLifespan'].setValue(response.resultLifespanInDays);
         });
     }
 
@@ -36,6 +40,8 @@ export class ConfiguratorUsersComponent implements OnInit {
         this.userSettingsArray.forEach((setting: Setting) => {
             ConfiguratorService.setSettingValue(setting.name, this.form.controls[setting.name].value, this.config);
         });
+
+        this.config.resultLifespanInDays = Math.round(this.form.controls['resultLifespan'].value);
 
         this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
             if (response.success) {

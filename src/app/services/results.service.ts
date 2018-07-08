@@ -45,4 +45,9 @@ export class ResultsService {
         return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/delete-request', null, {params: params});
     }
 
+    public deleteExpiredResults(): Observable<PostResult> {
+        let params: HttpParams = this.authService.setXSRFPayloadToken(new HttpParams());
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/manage-expired-results', null, {params: params});
+    }
+
 }

@@ -19,4 +19,9 @@
             <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
         </button>
     </div>
+    <div *ngIf="this.authService.getCurrentUser().isAdmin">
+        <button mat-raised-button color="warn" (click)="this.deleteExpiredResults()">
+            <img src="./assets/icons/icons8-expired-50.png" class="embeddedIcon">Delete Expired Results
+        </button>
+    </div>
 </div>

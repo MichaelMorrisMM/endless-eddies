@@ -7,8 +7,17 @@
                               [formControlName]="setting.name">{{setting.name}}</mat-checkbox>
             </div>
         </ng-container>
+        <div>
+            <mat-form-field>
+                <input matInput type="number" placeholder="Data Lifespan" [formControlName]="'resultLifespan'">
+            </mat-form-field>
+            <span matTooltip="The lifespan of user submitted requests (in days). Expired data can be deleted via the Results screen. NOTE: A value of 0 means data will never expire"
+                  [matTooltipPosition]="'right'">
+                    <img src="./assets/icons/icons8-info-popup-50.png" class="embeddedIconNoMargin">
+            </span>
+        </div>
         <div class="flex-container-row">
-            <button mat-raised-button color="primary" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
+            <button mat-raised-button color="primary" [disabled]="this.form.invalid" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
             <span *ngIf="this.form.dirty" class="dirty-note"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
         </div>
     </form>

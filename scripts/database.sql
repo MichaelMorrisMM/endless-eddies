@@ -10,7 +10,8 @@ DROP TABLE IF EXISTS request;
 CREATE TABLE request(
     idRequest   INTEGER         PRIMARY KEY,
     name        VARCHAR(100)    NOT NULL UNIQUE,
-    idUser      INTEGER,
-    date        VARCHAR(30),
+    idUser      INTEGER         NOT NULL,
+    date        VARCHAR(30)     NOT NULL,
+    expiration  INTEGER,
     FOREIGN KEY(idUser) REFERENCES user(idUser)
 );

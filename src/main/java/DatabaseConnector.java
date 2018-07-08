@@ -1,6 +1,9 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
@@ -97,10 +100,26 @@ public class DatabaseConnector {
 
     public static boolean createNewRequest(String name, int idUser) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, ?, ?);");
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, ?, ?, ?);");
             pstmt.setString(1, name);
             pstmt.setInt(2, idUser);
-            pstmt.setString(3, new Date().toString());
+
+            Instant now = Instant.now();
+            Instant expiration = null;
+            try {
+                ConfigSettings config = ConfiguratorServlet.getCurrentConfig();
+                if (config.resultLifespan > 0) {
+                    expiration = now.plus(config.resultLifespan, ChronoUnit.DAYS);
+                }
+            } catch (FileNotFoundException e) {
+            }
+            pstmt.setString(3, Date.from(now).toString());
+            if (expiration != null) {
+                pstmt.setLong(4, expiration.getEpochSecond());
+            } else {
+                pstmt.setNull(4, Types.INTEGER);
+            }
+
             pstmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -218,9 +237,9 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt;
             if (user.isAdmin) {
-                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date FROM request JOIN user ON request.idUser = user.idUser;");
+                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser;");
             } else {
-                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date FROM request JOIN user ON request.idUser = user.idUser WHERE request.idUser = ?;");
+                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser WHERE request.idUser = ?;");
                 pstmt.setInt(1, user.idUser);
             }
             ResultSet rs = pstmt.executeQuery();
@@ -235,7 +254,7 @@ public class DatabaseConnector {
 
     public static Request getRequest(int idRequest) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date FROM request JOIN user ON request.idUser = user.idUser WHERE idRequest = ?;");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser WHERE idRequest = ?;");
             pstmt.setInt(1, idRequest);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -245,6 +264,28 @@ public class DatabaseConnector {
             }
         } catch (SQLException e) {
             return null;
+        }
+    }
+
+    public static int deleteExpiredResults() {
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            long expirationThreshold = Instant.now().getEpochSecond();
+            PreparedStatement pstmt = conn.prepareStatement("SELECT name FROM request WHERE expiration IS NOT NULL AND expiration < ?;");
+            pstmt.setLong(1, expirationThreshold);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                try {
+                    Util.deleteRequestFiles(rs.getString("name"));
+                } catch (IOException e) {
+                    return -1;
+                }
+            }
+
+            pstmt = conn.prepareStatement("DELETE FROM request WHERE expiration IS NOT NULL AND expiration < ?;");
+            pstmt.setLong(1, expirationThreshold);
+            return pstmt.executeUpdate();
+        } catch (SQLException e) {
+            return -1;
         }
     }
 

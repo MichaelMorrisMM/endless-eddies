@@ -3,6 +3,8 @@ import javax.json.JsonObject;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.util.Date;
 
 public class Request implements DatabaseObject {
     public int idRequest;
@@ -10,6 +12,7 @@ public class Request implements DatabaseObject {
     public int idUser;
     public String userEmail;
     public String date;
+    public String expiration;
 
     public Request(ResultSet rs) throws SQLException {
         this.setValues(rs);
@@ -22,6 +25,12 @@ public class Request implements DatabaseObject {
         this.idUser = rs.getInt("idUser");
         this.userEmail = rs.getString("email");
         this.date = rs.getString("date");
+        long exp = rs.getLong("expiration");
+        if (exp > 0) {
+            this.expiration = Date.from(Instant.ofEpochSecond(exp)).toString();
+        } else {
+            this.expiration = "No Expiration";
+        }
     }
 
     @Override
@@ -32,6 +41,7 @@ public class Request implements DatabaseObject {
             .add("idUser", "" + this.idUser)
             .add("userEmail", this.userEmail)
             .add("date", this.date)
+            .add("expiration", this.expiration)
             .add("size", this.getSize())
             .build();
     }

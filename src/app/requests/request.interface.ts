@@ -4,5 +4,6 @@ export interface Request {
     readonly idUser: string;
     readonly userEmail: string;
     readonly date: string;
+    readonly expiration: string;
     readonly size: number;
 }
