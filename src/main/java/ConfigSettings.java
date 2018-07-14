@@ -29,29 +29,25 @@ public class ConfigSettings {
         groupSet.add(GROUP_USERS);
     }
 
-    public static final String NODE_SETTINGS = "settings";
     public static final String NODE_APPLICATIONS = "applications";
     public static final String TARGET_APPLICATION = "targetApplication";
 
-    public static final String SETTING_ALLOW_GUEST_MODE = "allow_guest_mode";
-    public static final String SETTING_ALLOW_GOOGLE_AUTH = "allow_google_auth";
-    public static final String SETTING_ALLOW_GITHUB_AUTH = "allow_github_auth";
-
-    private Map<String, Setting> settings;
     private List<Application> applications;
-
     public static final String RESULT_LIFESPAN = "resultLifespanInDays";
     public int resultLifespan;
+    public static final String ALLOW_GUEST_MODE = "allowGuestMode";
+    public boolean allowGuestMode;
+    public static final String ALLOW_GOOGLE_LOGIN = "allowGoogleLogin";
+    public boolean allowGoogleLogin;
+    public static final String ALLOW_GITHUB_LOGIN = "allowGithubLogin";
+    public boolean allowGithubLogin;
 
     public ConfigSettings() {
-        this.settings = new HashMap<>();
-        this.settings.put(SETTING_ALLOW_GUEST_MODE, new Setting(SETTING_ALLOW_GUEST_MODE, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
-        this.settings.put(SETTING_ALLOW_GOOGLE_AUTH, new Setting(SETTING_ALLOW_GOOGLE_AUTH, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
-        this.settings.put(SETTING_ALLOW_GITHUB_AUTH, new Setting(SETTING_ALLOW_GITHUB_AUTH, JsonValue.FALSE, GROUP_USERS, TYPE_FLAG));
-
         this.applications = new ArrayList<>();
-
         this.resultLifespan = 0;
+        this.allowGuestMode = false;
+        this.allowGoogleLogin = false;
+        this.allowGithubLogin = false;
     }
 
     public ConfigSettings(File configFile) throws FileNotFoundException {
@@ -63,16 +59,6 @@ public class ConfigSettings {
 
     public void updateWithConfig(JsonObject config) {
         try {
-            JsonArray settingsArray = Util.getArraySafe(config, NODE_SETTINGS);
-            if (settingsArray != null) {
-                for (JsonObject obj : settingsArray.getValuesAs(JsonObject.class)) {
-                    String name = Util.getStringSafe(obj, ConfigObject.NAME);
-                    if (name != null && this.settings.containsKey(name)) {
-                        this.settings.get(name).updateWith(obj);
-                    }
-                }
-            }
-
             JsonArray applicationsArray = Util.getArraySafe(config, NODE_APPLICATIONS);
             if (applicationsArray != null) {
                 this.applications.clear();
@@ -86,6 +72,15 @@ public class ConfigSettings {
 
             if (config.get(RESULT_LIFESPAN) != null) {
                 this.resultLifespan = config.getInt(RESULT_LIFESPAN);
+            }
+            if (config.get(ALLOW_GUEST_MODE) != null) {
+                this.allowGuestMode = config.getBoolean(ALLOW_GUEST_MODE);
+            }
+            if (config.get(ALLOW_GOOGLE_LOGIN) != null) {
+                this.allowGoogleLogin = config.getBoolean(ALLOW_GOOGLE_LOGIN);
+            }
+            if (config.get(ALLOW_GITHUB_LOGIN) != null) {
+                this.allowGithubLogin = config.getBoolean(ALLOW_GITHUB_LOGIN);
             }
         } catch (Exception e) {
         }
@@ -104,9 +99,11 @@ public class ConfigSettings {
 
     public JsonObject getConfig() {
         return Json.createObjectBuilder()
-            .add(NODE_SETTINGS, getNode(this.settings))
             .add(NODE_APPLICATIONS, getNode(this.applications))
             .add(RESULT_LIFESPAN, this.resultLifespan)
+            .add(ALLOW_GUEST_MODE, this.allowGuestMode)
+            .add(ALLOW_GOOGLE_LOGIN, this.allowGoogleLogin)
+            .add(ALLOW_GITHUB_LOGIN, this.allowGithubLogin)
             .build();
     }
 
@@ -122,16 +119,6 @@ public class ConfigSettings {
         JsonArrayBuilder builder = Json.createArrayBuilder();
         for (Entry<String, T> e : node.entrySet()) {
             builder = builder.add(e.getValue().toJsonObject());
-        }
-        return builder.build();
-    }
-
-    public static <T extends ConfigObject> JsonArray getSortedNode(Map<String, T> node, Comparator<T> comparator) {
-        JsonArrayBuilder builder = Json.createArrayBuilder();
-        List<T> list = new ArrayList<>(node.values());
-        list.sort(comparator);
-        for (T obj : list) {
-            builder = builder.add(obj.toJsonObject());
         }
         return builder.build();
     }

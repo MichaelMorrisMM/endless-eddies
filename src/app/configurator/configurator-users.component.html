@@ -1,13 +1,28 @@
 <ng-container *ngIf="this.config">
     <form [formGroup]="this.form" class="flex-container-col">
         <h1 class="title">Users</h1>
-        <ng-container *ngFor="let setting of this.userSettingsArray">
-            <div [ngSwitch]="setting.type" class="margin-bottom">
-                <mat-checkbox *ngSwitchCase="this.configuratorService.TYPE_FLAG"
-                              [formControlName]="setting.name">{{setting.name}}</mat-checkbox>
-            </div>
-        </ng-container>
-        <div>
+        <div class="padding-bottom">
+            <mat-checkbox [formControlName]="'allowGuestMode'">Enable Guest Mode</mat-checkbox>
+            <span matTooltip="When guest mode is enabled, users can submit requests and view data without logging in. They have limited privilege and the lifespan of their results is limited to the session"
+                  [matTooltipPosition]="'right'">
+                    <img src="./assets/icons/icons8-info-popup-50.png" class="embeddedIconNoMargin">
+            </span>
+        </div>
+        <div class="padding-bottom">
+            <mat-checkbox [formControlName]="'allowGoogleLogin'">Enable Google Third-Party Authentication</mat-checkbox>
+            <span matTooltip="Allows users to log in with their Google account"
+                  [matTooltipPosition]="'right'">
+                    <img src="./assets/icons/icons8-info-popup-50.png" class="embeddedIconNoMargin">
+            </span>
+        </div>
+        <div class="padding-bottom">
+            <mat-checkbox [formControlName]="'allowGithubLogin'">Enable Github Third-Party Authentication</mat-checkbox>
+            <span matTooltip="Allows users to log in with their Github account"
+                  [matTooltipPosition]="'right'">
+                    <img src="./assets/icons/icons8-info-popup-50.png" class="embeddedIconNoMargin">
+            </span>
+        </div>
+        <div class="padding-bottom">
             <mat-form-field>
                 <input matInput type="number" placeholder="Data Lifespan" [formControlName]="'resultLifespan'">
             </mat-form-field>

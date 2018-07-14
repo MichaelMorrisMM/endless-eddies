@@ -4,7 +4,6 @@ import {Observable} from 'rxjs/Observable';
 import {ConstantsService} from './constants.service';
 import {PostResult} from "../configurator/post-result.interface";
 import {Config} from "../configurator/config.interface";
-import {Setting} from "../configurator/setting.interface";
 import {ValidatorBlueprint} from "../configurator/validator-blueprint.interface";
 import {AuthService} from "./auth.service";
 
@@ -36,42 +35,6 @@ export class ConfiguratorService {
 
     public getValidatorBlueprints(): Observable<ValidatorBlueprint[]> {
         return this.http.get<ValidatorBlueprint[]>(ConstantsService.URL_PREFIX + '/validators');
-    }
-
-    public static getGroupSettings(group: string, config: Config): Setting[] {
-        if (group && config && config.settings) {
-            return config.settings.filter((setting: Setting) => {
-                return setting.group === group;
-            });
-        }
-        return [];
-    }
-
-    public static getSetting(name: string, config: Config): Setting {
-        if (name && config && config.settings) {
-            let trimmedList: Setting[] = config.settings.filter((setting: Setting) => {
-                return setting.name === name;
-            });
-            if (trimmedList.length === 1) {
-                return trimmedList[0];
-            }
-        }
-        return null;
-    }
-
-    public static getSettingValue(name: string, config: Config): any {
-        let setting: Setting = ConfiguratorService.getSetting(name, config);
-        if (setting) {
-            return setting.value;
-        }
-        return null;
-    }
-
-    public static setSettingValue(name: string, value: any, config: Config): void {
-        let setting: Setting = ConfiguratorService.getSetting(name, config);
-        if (setting) {
-            setting.value = value;
-        }
     }
 
     public getParameterTypes(): string[] {

@@ -100,6 +100,10 @@ span.dirty-note {
     margin-top: 2rem;
 }
 
+.padding-bottom {
+    padding-bottom: 1em;
+}
+
 mat-sidenav-container.container {
     position: absolute;
     top: 0;
