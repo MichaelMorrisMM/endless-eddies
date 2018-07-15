@@ -60,7 +60,7 @@ public class DatabaseConnector {
 
     public static boolean deleteUser(int idUser) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT name FROM request WHERE idUser = ?;");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT name FROM request WHERE idUser = ? AND idGuest IS NULL;");
             pstmt.setInt(1, idUser);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -71,7 +71,7 @@ public class DatabaseConnector {
                 }
             }
 
-            pstmt = conn.prepareStatement("DELETE FROM request WHERE idUser = ?;");
+            pstmt = conn.prepareStatement("DELETE FROM request WHERE idUser = ? AND idGuest IS NULL;");
             pstmt.setInt(1, idUser);
             pstmt.executeUpdate();
 
@@ -100,7 +100,7 @@ public class DatabaseConnector {
 
     public static boolean createNewRequest(String name, int idUser) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, ?, ?, ?);");
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, ?, NULL, ?, ?);");
             pstmt.setString(1, name);
             pstmt.setInt(2, idUser);
 
@@ -119,6 +119,24 @@ public class DatabaseConnector {
             } else {
                 pstmt.setNull(4, Types.INTEGER);
             }
+
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public static boolean createNewGuestRequest(String name, long idGuest) {
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, NULL, ?, ?, ?);");
+            pstmt.setString(1, name);
+            pstmt.setLong(2, idGuest);
+
+            Instant now = Instant.now();
+            Instant expiration = now.plus(1, ChronoUnit.DAYS);
+            pstmt.setString(3, Date.from(now).toString());
+            pstmt.setLong(4, expiration.getEpochSecond());
 
             pstmt.executeUpdate();
             return true;
@@ -154,9 +172,16 @@ public class DatabaseConnector {
         }
 
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest FROM request WHERE idRequest = ? AND idUser = ?;");
-            pstmt.setInt(1, idRequest);
-            pstmt.setInt(2, user.idUser);
+            PreparedStatement pstmt;
+            if (!user.isGuest) {
+                pstmt = conn.prepareStatement("SELECT idRequest FROM request WHERE idRequest = ? AND idUser = ? AND idGuest IS NULL;");
+                pstmt.setInt(1, idRequest);
+                pstmt.setInt(2, user.idUser);
+            } else {
+                pstmt = conn.prepareStatement("SELECT idRequest FROM request WHERE idRequest = ? AND idGuest = ? AND idUser IS NULL;");
+                pstmt.setInt(1, idRequest);
+                pstmt.setLong(2, user.idGuest);
+            }
             ResultSet rs = pstmt.executeQuery();
             return rs.next();
         } catch (SQLException e) {
@@ -237,14 +262,24 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt;
             if (user.isAdmin) {
-                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser;");
+                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser WHERE request.idGuest IS NULL;");
+            } else if (user.isGuest) {
+                pstmt = conn.prepareStatement("SELECT idRequest, name, idGuest, date, expiration FROM request WHERE request.idGuest = ? AND request.idUser IS NULL;");
+                pstmt.setLong(1, user.idGuest);
             } else {
-                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser WHERE request.idUser = ?;");
+                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser WHERE request.idUser = ? AND request.idGuest IS NULL;");
                 pstmt.setInt(1, user.idUser);
             }
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 requests.add(new Request(rs));
+            }
+            if (user.isAdmin) {
+                pstmt = conn.prepareStatement("SELECT idRequest, name, idGuest, date, expiration FROM request WHERE request.idUser IS NULL;");
+                rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    requests.add(new Request(rs));
+                }
             }
         } catch (SQLException e) {
             return null;
@@ -254,13 +289,20 @@ public class DatabaseConnector {
 
     public static Request getRequest(int idRequest) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser WHERE idRequest = ?;");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser WHERE idRequest = ? AND request.idGuest IS NULL;");
             pstmt.setInt(1, idRequest);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return new Request(rs);
             } else {
-                return null;
+                pstmt = conn.prepareStatement("SELECT idRequest, name, idGuest, date, expiration FROM request WHERE idRequest = ? AND request.idUser IS NULL;");
+                pstmt.setInt(1, idRequest);
+                rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    return new Request(rs);
+                } else {
+                    return null;
+                }
             }
         } catch (SQLException e) {
             return null;

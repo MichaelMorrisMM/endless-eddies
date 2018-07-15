@@ -73,4 +73,11 @@ public class User implements DatabaseObject {
         guest.isGuest = true;
         return guest;
     }
+
+    public static User getGuestUser(long idGuest) {
+        User guest = new User();
+        guest.idGuest = idGuest;
+        guest.isGuest = true;
+        return guest;
+    }
 }

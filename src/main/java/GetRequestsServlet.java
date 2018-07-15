@@ -14,7 +14,7 @@ public class GetRequestsServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JsonArrayBuilder builder = Json.createArrayBuilder();
 
-        User user = SessionManager.checkSession(request);
+        User user = HttpUtil.checkForUserSessionAllowingForGuest(request);
         if (user != null) {
             List<Request> requests = DatabaseConnector.getRequestsList(user);
             if (requests != null) {

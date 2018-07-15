@@ -2,6 +2,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonWriter;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
@@ -52,6 +53,15 @@ public class HttpUtil {
             }
             out.flush();
         }
+    }
+
+    public static User checkForUserSessionAllowingForGuest(HttpServletRequest request) throws FileNotFoundException {
+        ConfigSettings config = ConfiguratorServlet.getCurrentConfig();
+        User user = SessionManager.checkSession(request);
+        if (user == null && config.allowGuestMode) {
+            user = SessionManager.checkGuestSession(request);
+        }
+        return user;
     }
 
 }

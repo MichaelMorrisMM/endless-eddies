@@ -9,7 +9,7 @@ public class DeleteRequestServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        User user = SessionManager.checkSession(request);
+        User user = HttpUtil.checkForUserSessionAllowingForGuest(request);
         if (user == null) {
             HttpUtil.printPOSTResult(response, false, "No user session");
             return;

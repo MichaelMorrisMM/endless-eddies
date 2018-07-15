@@ -17,7 +17,7 @@ public class GetRequestServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        User user = SessionManager.checkSession(request);
+        User user = HttpUtil.checkForUserSessionAllowingForGuest(request);
         if (user == null) {
             HttpUtil.printJSONResponse(response, builder.add("success", false).add("message", "No user session").build());
             return;

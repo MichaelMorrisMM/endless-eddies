@@ -15,7 +15,7 @@ public class ExecuteServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        User user = SessionManager.checkSession(request);
+        User user = HttpUtil.checkForUserSessionAllowingForGuest(request);
         if (user == null) {
             HttpUtil.printPOSTResult(response, false, "No user session");
             return;
@@ -38,7 +38,12 @@ public class ExecuteServlet extends HttpServlet {
                 inputs.add(new Input(param, requestObject));
             }
 
-            String requestName = "" + user.idUser + "_" + UUID.randomUUID().toString().replace("-", "");
+            String requestName;
+            if (user.isGuest) {
+                requestName = "guest_" + UUID.randomUUID().toString().replace("-", "");
+            } else {
+                requestName = "" + user.idUser + "_" + UUID.randomUUID().toString().replace("-", "");
+            }
             File tmpDir = new File(
                 ConfiguratorServlet.ROOT_PATH
                     + File.separator
@@ -64,7 +69,11 @@ public class ExecuteServlet extends HttpServlet {
                 Process process = command.execute(inFile, outFile, errorFile, tmpDir);
                 process.waitFor();
 
-                DatabaseConnector.createNewRequest(requestName, user.idUser);
+                if (user.isGuest) {
+                    DatabaseConnector.createNewGuestRequest(requestName, user.idGuest);
+                } else {
+                    DatabaseConnector.createNewRequest(requestName, user.idUser);
+                }
 
                 HttpUtil.printPOSTResult(response, true, "");
             } catch (Exception e) {

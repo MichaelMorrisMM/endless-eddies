@@ -82,6 +82,19 @@ public class SessionManager {
         return null;
     }
 
+    public static User checkGuestSession(HttpServletRequest request) {
+        try {
+            DecodedJWT jwt = getJWT(request);
+            Instant now = Instant.now();
+            if (now.compareTo(jwt.getIssuedAt().toInstant()) > 0 && now.compareTo(jwt.getExpiresAt().toInstant()) < 0) {
+                return User.getGuestUser(jwt.getClaim("idGuest").asLong());
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
     public static User checkAdminSession(HttpServletRequest request) {
         User user = checkSession(request);
         if (user != null && user.isAdmin) {

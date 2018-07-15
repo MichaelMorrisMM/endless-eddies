@@ -10,6 +10,7 @@ public class Request implements DatabaseObject {
     public int idRequest;
     public String name;
     public int idUser;
+    public long idGuest;
     public String userEmail;
     public String date;
     public String expiration;
@@ -22,8 +23,15 @@ public class Request implements DatabaseObject {
     public void setValues(ResultSet rs) throws SQLException {
         this.idRequest = rs.getInt("idRequest");
         this.name = rs.getString("name");
-        this.idUser = rs.getInt("idUser");
-        this.userEmail = rs.getString("email");
+        try {
+            this.idUser = rs.getInt("idUser");
+            this.idGuest = 0;
+            this.userEmail = rs.getString("email");
+        } catch (SQLException e) {
+            this.idGuest = rs.getLong("idGuest");
+            this.idUser = 0;
+            this.userEmail = "Guest User";
+        }
         this.date = rs.getString("date");
         long exp = rs.getLong("expiration");
         if (exp > 0) {
@@ -39,6 +47,7 @@ public class Request implements DatabaseObject {
             .add("idRequest", "" + this.idRequest)
             .add("name", this.name)
             .add("idUser", "" + this.idUser)
+            .add("idGuest", "" + this.idGuest)
             .add("userEmail", this.userEmail)
             .add("date", this.date)
             .add("expiration", this.expiration)
