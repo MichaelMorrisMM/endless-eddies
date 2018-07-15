@@ -46,6 +46,29 @@ public class SessionManager {
         }
     }
 
+    public static boolean createGuestSession(User guest, HttpServletResponse response) {
+        try {
+            String xsrfToken = PasswordUtil.createSalt();
+            guest.currentXSRFToken = xsrfToken;
+
+            Instant now = Instant.now();
+            String jwt = JWT.create()
+                .withIssuedAt(Date.from(now))
+                .withExpiresAt(Date.from(now.plus(1, ChronoUnit.HOURS)))
+                .withClaim("idGuest", guest.idGuest)
+                .withClaim(XSRF_TOKEN, xsrfToken)
+                .sign(ALGORITHM);
+            Cookie sessionCookie = new Cookie(SESSION_COOKIE_NAME, jwt);
+            // TODO add secure when https is working
+            sessionCookie.setHttpOnly(true);
+            response.addCookie(sessionCookie);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static User checkSession(HttpServletRequest request) {
         try {
             DecodedJWT jwt = getJWT(request);

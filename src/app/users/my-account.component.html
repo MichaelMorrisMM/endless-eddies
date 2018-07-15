@@ -1,4 +1,4 @@
-<ng-container *ngIf="this.authService.getCurrentUser()">
+<ng-container *ngIf="this.authService.getCurrentUser() && !this.authService.getCurrentUser().isGuest">
     <h1 class="title">My Account - {{this.authService.getCurrentUser().isAdmin ? 'Admin User' : 'Normal User'}}</h1>
     <div>
         <mat-form-field class="half-width">

@@ -3,6 +3,8 @@ import {AuthService} from '../services/auth.service';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpParams} from "@angular/common/http";
+import {ConfiguratorService} from "../services/configurator.service";
+import {Config} from "../configurator/config.interface";
 
 @Component({
     selector: 'app-login',
@@ -11,11 +13,13 @@ import {HttpParams} from "@angular/common/http";
     `]
 })
 export class LoginComponent implements OnInit {
+    public config: Config;
     public showCreateAccount: boolean = false;
     public form: FormGroup;
 
     constructor(public authService: AuthService,
                 private router: Router,
+                private configuratorService: ConfiguratorService,
                 @Inject(FormBuilder) fb: FormBuilder) {
         this.form = fb.group({
             email: ['', [Validators.required, Validators.email]],
@@ -32,10 +36,19 @@ export class LoginComponent implements OnInit {
         }
     }
 
+    public doGuestLogIn() {
+        if (this.config && this.config.allowGuestMode) {
+            this.authService.guestLogIn();
+        }
+    }
+
     public toggleSignup() {
         this.showCreateAccount = !this.showCreateAccount;
     }
 
     ngOnInit() {
+        this.configuratorService.getConfiguration().subscribe((result: Config) => {
+            this.config = result;
+        });
     }
 }

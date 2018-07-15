@@ -34,6 +34,18 @@ export class AuthService {
         });
     }
 
+    public guestLogIn(): void {
+        this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/guest-login', null).subscribe((pr: PostResult) => {
+            if (pr && pr.success && pr.user) {
+                this.currentUser = pr.user;
+                this.onLogIn.emit(this.currentUser);
+                this.router.navigateByUrl('/home');
+            } else {
+                alert(pr.message);
+            }
+        });
+    }
+
     public logOut(): void {
         this.currentUser = null;
         this.onLogOut.emit(null);
