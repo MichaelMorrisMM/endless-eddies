@@ -166,6 +166,21 @@ public class DatabaseConnector {
         }
     }
 
+    public static String checkRequestStatus(String requestName) {
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest FROM request WHERE name = ?;");
+            pstmt.setString(1, requestName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return "" + rs.getInt("idRequest");
+            } else {
+                return "";
+            }
+        } catch (SQLException e) {
+            return "";
+        }
+    }
+
     public static boolean userCanManageRequest(User user, int idRequest) {
         if (user.isAdmin) {
             return true;

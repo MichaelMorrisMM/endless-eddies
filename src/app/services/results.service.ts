@@ -8,6 +8,7 @@ import {ResultFile} from "../configurator/result-file.model";
 import {AuthService} from "./auth.service";
 import {Request} from "../requests/request.interface";
 import {GetRequestResult} from "../requests/get-request-result.interface";
+import {CheckStatusResult} from "../requests/check-status-result.interface";
 
 @Injectable()
 export class ResultsService {
@@ -48,6 +49,11 @@ export class ResultsService {
     public deleteExpiredResults(): Observable<PostResult> {
         let params: HttpParams = this.authService.setXSRFPayloadToken(new HttpParams());
         return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/manage-expired-results', null, {params: params});
+    }
+
+    public checkStatus(requestName: string): Observable<CheckStatusResult> {
+        let params: HttpParams = new HttpParams().set("requestName", requestName);
+        return this.http.get<CheckStatusResult>(ConstantsService.URL_PREFIX + '/check-status', {params: params});
     }
 
 }

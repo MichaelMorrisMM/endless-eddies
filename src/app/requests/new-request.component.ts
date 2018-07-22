@@ -94,8 +94,8 @@ export class NewRequestComponent implements OnInit {
         });
 
         this.resultsService.submitRequest(this.application, request).subscribe((result: PostResult) => {
-            if (result.success) {
-                this.router.navigateByUrl("/all-results");
+            if (result.success && result.message) {
+                this.router.navigate(['/loading', result.message]);
             } else {
                 alert(result.message);
             }

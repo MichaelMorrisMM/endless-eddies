@@ -22,7 +22,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ConfiguratorService} from './services/configurator.service';
 import {ConfiguratorUsersComponent} from './configurator/configurator-users.component';
 import {
-    MatCheckboxModule, MatDialogModule, MatExpansionModule, MatSelectModule, MatSidenavModule, MatToolbarModule,
+    MatCheckboxModule, MatDialogModule, MatExpansionModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule,
+    MatToolbarModule,
     MatTooltipModule
 } from '@angular/material';
 import {BasicInputComponent} from './components/basic-input/basic-input.component';
@@ -42,6 +43,7 @@ import {AgGridModule} from "ag-grid-angular";
 import {UsersService} from "./services/users.service";
 import {AllResultsComponent} from "./results/all-results.component";
 import {AuthGuardNonGuestService} from "./services/auth-guard-non-guest.service";
+import {LoadingComponent} from "./requests/loading.component";
 
 
 @NgModule({
@@ -65,6 +67,7 @@ import {AuthGuardNonGuestService} from "./services/auth-guard-non-guest.service"
         MyAccountComponent,
         ManageUsersComponent,
         AllResultsComponent,
+        LoadingComponent,
     ],
     imports: [
         BrowserModule,
@@ -81,6 +84,7 @@ import {AuthGuardNonGuestService} from "./services/auth-guard-non-guest.service"
         MatToolbarModule,
         MatTooltipModule,
         MatDialogModule,
+        MatProgressSpinnerModule,
         MatExpansionModule,
         NgxChartsModule,
         AppRoutingModule,

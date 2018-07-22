@@ -13,6 +13,8 @@ import java.util.UUID;
 @WebServlet("/execute")
 public class ExecuteServlet extends HttpServlet {
 
+    public static QueueManager queueManager = new QueueManager();
+
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         User user = HttpUtil.checkForUserSessionAllowingForGuest(request);
@@ -25,62 +27,40 @@ public class ExecuteServlet extends HttpServlet {
             return;
         }
 
-        ConfigSettings config = ConfiguratorServlet.getCurrentConfig();
-        JsonObject requestObject;
-        try (JsonReader reader = Json.createReader(request.getReader())) {
-            requestObject = reader.readObject();
-        }
-        Application application = config.getApplication(Util.getStringSafe(requestObject, ConfigSettings.TARGET_APPLICATION));
-
-        if (requestObject != null && application != null) {
-            List<Input> inputs = new ArrayList<>();
-            for (Parameter param : application.getParameters()) {
-                inputs.add(new Input(param, requestObject));
+        try {
+            ConfigSettings config = ConfiguratorServlet.getCurrentConfig();
+            JsonObject requestObject;
+            try (JsonReader reader = Json.createReader(request.getReader())) {
+                requestObject = reader.readObject();
             }
+            Application application = config.getApplication(Util.getStringSafe(requestObject, ConfigSettings.TARGET_APPLICATION));
 
-            String requestName;
-            if (user.isGuest) {
-                requestName = "guest_" + UUID.randomUUID().toString().replace("-", "");
-            } else {
-                requestName = "" + user.idUser + "_" + UUID.randomUUID().toString().replace("-", "");
-            }
-            File tmpDir = new File(
-                ConfiguratorServlet.ROOT_PATH
-                    + File.separator
-                    + requestName
-            );
-            tmpDir.mkdir();
-
-            File inFile = new File(tmpDir, GetRequestServlet.IN_FILE);
-            inFile.createNewFile();
-            File outFile = new File(tmpDir, GetRequestServlet.OUT_FILE);
-            outFile.createNewFile();
-            File errorFile = new File(tmpDir, GetRequestServlet.ERROR_FILE);
-            errorFile.createNewFile();
-            File applicationDefinitionFile = new File(tmpDir, GetRequestServlet.APPLICATION_DEFINITION_FILE);
-            applicationDefinitionFile.createNewFile();
-
-            try {
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter(applicationDefinitionFile))) {
-                    writer.write(application.toJsonObject().toString());
+            if (requestObject != null && application != null) {
+                List<Input> inputs = new ArrayList<>();
+                for (Parameter param : application.getParameters()) {
+                    inputs.add(new Input(param, requestObject));
                 }
 
-                Command command = new Command(application.command, inputs);
-                Process process = command.execute(inFile, outFile, errorFile, tmpDir);
-                process.waitFor();
-
+                String requestName;
                 if (user.isGuest) {
-                    DatabaseConnector.createNewGuestRequest(requestName, user.idGuest);
+                    requestName = "guest_" + UUID.randomUUID().toString().replace("-", "");
                 } else {
-                    DatabaseConnector.createNewRequest(requestName, user.idUser);
+                    requestName = "" + user.idUser + "_" + UUID.randomUUID().toString().replace("-", "");
                 }
 
-                HttpUtil.printPOSTResult(response, true, "");
-            } catch (Exception e) {
+                Command command = new Command(inputs, application, requestName, user);
+
+                if (ExecuteServlet.queueManager.tryAddingCommand(command)) {
+                    ExecuteServlet.queueManager.initiate();
+                    HttpUtil.printPOSTResult(response, true, requestName);
+                } else {
+                    HttpUtil.printPOSTResult(response, false, "Execution queue is temporarily full, please try again later");
+                }
+            } else {
                 HttpUtil.printPOSTResult(response, false, "");
             }
-        } else {
-            HttpUtil.printPOSTResult(response, false, "");
+        } catch (Exception e) {
+            HttpUtil.printPOSTResult(response, false, "An error occurred");
         }
     }
 

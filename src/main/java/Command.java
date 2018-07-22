@@ -11,9 +11,16 @@ public class Command {
     private List<String> command;
     private List<Input> inputs;
 
-    public Command(String command, List<Input> inputs) {
-        this.command = new ArrayList<>(Arrays.asList(command.split(commandDelimiter)));
+    public Application application;
+    public String requestName;
+    public User user;
+
+    public Command(List<Input> inputs, Application application, String requestName, User user) {
+        this.command = new ArrayList<>(Arrays.asList(application.command.split(commandDelimiter)));
         this.inputs = inputs;
+        this.application = application;
+        this.requestName = requestName;
+        this.user = user;
     }
 
     private ProcessBuilder getBuilder() {
@@ -28,14 +35,6 @@ public class Command {
 
         return new ProcessBuilder(command)
             .directory(new File(ConfiguratorServlet.ROOT_PATH));
-    }
-
-    public Process execute(ProcessBuilder.Redirect in, ProcessBuilder.Redirect out, ProcessBuilder.Redirect error) throws IOException {
-        return this.getBuilder()
-            .redirectInput(in)
-            .redirectOutput(out)
-            .redirectError(error)
-            .start();
     }
 
     public Process execute(File in, File out, File error, File dir) throws IOException {

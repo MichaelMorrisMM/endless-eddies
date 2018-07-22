@@ -14,6 +14,7 @@ import {MyAccountComponent} from "./users/my-account.component";
 import {ManageUsersComponent} from "./users/manage-users.component";
 import {AllResultsComponent} from "./results/all-results.component";
 import {AuthGuardNonGuestService} from "./services/auth-guard-non-guest.service";
+import {LoadingComponent} from "./requests/loading.component";
 
 const routes: Routes = [
     { path: 'config', component: ConfiguratorOverviewComponent, canActivate: [AuthGuardAdminService] },
@@ -22,6 +23,7 @@ const routes: Routes = [
     { path: 'config-results', component: ConfiguratorResultsComponent, canActivate: [AuthGuardAdminService] },
     { path: 'manage-users', component: ManageUsersComponent, canActivate: [AuthGuardAdminService] },
     { path: 'new-request', component: NewRequestComponent, canActivate: [AuthGuardService] },
+    { path: 'loading/:requestName', component: LoadingComponent, canActivate: [AuthGuardService] },
     { path: 'results/:idRequest', component: ResultsComponent, canActivate: [AuthGuardService] },
     { path: 'all-results', component: AllResultsComponent, canActivate: [AuthGuardService] },
     { path: 'my-account', component: MyAccountComponent, canActivate: [AuthGuardNonGuestService] },
