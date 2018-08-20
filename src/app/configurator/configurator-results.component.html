@@ -29,6 +29,34 @@
                 <button mat-raised-button color="accent" (click)="this.addResultFile()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add</button>
             </mat-expansion-panel>
         </mat-accordion>
+        <mat-accordion class="margin-bottom">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title><img src="./assets/icons/icons8-statistics-50.png" class="embeddedIcon">Graphs</mat-panel-title>
+                    <mat-panel-description>Display data in various graphs and charts</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div *ngFor="let g of this.graphs" class="flex-container-col full-width margin-bottom">
+                    <div class="flex-container-row full-width">
+                        <mat-form-field class="margin-right flex-one">
+                            <input matInput placeholder="Name" [formControlName]="g.keyName">
+                        </mat-form-field>
+                        <mat-form-field class="flex-one">
+                            <mat-select placeholder="Type" [formControlName]="g.keyType">
+                                <mat-option *ngFor="let type of this.constantsService.GRAPH_TYPES" [value]="type">
+                                    {{type}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="flex-container-row full-width">
+                        <button mat-raised-button color="warn" class="flex-one" (click)="this.deleteGraph(g)">
+                            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
+                        </button>
+                    </div>
+                </div>
+                <button mat-raised-button color="accent" (click)="this.addGraph()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add</button>
+            </mat-expansion-panel>
+        </mat-accordion>
         <div class="flex-container-row">
             <button mat-raised-button color="primary" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
             <span *ngIf="this.form.dirty" class="dirty-note"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>

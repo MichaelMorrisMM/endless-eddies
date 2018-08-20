@@ -8,6 +8,7 @@ import {MatDialog, MatDialogRef} from "@angular/material";
 import {ApplicationPickerComponent} from "./application-picker.component";
 import {Application} from "./application.model";
 import {ResultFile} from "./result-file.model";
+import {Graph} from "./graph.model";
 
 @Component({
     selector: 'configurator-results',
@@ -22,6 +23,9 @@ export class ConfiguratorResultsComponent implements OnInit {
 
     private counterResultFiles: number;
     private resultFiles: ResultFile[];
+
+    private counterGraphs: number;
+    private graphs: Graph[];
 
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService,
@@ -53,11 +57,20 @@ export class ConfiguratorResultsComponent implements OnInit {
                     return;
                 }
                 this.form = new FormGroup({});
+
                 this.counterResultFiles = 1;
                 this.resultFiles = [];
                 if (this.application.resultFiles) {
                     this.application.resultFiles.forEach((rf: ResultFile) => {
                         this.makeNewResultFile(rf);
+                    });
+                }
+
+                this.counterGraphs = 1;
+                this.graphs = [];
+                if (this.application.graphs) {
+                    this.application.graphs.forEach((g: Graph) => {
+                        this.makeNewGraph(g);
                     });
                 }
             });
@@ -86,6 +99,26 @@ export class ConfiguratorResultsComponent implements OnInit {
         this.form.markAsDirty();
     }
 
+    public addGraph(): void {
+        this.makeNewGraph(null);
+        this.form.markAsDirty();
+    }
+
+    private makeNewGraph(g: Graph): void {
+        let graph: Graph = new Graph(this.counterGraphs, g);
+        this.counterGraphs = this.counterGraphs + 1;
+        this.form.addControl(graph.keyName, new FormControl(graph.name));
+        this.form.addControl(graph.keyType, new FormControl(graph.type, Validators.required));
+        this.graphs.push(graph);
+    }
+
+    public deleteGraph(g: Graph): void {
+        this.graphs.splice(this.graphs.indexOf(g),1);
+        this.form.removeControl(g.keyName);
+        this.form.removeControl(g.keyType);
+        this.form.markAsDirty();
+    }
+
     public save(): void {
         this.resultFiles.forEach((rf: ResultFile) => {
             rf.name = this.form.controls[rf.keyName].value;
@@ -93,6 +126,12 @@ export class ConfiguratorResultsComponent implements OnInit {
             rf.toolTip = this.form.controls[rf.keyTooltip].value;
         });
         this.application.resultFiles = this.resultFiles;
+
+        this.graphs.forEach((g: Graph) => {
+            g.name = this.form.controls[g.keyName].value;
+            g.type = this.form.controls[g.keyType].value;
+        });
+        this.application.graphs = this.graphs;
 
         this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
             if (response.success) {

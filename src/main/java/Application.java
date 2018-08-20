@@ -18,12 +18,15 @@ public class Application extends ConfigObject {
 
     public static final String NODE_RESULT_FILES = "resultFiles";
     public List<ResultFile> resultFiles;
+    public static final String NODE_GRAPHS = "graphs";
+    public List<Graph> graphs;
 
     public Application() {
         this.name = "";
         this.parameters = new HashMap<>();
         this.command = "";
         this.resultFiles = new ArrayList<>();
+        this.graphs = new ArrayList<>();
     }
 
     public Application(File applicationFile) throws Exception {
@@ -60,6 +63,17 @@ public class Application extends ConfigObject {
                 }
             }
 
+            JsonArray graphsArray = Util.getArraySafe(obj, NODE_GRAPHS);
+            if (graphsArray != null) {
+                this.graphs.clear();
+                for (JsonObject graphObj : graphsArray.getValuesAs(JsonObject.class)) {
+                    Graph newGraph = new Graph();
+                    if (newGraph.updateWith(graphObj)) {
+                        this.graphs.add(newGraph);
+                    }
+                }
+            }
+
             this.command = Util.getStringSafeNonNull(obj, COMMAND);
             this.name = Util.getStringSafeNonNull(obj, NAME);
             return true;
@@ -79,6 +93,7 @@ public class Application extends ConfigObject {
             .add(NAME, this.name)
             .add(NODE_PARAMETERS, ConfigSettings.getNode(this.parameters))
             .add(NODE_RESULT_FILES, ConfigSettings.getNode(this.resultFiles))
+            .add(NODE_GRAPHS, ConfigSettings.getNode(this.graphs))
             .add(COMMAND, this.command)
             .build();
     }

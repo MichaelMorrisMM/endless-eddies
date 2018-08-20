@@ -20,19 +20,11 @@ export class ResultsComponent implements OnInit {
     public request: Request;
     public application: Application;
     public result: GetRequestResult;
-    public u: Number[];
-    public v: Number[];
-    public w: Number[];
-    public isGraphShowing: boolean = false;
 
     constructor(private configuratorService: ConfiguratorService,
                 private resultsService: ResultsService,
                 private route: ActivatedRoute,
                 private router: Router) {
-    }
-
-    toggleGraph() {
-        this.isGraphShowing = !(this.isGraphShowing);
     }
 
     ngOnInit() {
@@ -47,35 +39,11 @@ export class ResultsComponent implements OnInit {
             this.application = null;
             this.result = null;
 
-            this.u = [];
-            this.v = [];
-            this.w = [];
-
             this.resultsService.getRequest(idRequest).subscribe((result: GetRequestResult) => {
                 if (result.success && result.request && result.application && result.systemOut) {
                     this.result = result;
                     this.request = result.request;
                     this.application = result.application;
-
-                    const tempArr: any[] = result
-                        .systemOut
-                        .replace('\r\n', ' ')
-                        .replace('\n', ' ')
-                        .split(' ')
-                        .filter(x => x !== '')
-                        .map(x => Number(x))
-                        .map(x => Math.round(x * 100) / 100)
-                        .filter(x => !isNaN(x));
-
-                    tempArr.forEach( (x, i) => {
-                        if (i % 3 === 0) {
-                            this.u.push(x);
-                        } else if (i % 3 === 1) {
-                            this.v.push(x);
-                        } else {
-                            this.w.push(x);
-                        }
-                    });
                 } else {
                     alert(result.message);
                 }

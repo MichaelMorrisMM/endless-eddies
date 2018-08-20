@@ -1,13 +1,4 @@
 <h1 class="title">Results</h1>
-<button mat-raised-button (click)="this.toggleGraph()">Show Histogram</button>
-<div *ngIf="this.isGraphShowing">
-    <h1 class="subtitle">U Data</h1>
-    <app-histogram [inputData]="this.u"></app-histogram>
-    <h1 class="subtitle">V Data</h1>
-    <app-histogram [inputData]="this.v"></app-histogram>
-    <h1 class="subtitle">W Data</h1>
-    <app-histogram [inputData]="this.w"></app-histogram>
-</div>
 <div *ngIf="this.config && this.result && this.request && this.application">
     <label>System Out:</label>
     <pre>{{this.result.systemOut}}</pre>
@@ -17,6 +8,12 @@
                 mat-button (click)="this.downloadFile(rf)" matTooltip="{{rf.toolTip}}">
             <img src="./assets/icons/icons8-download-50.png" class="embeddedIcon">{{rf.name}}
         </button>
+    </div>
+    <div *ngIf="this.application.graphs && this.application.graphs.length > 0">
+        <h2 class="subtitle">Graph(s)</h2>
+        <div *ngFor="let g of this.application.graphs">
+            <custom-graph-renderer [graph]="g"></custom-graph-renderer>
+        </div>
     </div>
 </div>
 <button mat-raised-button color="primary" (click)="this.backToAllResults()"><img src="./assets/icons/icons8-back-50.png" class="embeddedIcon">Back</button>

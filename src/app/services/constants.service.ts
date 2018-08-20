@@ -15,4 +15,13 @@ export class ConstantsService {
     public static readonly VALIDATOR_TYPE_MAX_LENGTH: string = "maxlength";
     public static readonly XSRF_TOKEN: string = "xsrfToken";
 
+    public static readonly GRAPH_VERT_BAR: string = "Vertical Bar Chart";
+    public static readonly GRAPH_HOR_BAR: string = "Horizontal Bar Chart";
+    public static readonly GRAPH_PIE: string = "Pie Chart";
+
+    public GRAPH_TYPES: string[] = [
+        ConstantsService.GRAPH_VERT_BAR,
+        ConstantsService.GRAPH_HOR_BAR,
+        ConstantsService.GRAPH_PIE,
+    ];
 }

@@ -19,8 +19,8 @@ export class ResultFile {
             this.fileName = '';
             this.toolTip = '';
         }
-        this.keyName = "" + this.id + "name";
-        this.keyFilename = "" + this.id + "filename";
-        this.keyTooltip = "" + this.id + "tooltip";
+        this.keyName = "" + this.id + "resultfilename";
+        this.keyFilename = "" + this.id + "resultfilefilename";
+        this.keyTooltip = "" + this.id + "resultfiletooltip";
     }
 }

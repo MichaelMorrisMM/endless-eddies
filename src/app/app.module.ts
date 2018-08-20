@@ -44,6 +44,7 @@ import {UsersService} from "./services/users.service";
 import {AllResultsComponent} from "./results/all-results.component";
 import {AuthGuardNonGuestService} from "./services/auth-guard-non-guest.service";
 import {LoadingComponent} from "./requests/loading.component";
+import {CustomGraphRendererComponent} from "./custom-charts/custom-graph-renderer.component";
 
 
 @NgModule({
@@ -68,6 +69,7 @@ import {LoadingComponent} from "./requests/loading.component";
         ManageUsersComponent,
         AllResultsComponent,
         LoadingComponent,
+        CustomGraphRendererComponent,
     ],
     imports: [
         BrowserModule,
