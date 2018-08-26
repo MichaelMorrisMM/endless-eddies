@@ -35,6 +35,8 @@ public class ConfigSettings {
     private List<Application> applications;
     public static final String RESULT_LIFESPAN = "resultLifespanInDays";
     public int resultLifespan;
+    public static final String USER_STORAGE_LIMIT = "userStorageLimit";
+    public long userStorageLimit;
     public static final String ALLOW_GUEST_MODE = "allowGuestMode";
     public boolean allowGuestMode;
     public static final String ALLOW_GOOGLE_LOGIN = "allowGoogleLogin";
@@ -45,6 +47,7 @@ public class ConfigSettings {
     public ConfigSettings() {
         this.applications = new ArrayList<>();
         this.resultLifespan = 0;
+        this.userStorageLimit = 0;
         this.allowGuestMode = false;
         this.allowGoogleLogin = false;
         this.allowGithubLogin = false;
@@ -72,6 +75,9 @@ public class ConfigSettings {
 
             if (config.get(RESULT_LIFESPAN) != null) {
                 this.resultLifespan = config.getInt(RESULT_LIFESPAN);
+            }
+            if (config.get(USER_STORAGE_LIMIT) != null) {
+                this.userStorageLimit = config.getInt(USER_STORAGE_LIMIT);
             }
             if (config.get(ALLOW_GUEST_MODE) != null) {
                 this.allowGuestMode = config.getBoolean(ALLOW_GUEST_MODE);
@@ -101,6 +107,7 @@ public class ConfigSettings {
         return Json.createObjectBuilder()
             .add(NODE_APPLICATIONS, getNode(this.applications))
             .add(RESULT_LIFESPAN, this.resultLifespan)
+            .add(USER_STORAGE_LIMIT, this.userStorageLimit)
             .add(ALLOW_GUEST_MODE, this.allowGuestMode)
             .add(ALLOW_GOOGLE_LOGIN, this.allowGoogleLogin)
             .add(ALLOW_GITHUB_LOGIN, this.allowGithubLogin)

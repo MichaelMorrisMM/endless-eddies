@@ -5,6 +5,7 @@ import {ConstantsService} from "./constants.service";
 import {User} from "../login/user.interface";
 import {PostResult} from "../configurator/post-result.interface";
 import {AuthService} from "./auth.service";
+import {CheckUserStorageResult} from "../requests/check-user-storage-result.interface";
 
 @Injectable()
 export class UsersService {
@@ -35,6 +36,14 @@ export class UsersService {
         params = this.authService.setXSRFPayloadToken(params);
 
         return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/manage-user-accounts', null, {params: params});
+    }
+
+    public checkUserStorageUsed(idUser?: string): Observable<CheckUserStorageResult> {
+        let params: HttpParams = new HttpParams();
+        if (idUser) {
+            params = params.set("idUser", idUser);
+        }
+        return this.http.get<CheckUserStorageResult>(ConstantsService.URL_PREFIX + '/check-user-storage', {params: params});
     }
 
 }

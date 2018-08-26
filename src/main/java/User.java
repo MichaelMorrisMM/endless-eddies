@@ -14,6 +14,7 @@ public class User implements DatabaseObject {
     public boolean isAdmin;
     public boolean isGuest;
     public String currentXSRFToken;
+    public long storageUsed;
 
     private boolean liteMode;
 
@@ -26,6 +27,7 @@ public class User implements DatabaseObject {
         this.isAdmin = false;
         this.isGuest = false;
         this.currentXSRFToken = "";
+        this.storageUsed = 0;
 
         this.liteMode = false;
     }
@@ -51,6 +53,10 @@ public class User implements DatabaseObject {
             this.password = rs.getString("password");
             this.salt = rs.getString("salt");
         }
+        try {
+            this.storageUsed = StorageManager.getUserStorageSpaceUsed(this);
+        } catch (Exception e) {
+        }
     }
 
     @Override
@@ -60,7 +66,8 @@ public class User implements DatabaseObject {
             .add("idGuest", "" + this.idGuest)
             .add("email", this.email)
             .add("isAdmin", this.isAdmin)
-            .add("isGuest", this.isGuest);
+            .add("isGuest", this.isGuest)
+            .add("storageUsed", this.storageUsed);
         if (!this.liteMode) {
             builder = builder.add("xsrfToken", this.currentXSRFToken);
         }

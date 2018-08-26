@@ -31,6 +31,15 @@
                     <img src="./assets/icons/icons8-info-popup-50.png" class="embeddedIconNoMargin">
             </span>
         </div>
+        <div class="padding-bottom">
+            <mat-form-field>
+                <input matInput type="number" placeholder="User Storage Limit" [formControlName]="'userStorageLimit'">
+            </mat-form-field>
+            <span matTooltip="Users will be unable to submit a new request if the storage size (in bytes) of all their existing requests exceeds this limit. NOTE: A value of 0 means no limit is imposed"
+                  [matTooltipPosition]="'right'">
+                    <img src="./assets/icons/icons8-info-popup-50.png" class="embeddedIconNoMargin">
+            </span>
+        </div>
         <div class="flex-container-row">
             <button mat-raised-button color="primary" [disabled]="this.form.invalid" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
             <span *ngIf="this.form.dirty" class="dirty-note"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>

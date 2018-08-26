@@ -20,6 +20,7 @@ export class ConfiguratorUsersComponent implements OnInit {
                 @Inject(FormBuilder) private fb: FormBuilder) {
         this.form = fb.group({
             resultLifespan: [0, [Validators.required, Validators.min(0)]],
+            userStorageLimit: [0, [Validators.required, Validators.min(0)]],
             allowGuestMode: false,
             allowGoogleLogin: false,
             allowGithubLogin: false,
@@ -34,6 +35,7 @@ export class ConfiguratorUsersComponent implements OnInit {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
             this.form.controls['resultLifespan'].setValue(response.resultLifespanInDays);
+            this.form.controls['userStorageLimit'].setValue(response.userStorageLimit);
             this.form.controls['allowGuestMode'].setValue(response.allowGuestMode);
             this.form.controls['allowGoogleLogin'].setValue(response.allowGoogleLogin);
             this.form.controls['allowGithubLogin'].setValue(response.allowGithubLogin);
@@ -42,6 +44,7 @@ export class ConfiguratorUsersComponent implements OnInit {
 
     public save(): void {
         this.config.resultLifespanInDays = Math.round(this.form.controls['resultLifespan'].value);
+        this.config.userStorageLimit = Math.round(this.form.controls['userStorageLimit'].value);
         this.config.allowGuestMode = this.form.controls['allowGuestMode'].value;
         this.config.allowGoogleLogin = this.form.controls['allowGoogleLogin'].value;
         this.config.allowGithubLogin = this.form.controls['allowGithubLogin'].value;

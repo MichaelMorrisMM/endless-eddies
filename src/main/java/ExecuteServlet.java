@@ -26,6 +26,10 @@ public class ExecuteServlet extends HttpServlet {
             HttpUtil.printPOSTResult(response, false, "Invalid XSRF token");
             return;
         }
+        if (StorageManager.userStorageLimitExceeded(user)) {
+            HttpUtil.printPOSTResult(response, false, "Storage limit exceeded. Please delete previous request(s) before submitting a new one");
+            return;
+        }
 
         try {
             ConfigSettings config = ConfiguratorServlet.getCurrentConfig();

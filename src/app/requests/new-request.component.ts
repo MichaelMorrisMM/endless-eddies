@@ -11,6 +11,8 @@ import {Application} from "../configurator/application.model";
 import {ApplicationPickerComponent} from "../configurator/application-picker.component";
 import {MatDialog, MatDialogRef} from "@angular/material";
 import {PostResult} from "../configurator/post-result.interface";
+import {UsersService} from "../services/users.service";
+import {CheckUserStorageResult} from "./check-user-storage-result.interface";
 
 @Component({
     selector: 'new-request',
@@ -26,12 +28,20 @@ export class NewRequestComponent implements OnInit {
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService,
                 private resultsService: ResultsService,
+                private usersService: UsersService,
                 private router: Router,
                 private dialog: MatDialog) {
         this.form = new FormGroup({});
     }
 
     ngOnInit() {
+        this.usersService.checkUserStorageUsed().subscribe((result: CheckUserStorageResult) => {
+            if (result.limitExceeded) {
+                alert("Storage limit exceeded. Please free up space by deleting previous request(s) before submitting a new one");
+            } else if (result.error) {
+                alert(result.error);
+            }
+        });
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
             this.showAppPicker();

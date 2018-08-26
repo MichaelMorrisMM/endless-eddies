@@ -28,6 +28,7 @@ export class ManageUsersComponent implements OnInit {
     ngOnInit() {
         this.gridColumnDefs = [
             {headerName: 'Email', field: 'email', checkboxSelection: true, headerCheckboxSelection: true},
+            {headerName: 'Storage Used (bytes)', field: 'storageUsed', type: 'numericColumn'},
             {headerName: 'Is Admin', field: 'isAdmin'},
         ];
         this.loadUsers();
