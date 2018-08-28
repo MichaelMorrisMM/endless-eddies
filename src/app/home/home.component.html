@@ -1,1 +1,5 @@
-<div [innerHTML]="pageContent"></div>
+<mat-tab-group>
+    <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
+        <div [innerHTML]="md.parse(tabsContent[index])"></div>
+    </mat-tab>
+</mat-tab-group>
