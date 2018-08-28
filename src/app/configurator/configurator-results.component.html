@@ -41,7 +41,7 @@
                             <input matInput placeholder="Name" [formControlName]="g.keyName">
                         </mat-form-field>
                         <mat-form-field class="margin-right flex-one">
-                            <mat-select placeholder="Type" [formControlName]="g.keyType">
+                            <mat-select placeholder="Type" [formControlName]="g.keyType" (selectionChange)="this.onGraphTypeChange(g)">
                                 <mat-option *ngFor="let type of this.constantsService.GRAPH_TYPES" [value]="type">
                                     {{type}}
                                 </mat-option>
@@ -55,8 +55,15 @@
                         <mat-form-field class="margin-right flex-one">
                             <input matInput placeholder="X Axis Label" [formControlName]="g.keyXAxisLabel">
                         </mat-form-field>
-                        <mat-form-field class="flex-one">
+                        <mat-form-field class="margin-right flex-one">
                             <input matInput placeholder="Y Axis Label" [formControlName]="g.keyYAxisLabel">
+                        </mat-form-field>
+                        <mat-form-field class="flex-one">
+                            <mat-select placeholder="Color Scheme">
+                                <mat-option *ngFor="let scheme of this.constantsService.GRAPH_COLOR_SCHEMES" [value]="scheme.name">
+                                    {{scheme.name}}
+                                </mat-option>
+                            </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="flex-container-row full-width">

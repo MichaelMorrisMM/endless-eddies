@@ -10,6 +10,8 @@ import {Application} from "./application.model";
 import {ResultFile} from "./result-file.model";
 import {GraphTemplate} from "./graph-template.model";
 
+import {colorSets} from "@swimlane/ngx-charts/release/utils";
+
 @Component({
     selector: 'configurator-results',
     templateUrl: './configurator-results.component.html',
@@ -123,6 +125,19 @@ export class ConfiguratorResultsComponent implements OnInit {
         this.form.removeControl(g.keyXAxisLabel);
         this.form.removeControl(g.keyYAxisLabel);
         this.form.markAsDirty();
+    }
+
+    public onGraphTypeChange(g: GraphTemplate): void {
+        let type = this.form.controls[g.keyType].value;
+        if (type === this.constantsService.GRAPH_PIE) {
+            this.form.controls[g.keyXAxisLabel].setValue('');
+            this.form.controls[g.keyXAxisLabel].disable();
+            this.form.controls[g.keyYAxisLabel].setValue('');
+            this.form.controls[g.keyYAxisLabel].disable();
+        } else {
+            this.form.controls[g.keyXAxisLabel].enable();
+            this.form.controls[g.keyYAxisLabel].enable();
+        }
     }
 
     public save(): void {

@@ -12,4 +12,14 @@
     <ngx-charts-pie-chart *ngIf="this.graph.type === this.constantsService.GRAPH_PIE"
                           [results]="this.data" [legend]="true" [legendTitle]="this.graph.name" [labels]="true">
     </ngx-charts-pie-chart>
+    <ngx-charts-line-chart *ngIf="this.graph.type === this.constantsService.GRAPH_LINE_CHART"
+                             [results]="this.data" [legend]="true" [legendTitle]="this.graph.name"
+                             [xAxis]="true" [xAxisLabel]="this.graph.xAxisLabel" [showXAxisLabel]="true"
+                             [yAxis]="true" [yAxisLabel]="this.graph.yAxisLabel" [showYAxisLabel]="true">
+    </ngx-charts-line-chart>
+    <ngx-charts-heat-map *ngIf="this.graph.type === this.constantsService.GRAPH_HEAT_MAP"
+                           [results]="this.data" [legend]="true" [legendTitle]="this.graph.name"
+                           [xAxis]="true" [xAxisLabel]="this.graph.xAxisLabel" [showXAxisLabel]="true"
+                           [yAxis]="true" [yAxisLabel]="this.graph.yAxisLabel" [showYAxisLabel]="true">
+    </ngx-charts-heat-map>
 </div>
