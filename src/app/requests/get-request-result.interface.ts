@@ -7,4 +7,5 @@ export interface GetRequestResult {
     readonly request?: Request;
     readonly application?: Application;
     readonly systemOut?: string;
+    readonly graphResults?: any[];
 }

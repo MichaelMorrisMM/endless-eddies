@@ -1,4 +1,6 @@
 import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -53,6 +55,10 @@ public class GetRequestServlet extends HttpServlet {
                         stringBuilder.append(System.lineSeparator());
                     }
                 }
+                JsonArrayBuilder graphResultsBuilder = Json.createArrayBuilder();
+                for (GraphTemplate graphTemplate : application.graphs) {
+                    graphResultsBuilder = graphResultsBuilder.add(new Graph(userRequest.name, graphTemplate).results);
+                }
                 HttpUtil.printJSONResponse(response,
                     builder
                         .add("success", true)
@@ -60,6 +66,7 @@ public class GetRequestServlet extends HttpServlet {
                         .add("request", userRequest.toJsonObject())
                         .add("application", application.toJsonObject())
                         .add("systemOut", stringBuilder.toString())
+                        .add("graphResults", graphResultsBuilder.build())
                         .build());
             } catch (Exception e) {
                 HttpUtil.printJSONResponse(response, builder.add("success", false).add("message", "An error occurred").build());

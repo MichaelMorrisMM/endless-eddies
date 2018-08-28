@@ -15,13 +15,24 @@ export class ConstantsService {
     public static readonly VALIDATOR_TYPE_MAX_LENGTH: string = "maxlength";
     public static readonly XSRF_TOKEN: string = "xsrfToken";
 
-    public static readonly GRAPH_VERT_BAR: string = "Vertical Bar Chart";
-    public static readonly GRAPH_HOR_BAR: string = "Horizontal Bar Chart";
-    public static readonly GRAPH_PIE: string = "Pie Chart";
+    public readonly GRAPH_VERT_BAR: string = "Vertical Bar Chart";
+    public readonly GRAPH_HOR_BAR: string = "Horizontal Bar Chart";
+    public readonly GRAPH_PIE: string = "Pie Chart";
 
     public GRAPH_TYPES: string[] = [
-        ConstantsService.GRAPH_VERT_BAR,
-        ConstantsService.GRAPH_HOR_BAR,
-        ConstantsService.GRAPH_PIE,
+        this.GRAPH_VERT_BAR,
+        this.GRAPH_HOR_BAR,
+        this.GRAPH_PIE,
     ];
+
+    public static readonly GRAPH_TOOLTIP_SINGLE_SERIES: string = 'Data source must be a json file formatted with single series data (e.g. [{"name": "Germany", "value": 100}, {"name": "USA", "value": 200}])';
+    public static readonly GRAPH_TOOLTIP_MULTI_SERIES: string = 'Data source must be a json file formatted with multi series data (e.g. [{"name": "Germany", "series": [{ "name": "2010", "value": 100}, {"name": "2011", "value": 200}]}, {"name": "USA", "series": [{ "name": "2010", "value": 500}, {"name": "2011", "value": 15}]}])';
+
+    public getGraphDataSourceTooltip(type: string): string {
+        if (type == this.GRAPH_VERT_BAR || type === this.GRAPH_HOR_BAR || type === this.GRAPH_PIE) {
+            return ConstantsService.GRAPH_TOOLTIP_SINGLE_SERIES;
+        } else {
+            return '';
+        }
+    }
 }

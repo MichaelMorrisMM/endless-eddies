@@ -8,7 +8,7 @@ import {MatDialog, MatDialogRef} from "@angular/material";
 import {ApplicationPickerComponent} from "./application-picker.component";
 import {Application} from "./application.model";
 import {ResultFile} from "./result-file.model";
-import {Graph} from "./graph.model";
+import {GraphTemplate} from "./graph-template.model";
 
 @Component({
     selector: 'configurator-results',
@@ -25,7 +25,7 @@ export class ConfiguratorResultsComponent implements OnInit {
     private resultFiles: ResultFile[];
 
     private counterGraphs: number;
-    private graphs: Graph[];
+    private graphs: GraphTemplate[];
 
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService,
@@ -69,7 +69,7 @@ export class ConfiguratorResultsComponent implements OnInit {
                 this.counterGraphs = 1;
                 this.graphs = [];
                 if (this.application.graphs) {
-                    this.application.graphs.forEach((g: Graph) => {
+                    this.application.graphs.forEach((g: GraphTemplate) => {
                         this.makeNewGraph(g);
                     });
                 }
@@ -86,7 +86,7 @@ export class ConfiguratorResultsComponent implements OnInit {
         let resultFile: ResultFile = new ResultFile(this.counterResultFiles, rf);
         this.counterResultFiles = this.counterResultFiles + 1;
         this.form.addControl(resultFile.keyName, new FormControl(resultFile.name));
-        this.form.addControl(resultFile.keyFilename, new FormControl(resultFile.fileName, Validators.required));
+        this.form.addControl(resultFile.keyFilename, new FormControl(resultFile.filename, Validators.required));
         this.form.addControl(resultFile.keyTooltip, new FormControl(resultFile.toolTip));
         this.resultFiles.push(resultFile);
     }
@@ -104,32 +104,41 @@ export class ConfiguratorResultsComponent implements OnInit {
         this.form.markAsDirty();
     }
 
-    private makeNewGraph(g: Graph): void {
-        let graph: Graph = new Graph(this.counterGraphs, g);
+    private makeNewGraph(g: GraphTemplate): void {
+        let graph: GraphTemplate = new GraphTemplate(this.counterGraphs, g);
         this.counterGraphs = this.counterGraphs + 1;
         this.form.addControl(graph.keyName, new FormControl(graph.name));
         this.form.addControl(graph.keyType, new FormControl(graph.type, Validators.required));
+        this.form.addControl(graph.keyFilename, new FormControl(graph.filename, Validators.required));
+        this.form.addControl(graph.keyXAxisLabel, new FormControl(graph.xAxisLabel));
+        this.form.addControl(graph.keyYAxisLabel, new FormControl(graph.yAxisLabel));
         this.graphs.push(graph);
     }
 
-    public deleteGraph(g: Graph): void {
+    public deleteGraph(g: GraphTemplate): void {
         this.graphs.splice(this.graphs.indexOf(g),1);
         this.form.removeControl(g.keyName);
         this.form.removeControl(g.keyType);
+        this.form.removeControl(g.keyFilename);
+        this.form.removeControl(g.keyXAxisLabel);
+        this.form.removeControl(g.keyYAxisLabel);
         this.form.markAsDirty();
     }
 
     public save(): void {
         this.resultFiles.forEach((rf: ResultFile) => {
             rf.name = this.form.controls[rf.keyName].value;
-            rf.fileName = this.form.controls[rf.keyFilename].value;
+            rf.filename = this.form.controls[rf.keyFilename].value;
             rf.toolTip = this.form.controls[rf.keyTooltip].value;
         });
         this.application.resultFiles = this.resultFiles;
 
-        this.graphs.forEach((g: Graph) => {
+        this.graphs.forEach((g: GraphTemplate) => {
             g.name = this.form.controls[g.keyName].value;
             g.type = this.form.controls[g.keyType].value;
+            g.filename = this.form.controls[g.keyFilename].value;
+            g.xAxisLabel = this.form.controls[g.keyXAxisLabel].value;
+            g.yAxisLabel = this.form.controls[g.keyYAxisLabel].value;
         });
         this.application.graphs = this.graphs;
 

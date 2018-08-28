@@ -19,7 +19,7 @@ public class Application extends ConfigObject {
     public static final String NODE_RESULT_FILES = "resultFiles";
     public List<ResultFile> resultFiles;
     public static final String NODE_GRAPHS = "graphs";
-    public List<Graph> graphs;
+    public List<GraphTemplate> graphs;
 
     public Application() {
         this.name = "";
@@ -67,9 +67,9 @@ public class Application extends ConfigObject {
             if (graphsArray != null) {
                 this.graphs.clear();
                 for (JsonObject graphObj : graphsArray.getValuesAs(JsonObject.class)) {
-                    Graph newGraph = new Graph();
-                    if (newGraph.updateWith(graphObj)) {
-                        this.graphs.add(newGraph);
+                    GraphTemplate newGraphTemplate = new GraphTemplate();
+                    if (newGraphTemplate.updateWith(graphObj)) {
+                        this.graphs.add(newGraphTemplate);
                     }
                 }
             }

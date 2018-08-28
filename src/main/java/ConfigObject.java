@@ -15,7 +15,10 @@ public abstract class ConfigObject {
     public static final String VALIDATORS = "validators";
     public static final String REQUIRES_VALUE = "requiresValue";
     public static final String SELECT_OPTIONS = "selectOptions";
-    public static final String FILE_NAME = "fileName";
+    public static final String FILE_NAME = "filename";
+    public static final String X_AXIS_LABEL = "xAxisLabel";
+    public static final String Y_AXIS_LABEL = "yAxisLabel";
+    public static final String RESULTS = "results";
 
     public static final int DEFAULT_SORT_ORDER = 1;
 

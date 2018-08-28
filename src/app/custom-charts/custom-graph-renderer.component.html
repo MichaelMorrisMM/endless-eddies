@@ -1,1 +1,15 @@
-<label>Placeholder Graph</label>
+<div class="graph-div">
+    <ngx-charts-bar-vertical *ngIf="this.graph.type === this.constantsService.GRAPH_VERT_BAR"
+                             [results]="this.data" [legend]="true" [legendTitle]="this.graph.name"
+                             [xAxis]="true" [xAxisLabel]="this.graph.xAxisLabel" [showXAxisLabel]="true"
+                             [yAxis]="true" [yAxisLabel]="this.graph.yAxisLabel" [showYAxisLabel]="true">
+    </ngx-charts-bar-vertical>
+    <ngx-charts-bar-horizontal *ngIf="this.graph.type === this.constantsService.GRAPH_HOR_BAR"
+                               [results]="this.data" [legend]="true" [legendTitle]="this.graph.name"
+                               [xAxis]="true" [xAxisLabel]="this.graph.xAxisLabel" [showXAxisLabel]="true"
+                               [yAxis]="true" [yAxisLabel]="this.graph.yAxisLabel" [showYAxisLabel]="true">
+    </ngx-charts-bar-horizontal>
+    <ngx-charts-pie-chart *ngIf="this.graph.type === this.constantsService.GRAPH_PIE"
+                          [results]="this.data" [legend]="true" [legendTitle]="this.graph.name" [labels]="true">
+    </ngx-charts-pie-chart>
+</div>

@@ -1,52 +1,21 @@
 import javax.json.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 
-public class Graph extends ConfigObject {
+public class Graph {
 
-    public String name;
-    public String type;
+    public JsonArray results;
 
-    public Graph() {
-        this.name = "";
-        this.type = "";
-    }
-
-    public Graph(String n, String t) {
-        this.name = n;
-        this.type = t;
-    }
-
-    public Graph(JsonObject obj) {
-        this();
-        this.updateWith(obj);
-    }
-
-    public boolean updateWith(JsonObject obj) {
-        if (isValidObject(obj)) {
-            this.name = Util.getStringSafeNonNull(obj, NAME);
-            this.type = Util.getStringSafeNonNull(obj, TYPE);
-            return true;
+    public Graph(String requestName, GraphTemplate template) {
+        this.results = Json.createArrayBuilder().build();
+        File file = new File(ConfiguratorServlet.ROOT_PATH + File.separator + requestName + File.separator + template.filename);
+        if (file.exists() && file.isFile() && file.canRead()) {
+            try (JsonReader reader = Json.createReader(new FileReader(file))) {
+                results = reader.readArray();
+            } catch (FileNotFoundException e) {
+            }
         }
-        return false;
-    }
-
-    public JsonObject toJsonObject() {
-        return Json.createObjectBuilder()
-            .add(NAME, this.name)
-            .add(TYPE, this.type)
-            .build();
-    }
-
-    public static boolean isValidObject(JsonObject obj) {
-        return obj != null && Util.getStringSafe(obj, TYPE) != null;
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (other != null && other instanceof Graph) {
-            Graph otherAsG = (Graph) other;
-            return this.name.equals(otherAsG.name) && this.type.equals(otherAsG.type);
-        }
-        return false;
     }
 
 }

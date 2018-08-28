@@ -25,7 +25,7 @@ export class ResultsService {
     public downloadFile(requestName: string, rf: ResultFile): Observable<Blob> {
         let params: HttpParams = new HttpParams()
             .set("requestName", requestName)
-            .set("filename", rf.fileName);
+            .set("filename", rf.filename);
         return this.http.get(ConstantsService.URL_PREFIX + '/download-file', {params: params, responseType: 'blob'});
     }
 

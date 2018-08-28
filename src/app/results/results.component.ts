@@ -21,6 +21,8 @@ export class ResultsComponent implements OnInit {
     public application: Application;
     public result: GetRequestResult;
 
+    public graphResults: any[];
+
     constructor(private configuratorService: ConfiguratorService,
                 private resultsService: ResultsService,
                 private route: ActivatedRoute,
@@ -38,12 +40,14 @@ export class ResultsComponent implements OnInit {
             this.request = null;
             this.application = null;
             this.result = null;
+            this.graphResults = null;
 
             this.resultsService.getRequest(idRequest).subscribe((result: GetRequestResult) => {
                 if (result.success && result.request && result.application && result.systemOut) {
                     this.result = result;
                     this.request = result.request;
                     this.application = result.application;
+                    this.graphResults = result.graphResults;
                 } else {
                     alert(result.message);
                 }
@@ -54,7 +58,7 @@ export class ResultsComponent implements OnInit {
     public downloadFile(rf: ResultFile): void {
         if (this.request) {
             this.resultsService.downloadFile(this.request.name, rf).subscribe((blob: Blob) => {
-                saveAs(blob, rf.fileName);
+                saveAs(blob, rf.filename);
             });
         }
     }
