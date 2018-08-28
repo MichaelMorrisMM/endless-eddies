@@ -22,7 +22,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ConfiguratorService} from './services/configurator.service';
 import {ConfiguratorUsersComponent} from './configurator/configurator-users.component';
 import {
-    MatCheckboxModule, MatDialogModule, MatExpansionModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatProgressSpinnerModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatTabsModule,
     MatToolbarModule,
     MatTooltipModule
 } from '@angular/material';
@@ -83,6 +89,7 @@ import {CustomGraphRendererComponent} from "./custom-charts/custom-graph-rendere
         MatCheckboxModule,
         MatSelectModule,
         MatSidenavModule,
+        MatTabsModule,
         MatToolbarModule,
         MatTooltipModule,
         MatDialogModule,
