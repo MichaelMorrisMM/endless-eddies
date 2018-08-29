@@ -46,8 +46,13 @@ export class ConstantsService {
     }
 
     public getGraphColorScheme(name: string): any {
-        return this.GRAPH_COLOR_SCHEMES.filter((scheme: any) => {
-            scheme.name === name;
-        })[0];
+        let filteredList: any[] = this.GRAPH_COLOR_SCHEMES.filter((scheme: any) => {
+            return scheme.name === name;
+        });
+        if (filteredList.length === 1) {
+            return filteredList[0];
+        } else {
+            return this.GRAPH_COLOR_SCHEMES[0];
+        }
     }
 }

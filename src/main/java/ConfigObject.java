@@ -19,6 +19,7 @@ public abstract class ConfigObject {
     public static final String X_AXIS_LABEL = "xAxisLabel";
     public static final String Y_AXIS_LABEL = "yAxisLabel";
     public static final String RESULTS = "results";
+    public static final String COLOR_SCHEME = "colorScheme";
 
     public static final int DEFAULT_SORT_ORDER = 1;
 

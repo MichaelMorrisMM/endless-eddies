@@ -10,8 +10,6 @@ import {Application} from "./application.model";
 import {ResultFile} from "./result-file.model";
 import {GraphTemplate} from "./graph-template.model";
 
-import {colorSets} from "@swimlane/ngx-charts/release/utils";
-
 @Component({
     selector: 'configurator-results',
     templateUrl: './configurator-results.component.html',
@@ -108,12 +106,16 @@ export class ConfiguratorResultsComponent implements OnInit {
 
     private makeNewGraph(g: GraphTemplate): void {
         let graph: GraphTemplate = new GraphTemplate(this.counterGraphs, g);
+        if (!g) {
+            graph.colorScheme = this.constantsService.GRAPH_COLOR_SCHEMES[0].name;
+        }
         this.counterGraphs = this.counterGraphs + 1;
         this.form.addControl(graph.keyName, new FormControl(graph.name));
         this.form.addControl(graph.keyType, new FormControl(graph.type, Validators.required));
         this.form.addControl(graph.keyFilename, new FormControl(graph.filename, Validators.required));
         this.form.addControl(graph.keyXAxisLabel, new FormControl(graph.xAxisLabel));
         this.form.addControl(graph.keyYAxisLabel, new FormControl(graph.yAxisLabel));
+        this.form.addControl(graph.keyColorScheme, new FormControl(graph.colorScheme));
         this.graphs.push(graph);
     }
 
@@ -124,6 +126,7 @@ export class ConfiguratorResultsComponent implements OnInit {
         this.form.removeControl(g.keyFilename);
         this.form.removeControl(g.keyXAxisLabel);
         this.form.removeControl(g.keyYAxisLabel);
+        this.form.removeControl(g.keyColorScheme);
         this.form.markAsDirty();
     }
 
@@ -140,6 +143,10 @@ export class ConfiguratorResultsComponent implements OnInit {
         }
     }
 
+    public showDataSourceInfo(g: GraphTemplate): void {
+        alert(this.constantsService.getGraphDataSourceTooltip(this.form.controls[g.keyType].value));
+    }
+
     public save(): void {
         this.resultFiles.forEach((rf: ResultFile) => {
             rf.name = this.form.controls[rf.keyName].value;
@@ -154,6 +161,7 @@ export class ConfiguratorResultsComponent implements OnInit {
             g.filename = this.form.controls[g.keyFilename].value;
             g.xAxisLabel = this.form.controls[g.keyXAxisLabel].value;
             g.yAxisLabel = this.form.controls[g.keyYAxisLabel].value;
+            g.colorScheme = this.form.controls[g.keyColorScheme].value;
         });
         this.application.graphs = this.graphs;
 

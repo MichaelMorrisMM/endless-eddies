@@ -7,6 +7,7 @@ public class GraphTemplate extends ConfigObject {
     public String filename;
     public String xAxisLabel;
     public String yAxisLabel;
+    public String colorScheme;
 
     public GraphTemplate() {
         this.name = "";
@@ -14,14 +15,16 @@ public class GraphTemplate extends ConfigObject {
         this.filename = "";
         this.xAxisLabel = "";
         this.yAxisLabel = "";
+        this.colorScheme = "";
     }
 
-    public GraphTemplate(String n, String t, String df, String xal, String yal) {
+    public GraphTemplate(String n, String t, String df, String xal, String yal, String cs) {
         this.name = n;
         this.type = t;
         this.filename = df;
         this.xAxisLabel = xal;
         this.yAxisLabel = yal;
+        this.colorScheme = cs;
     }
 
     public GraphTemplate(JsonObject obj) {
@@ -36,6 +39,7 @@ public class GraphTemplate extends ConfigObject {
             this.filename = Util.getStringSafeNonNull(obj, FILE_NAME);
             this.xAxisLabel = Util.getStringSafeNonNull(obj, X_AXIS_LABEL);
             this.yAxisLabel = Util.getStringSafeNonNull(obj, Y_AXIS_LABEL);
+            this.colorScheme = Util.getStringSafeNonNull(obj, COLOR_SCHEME);
             return true;
         }
         return false;
@@ -48,6 +52,7 @@ public class GraphTemplate extends ConfigObject {
             .add(FILE_NAME, this.filename)
             .add(X_AXIS_LABEL, this.xAxisLabel)
             .add(Y_AXIS_LABEL, this.yAxisLabel)
+            .add(COLOR_SCHEME, this.colorScheme)
             .build();
     }
 
@@ -60,7 +65,7 @@ public class GraphTemplate extends ConfigObject {
         if (other != null && other instanceof GraphTemplate) {
             GraphTemplate otherAsG = (GraphTemplate) other;
             return this.name.equals(otherAsG.name) && this.type.equals(otherAsG.type) && this.filename.equals(otherAsG.filename) &&
-                this.xAxisLabel.equals(otherAsG.xAxisLabel) && this.yAxisLabel.equals(otherAsG.yAxisLabel);
+                this.xAxisLabel.equals(otherAsG.xAxisLabel) && this.yAxisLabel.equals(otherAsG.yAxisLabel) && this.colorScheme.equals(otherAsG.colorScheme);
         }
         return false;
     }

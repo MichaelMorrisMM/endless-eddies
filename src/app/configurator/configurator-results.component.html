@@ -47,9 +47,10 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field class="flex-one">
+                        <mat-form-field class="margin-right flex-one">
                             <input matInput placeholder="Data Source" [formControlName]="g.keyFilename">
                         </mat-form-field>
+                        <button mat-button class="flex-one" (click)="this.showDataSourceInfo(g)"><img src="./assets/icons/icons8-info-50.png" class="embeddedIcon"></button>
                     </div>
                     <div class="flex-container-row full-width">
                         <mat-form-field class="margin-right flex-one">
@@ -59,7 +60,7 @@
                             <input matInput placeholder="Y Axis Label" [formControlName]="g.keyYAxisLabel">
                         </mat-form-field>
                         <mat-form-field class="flex-one">
-                            <mat-select placeholder="Color Scheme">
+                            <mat-select placeholder="Color Scheme" [formControlName]="g.keyColorScheme">
                                 <mat-option *ngFor="let scheme of this.constantsService.GRAPH_COLOR_SCHEMES" [value]="scheme.name">
                                     {{scheme.name}}
                                 </mat-option>
