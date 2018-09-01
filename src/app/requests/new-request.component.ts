@@ -84,6 +84,8 @@ export class NewRequestComponent implements OnInit {
                                 validatorArray.push(Validators.minLength(parseInt(validator.value)));
                             } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX_LENGTH) {
                                 validatorArray.push(Validators.maxLength(parseInt(validator.value)));
+                            } else if (validator.validatorType === ConstantService.VALIDATOR_TYPE_LOWERCASE_ALPHABET) {
+                                validatorArray.push(Validators.pattern('^([a-z]*)$'));
                             }
                         });
                         this.form.controls[param.name].setValidators(validatorArray);
