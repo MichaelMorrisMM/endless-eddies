@@ -30,6 +30,7 @@ export class AllResultsComponent implements OnInit {
         this.gridColumnDefs = [
             {headerName: 'ID', field: 'idRequest', checkboxSelection: true},
             {headerName: 'Name', field: 'name'},
+            {headerName: 'Application', field: 'applicationName'},
             {headerName: 'Date', field: 'date'},
             {headerName: 'Expires', field: 'expiration'},
             {headerName: 'Size (bytes)', field: 'size', type: "numericColumn"},

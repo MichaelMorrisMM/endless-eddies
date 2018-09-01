@@ -7,4 +7,5 @@ export interface Request {
     readonly date: string;
     readonly expiration: string;
     readonly size: number;
+    readonly applicationName: string;
 }

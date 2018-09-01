@@ -52,6 +52,7 @@ public class Request implements DatabaseObject {
             .add("date", this.date)
             .add("expiration", this.expiration)
             .add("size", this.getSize())
+            .add("applicationName", this.getApplicationName())
             .build();
     }
 
@@ -62,5 +63,10 @@ public class Request implements DatabaseObject {
         } catch (Exception e) {
         }
         return size;
+    }
+
+    public String getApplicationName() {
+        Application application = GetRequestServlet.getApplicationForRequest(this.name);
+        return application.name;
     }
 }
