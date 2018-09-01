@@ -1,23 +1,23 @@
 <div *ngIf="!this.showCreateAccount" class="userFormContainer">
     <form [formGroup]="this.form" class="userForm">
         <mat-form-field>
-            <input matInput placeholder="Email" [formControlName]="'email'">
+            <input matInput autofocus id="loginEmail" placeholder="Email" [formControlName]="'email'">
         </mat-form-field>
         <mat-form-field>
             <input matInput placeholder="Password" type="password" [formControlName]="'password'">
         </mat-form-field>
-        <div class="padding-bottom">
-            <button mat-raised-button color="accent" (click)="this.toggleSignup()">
-                <img src="./assets/icons/icons8-add-user-group-woman-man-50.png" class="embeddedIcon">Create New Account
-            </button>
-        </div>
-        <div class="flex-container-row">
+        <div class="flex-container-row padding-bottom">
             <button mat-raised-button color="primary" (click)="this.doLogIn()" [disabled]="this.form.invalid">
                 <img src="./assets/icons/icons8-login-50.png" class="embeddedIcon">Login
             </button>
             <span *ngIf="this.config?.allowGuestMode" class="spacer"></span>
             <button *ngIf="this.config?.allowGuestMode" mat-raised-button (click)="this.doGuestLogIn()">
                 <img src="./assets/icons/icons8-login-50.png" class="embeddedIcon">Guest Login
+            </button>
+        </div>
+        <div>
+            <button mat-raised-button color="accent" (click)="this.toggleSignup()">
+                <img src="./assets/icons/icons8-add-user-group-woman-man-50.png" class="embeddedIcon">Create New Account
             </button>
         </div>
     </form>
