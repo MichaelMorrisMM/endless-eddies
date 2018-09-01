@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Are you absolutely sure you want to delete this application?</h1>
+<mat-dialog-content>
+  <button mat-raised-button color="accent" (click)="this.closeDialog(this.application)">
+    Cancel
+  </button>
+  <button mat-raised-button color="warn" class="flex-one" (click)="this.deleteApplication(this.application)">
+    Yes, Delete Application
+  </button>
+</mat-dialog-content>

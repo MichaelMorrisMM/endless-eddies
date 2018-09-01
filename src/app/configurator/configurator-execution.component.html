@@ -46,9 +46,12 @@
         <button mat-raised-button color="accent" (click)="this.addParameter()">
             <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add
         </button>
-        <div class="flex-container-row margin-top">
+        <div class="flex-container-row margin-top justify-space-between">
             <button mat-raised-button color="primary" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
             <span *ngIf="this.form.dirty" class="dirty-note"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
+            <button mat-raised-button color="warn" (click)="this.deleteApplication(this.application)">
+                <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete Application
+            </button>
         </div>
     </form>
 </ng-container>
