@@ -187,3 +187,10 @@ form.userForm {
 span.spacer {
     width: 1em;
 }
+
+div.home-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

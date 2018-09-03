@@ -1,4 +1,5 @@
 import {Application} from "./application.model";
+import {HomePage} from "./home-page.model";
 
 export interface Config {
     applications: Application[];
@@ -7,4 +8,5 @@ export interface Config {
     allowGuestMode: boolean;
     allowGoogleLogin: boolean;
     allowGithubLogin: boolean;
+    homePages: HomePage[];
 }

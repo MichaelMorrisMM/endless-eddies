@@ -44,6 +44,9 @@ public class ConfigSettings {
     public static final String ALLOW_GITHUB_LOGIN = "allowGithubLogin";
     public boolean allowGithubLogin;
 
+    public static final String HOME_PAGES = "homePages";
+    private List<HomePage> homePages;
+
     public ConfigSettings() {
         this.applications = new ArrayList<>();
         this.resultLifespan = 0;
@@ -51,6 +54,7 @@ public class ConfigSettings {
         this.allowGuestMode = false;
         this.allowGoogleLogin = false;
         this.allowGithubLogin = false;
+        this.homePages = new ArrayList<>();
     }
 
     public ConfigSettings(File configFile) throws FileNotFoundException {
@@ -88,6 +92,17 @@ public class ConfigSettings {
             if (config.get(ALLOW_GITHUB_LOGIN) != null) {
                 this.allowGithubLogin = config.getBoolean(ALLOW_GITHUB_LOGIN);
             }
+
+            JsonArray homePagesArray = Util.getArraySafe(config, HOME_PAGES);
+            if (homePagesArray != null) {
+                this.homePages.clear();
+                for (JsonObject obj : homePagesArray.getValuesAs(JsonObject.class)) {
+                    HomePage newHomePage = new HomePage();
+                    if (newHomePage.updateWith(obj)) {
+                        this.homePages.add(newHomePage);
+                    }
+                }
+            }
         } catch (Exception e) {
         }
     }
@@ -111,6 +126,7 @@ public class ConfigSettings {
             .add(ALLOW_GUEST_MODE, this.allowGuestMode)
             .add(ALLOW_GOOGLE_LOGIN, this.allowGoogleLogin)
             .add(ALLOW_GITHUB_LOGIN, this.allowGithubLogin)
+            .add(HOME_PAGES, getNode(this.homePages))
             .build();
     }
 

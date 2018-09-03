@@ -12,7 +12,6 @@ import {SignupComponent} from './signup/signup.component';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {ResultsComponent} from './results/results.component';
 import {HomeComponent} from './home/home.component';
-import {HistogramComponent} from './custom-charts/histogram.component';
 
 import {AppRoutingModule} from './app-routing.module';
 import {ConfiguratorOverviewComponent} from './configurator/configurator-overview.component';
@@ -70,7 +69,6 @@ import { DeleteApplicationDialogComponent } from './configurator/delete-applicat
         NewRequestComponent,
         ValidatorsComponent,
         OptionsComponent,
-        HistogramComponent,
         ApplicationPickerComponent,
         MyAccountComponent,
         ManageUsersComponent,

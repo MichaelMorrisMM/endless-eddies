@@ -1,3 +1,35 @@
 <ng-container *ngIf="this.config">
-    <h1 class="title">Overview</h1>
+    <form [formGroup]="this.form" class="flex-container-col full-width margin-bottom">
+        <h1 class="title">Overview</h1>
+        <mat-accordion class="margin-bottom">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title><img src="./assets/icons/icons8-home-50.png" class="embeddedIcon">Home Page(s)</mat-panel-title>
+                    <mat-panel-description>Landing page(s) customized with markdown</mat-panel-description>
+                </mat-expansion-panel-header>
+                <div *ngFor="let page of this.homePages" class="flex-container-col full-width margin-bottom">
+                    <div class="flex-container-row full-width">
+                        <mat-form-field class="flex-three margin-right">
+                            <input matInput placeholder="Title" [formControlName]="page.keyTitle">
+                        </mat-form-field>
+                        <div class="flex-one">
+                            <button mat-raised-button color="warn" (click)="this.deleteHomePage(page)">
+                                <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex-container-row full-width">
+                        <mat-form-field class="flex-one">
+                            <textarea matInput placeholder="Content" [formControlName]="page.keyContent"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <button mat-raised-button color="accent" (click)="this.addHomePage()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add</button>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <div class="flex-container-row">
+            <button mat-raised-button color="primary" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
+            <span *ngIf="this.form.dirty" class="dirty-note"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
+        </div>
+    </form>
 </ng-container>
