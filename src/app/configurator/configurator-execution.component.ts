@@ -12,6 +12,7 @@ import {ValidatorBlueprint} from "./validator-blueprint.interface";
 import {OptionsComponent} from "./options.component";
 import {ApplicationPickerComponent} from "./application-picker.component";
 import {Application} from "./application.model";
+import { DeleteApplicationDialogComponent } from './delete-application-dialog.component';
 
 @Component({
     selector: 'configurator-execution',
@@ -170,6 +171,41 @@ export class ConfiguratorExecutionComponent implements OnInit {
         this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
             if (response.success) {
                 this.form.markAsPristine();
+            }
+        });
+    }
+
+    public deleteApplication(): void {
+        let dialog: MatDialogRef<DeleteApplicationDialogComponent> = this.dialog.open(DeleteApplicationDialogComponent, {
+            data: {
+                config: this.config
+            }
+        });
+
+        dialog.afterClosed().subscribe((result: any) => {
+            if (result === "delete") {
+                let index: number = this.config.applications.indexOf(this.application);
+                this.config.applications.splice(index, 1);
+                this.application = null;
+                
+                this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
+                    if (response.success) {
+                        this.form.markAsPristine();
+                    }
+                });
+
+                this.showAppPicker();
+            } else if (result) {
+                this.application = result;
+                
+                this.form = new FormGroup({});
+                this.counter = 1;
+                this.form.addControl("command", new FormControl(this.application.command));
+                this.form.addControl("applicationName", new FormControl(this.application.name));
+                this.parameterPlaceholders = [];
+                this.application.parameters.forEach((parameter: Parameter) => {
+                    this.makeNewPlaceholder(parameter);
+                });
             }
         });
     }

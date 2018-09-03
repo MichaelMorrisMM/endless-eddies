@@ -44,7 +44,12 @@ export class NewRequestComponent implements OnInit {
         });
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
-            this.showAppPicker();
+            if(this.config.applications.length > 1) { // If there is more than one app, show the dialog
+                this.showAppPicker();
+            } else { // Otherwise, choose the only app by default
+                this.application = this.config.applications[0];
+                this.setUpForm();
+            }
         });
     }
 
@@ -64,38 +69,42 @@ export class NewRequestComponent implements OnInit {
                     this.application = null;
                     return;
                 }
-                this.form = new FormGroup({});
-                this.application.parameters.forEach((param: Parameter) => {
-                    this.form.addControl(param.name, new FormControl());
-                    if (param.validators.length > 0) {
-                        let validatorArray: ValidatorFn[] = [];
-                        param.validators.forEach((validator: Validator) => {
-                            if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REQUIRED) {
-                                if (param.type === this.configuratorService.TYPE_FLAG) {
-                                    validatorArray.push(Validators.requiredTrue);
-                                } else {
-                                    validatorArray.push(Validators.required);
-                                }
-                            } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN) {
-                                validatorArray.push(Validators.min(parseFloat(validator.value)));
-                            } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX) {
-                                validatorArray.push(Validators.max(parseFloat(validator.value)));
-                            } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN_LENGTH) {
-                                validatorArray.push(Validators.minLength(parseInt(validator.value)));
-                            } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX_LENGTH) {
-                                validatorArray.push(Validators.maxLength(parseInt(validator.value)));
-                            } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REGEX) {
-                                validatorArray.push(Validators.pattern(validator.value));
-                            }
-                        });
-                        this.form.controls[param.name].setValidators(validatorArray);
-                    }
-                });
-                Object.keys(this.form.controls).forEach(key => {
-                    this.form.get(key).markAsTouched();
-                });
+                this.setUpForm();
             });
         }
+    }
+
+    public setUpForm():void {
+        this.form = new FormGroup({});
+        this.application.parameters.forEach((param: Parameter) => {
+            this.form.addControl(param.name, new FormControl());
+            if (param.validators.length > 0) {
+                let validatorArray: ValidatorFn[] = [];
+                param.validators.forEach((validator: Validator) => {
+                    if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REQUIRED) {
+                        if (param.type === this.configuratorService.TYPE_FLAG) {
+                            validatorArray.push(Validators.requiredTrue);
+                        } else {
+                            validatorArray.push(Validators.required);
+                        }
+                    } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN) {
+                        validatorArray.push(Validators.min(parseFloat(validator.value)));
+                    } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX) {
+                        validatorArray.push(Validators.max(parseFloat(validator.value)));
+                    } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN_LENGTH) {
+                        validatorArray.push(Validators.minLength(parseInt(validator.value)));
+                    } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX_LENGTH) {
+                        validatorArray.push(Validators.maxLength(parseInt(validator.value)));
+                    } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REGEX) {
+                        validatorArray.push(Validators.pattern(validator.value));
+                    }
+                });
+                this.form.controls[param.name].setValidators(validatorArray);
+            }
+        });
+        Object.keys(this.form.controls).forEach(key => {
+            this.form.get(key).markAsTouched();
+        });
     }
 
     public submit(): void {
