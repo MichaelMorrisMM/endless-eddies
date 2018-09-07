@@ -40,11 +40,6 @@ public class ExecuteServlet extends HttpServlet {
             Application application = config.getApplication(Util.getStringSafe(requestObject, ConfigSettings.TARGET_APPLICATION));
 
             if (requestObject != null && application != null) {
-                List<Input> inputs = new ArrayList<>();
-                for (Parameter param : application.getParameters()) {
-                    inputs.add(new Input(param, requestObject));
-                }
-
                 String requestName;
                 if (user.isGuest) {
                     requestName = "guest_" + UUID.randomUUID().toString().replace("-", "");
@@ -52,9 +47,17 @@ public class ExecuteServlet extends HttpServlet {
                     requestName = "" + user.idUser + "_" + UUID.randomUUID().toString().replace("-", "");
                 }
 
-                Command command = new Command(inputs, application, requestName, user);
+                List<Command> commands = new ArrayList<>();
+                for (int i = 0; i < application.commandGroups.size(); i++) {
+                    CommandGroup commandGroup = application.commandGroups.get(i);
+                    List<Input> inputs = new ArrayList<>();
+                    for (Parameter param : commandGroup.getParameters()) {
+                        inputs.add(new Input(param, requestObject));
+                    }
+                    commands.add(new Command(commandGroup.command, i, i == application.commandGroups.size() - 1, inputs, application, requestName, user));
+                }
 
-                if (ExecuteServlet.queueManager.tryAddingCommand(command)) {
+                if (ExecuteServlet.queueManager.tryAddingCommands(commands)) {
                     ExecuteServlet.queueManager.initiate();
                     HttpUtil.printPOSTResult(response, true, requestName);
                 } else {

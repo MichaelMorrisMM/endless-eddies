@@ -46,13 +46,16 @@ public class GetRequestServlet extends HttpServlet {
             try {
                 Request userRequest = DatabaseConnector.getRequest(idRequestParsed);
                 Application application = getApplicationForRequest(userRequest.name);
-                File systemOutFile = new File(ConfiguratorServlet.ROOT_PATH + File.separator + userRequest.name + File.separator + OUT_FILE);
                 StringBuilder stringBuilder = new StringBuilder();
-                try (BufferedReader reader = new BufferedReader(new FileReader(systemOutFile))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        stringBuilder.append(line);
-                        stringBuilder.append(System.lineSeparator());
+                File systemOutFile;
+                String line;
+                for (int i = 0; i < application.commandGroups.size(); i++) {
+                    systemOutFile = new File(ConfiguratorServlet.ROOT_PATH + File.separator + userRequest.name + File.separator + i + OUT_FILE);
+                    try (BufferedReader reader = new BufferedReader(new FileReader(systemOutFile))) {
+                        while ((line = reader.readLine()) != null) {
+                            stringBuilder.append(line);
+                            stringBuilder.append(System.lineSeparator());
+                        }
                     }
                 }
                 JsonArrayBuilder graphResultsBuilder = Json.createArrayBuilder();

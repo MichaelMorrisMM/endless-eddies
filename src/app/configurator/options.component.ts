@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
-import {ParameterPlaceholder} from "./parameter-placeholder.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Parameter} from "./parameter.model";
 
 @Component({
     selector: 'validators',
@@ -11,7 +11,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 })
 export class OptionsComponent implements OnInit {
     public paramName: string;
-    public paramPlaceholder: ParameterPlaceholder;
+    public parameter: Parameter;
     public form: FormGroup;
     public index: number;
     public keys: string[];
@@ -24,11 +24,11 @@ export class OptionsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.paramPlaceholder = this.data.paramPlaceholder;
+        this.parameter = this.data.parameter;
         this.paramName = this.data.name;
-        this.paramPlaceholder.selectOptions.forEach((opt: string) => {
+        for (let opt of this.parameter.selectOptions) {
             this.addOption(opt);
-        });
+        }
     }
 
     public addOption(opt: string): void {
@@ -48,10 +48,10 @@ export class OptionsComponent implements OnInit {
 
     public save() {
         let optionsArray: string[] = [];
-        this.keys.forEach((key: string) => {
+        for (let key of this.keys) {
             optionsArray.push(this.form.get(key).value);
-        });
-        this.paramPlaceholder.selectOptions = optionsArray;
+        }
+        this.parameter.selectOptions = optionsArray;
         this.dialogRef.close(true);
     }
 

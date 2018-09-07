@@ -10,12 +10,8 @@ public class Application extends ConfigObject {
 
     public String name;
 
-    public static final String NODE_PARAMETERS = "parameters";
-    private Map<String, Parameter> parameters;
-
-    public static final String COMMAND = "command";
-    public String command;
-
+    public static final String NODE_COMMAND_GROUPS = "commandGroups";
+    public List<CommandGroup> commandGroups;
     public static final String NODE_RESULT_FILES = "resultFiles";
     public List<ResultFile> resultFiles;
     public static final String NODE_GRAPHS = "graphs";
@@ -23,8 +19,7 @@ public class Application extends ConfigObject {
 
     public Application() {
         this.name = "";
-        this.parameters = new HashMap<>();
-        this.command = "";
+        this.commandGroups = new ArrayList<>();
         this.resultFiles = new ArrayList<>();
         this.graphs = new ArrayList<>();
     }
@@ -41,13 +36,13 @@ public class Application extends ConfigObject {
 
     public boolean updateWith(JsonObject obj) {
         try {
-            JsonArray parametersArray = Util.getArraySafe(obj, NODE_PARAMETERS);
-            if (parametersArray != null) {
-                this.parameters.clear();
-                for (JsonObject paramObj : parametersArray.getValuesAs(JsonObject.class)) {
-                    Parameter newParam = new Parameter();
-                    if (newParam.updateWith(paramObj)) {
-                        this.parameters.put(newParam.name, newParam);
+            JsonArray commandGroupsArray = Util.getArraySafe(obj, NODE_COMMAND_GROUPS);
+            if (commandGroupsArray != null) {
+                this.commandGroups.clear();
+                for (JsonObject commandGroupObj : commandGroupsArray.getValuesAs(JsonObject.class)) {
+                    CommandGroup newGroup = new CommandGroup();
+                    if (newGroup.updateWith(commandGroupObj)) {
+                        this.commandGroups.add(newGroup);
                     }
                 }
             }
@@ -74,7 +69,6 @@ public class Application extends ConfigObject {
                 }
             }
 
-            this.command = Util.getStringSafeNonNull(obj, COMMAND);
             this.name = Util.getStringSafeNonNull(obj, NAME);
             return true;
         } catch (Exception e) {
@@ -83,27 +77,21 @@ public class Application extends ConfigObject {
     }
 
     public List<Parameter> getParameters() {
-        List<Parameter> list = new ArrayList<>(this.parameters.values());
-        list.sort(new ParameterSortOrderComparator());
+        List<Parameter> list = new ArrayList<>();
+        for (CommandGroup group : this.commandGroups) {
+            list.addAll(group.getParameters());
+        }
         return list;
     }
 
     public JsonObject toJsonObject() {
         return Json.createObjectBuilder()
             .add(NAME, this.name)
-            .add(NODE_PARAMETERS, ConfigSettings.getNode(this.parameters))
+            .add(NODE_COMMAND_GROUPS, ConfigSettings.getNode(this.commandGroups))
             .add(NODE_RESULT_FILES, ConfigSettings.getNode(this.resultFiles))
             .add(NODE_GRAPHS, ConfigSettings.getNode(this.graphs))
-            .add(COMMAND, this.command)
+            .add(PARAMETERS, ConfigSettings.getNode(this.getParameters()))
             .build();
-    }
-
-    public static class ParameterSortOrderComparator implements Comparator<Parameter> {
-
-        public int compare(Parameter a, Parameter b) {
-            return a.sortOrder - b.sortOrder;
-        }
-
     }
 
 }

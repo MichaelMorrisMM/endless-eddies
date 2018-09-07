@@ -1,18 +1,18 @@
-import {Parameter} from "./parameter.model";
 import {ResultFile} from "./result-file.model";
 import {GraphTemplate} from "./graph-template.model";
+import {CommandGroup} from "./command-group.model";
+import {Parameter} from "./parameter.model";
 
 export class Application {
     name: string;
-    parameters: Parameter[];
-    command: string;
+    commandGroups: CommandGroup[];
+    parameters?: Parameter[];
     resultFiles?: ResultFile[];
     graphs?: GraphTemplate[];
 
-    public constructor(n: string, p: Parameter[], c: string, rfs: ResultFile[], gs: GraphTemplate[]) {
+    public constructor(n: string, cgs: CommandGroup[], rfs: ResultFile[], gs: GraphTemplate[]) {
         this.name = n;
-        this.parameters = p;
-        this.command = c;
+        this.commandGroups = cgs;
         this.resultFiles = rfs;
         this.graphs = gs;
     }

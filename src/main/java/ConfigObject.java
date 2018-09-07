@@ -22,6 +22,8 @@ public abstract class ConfigObject {
     public static final String COLOR_SCHEME = "colorScheme";
     public static final String TITLE = "title";
     public static final String CONTENT = "content";
+    public static final String PARAMETERS = "parameters";
+    public static final String COMMAND = "command";
 
     public static final int DEFAULT_SORT_ORDER = 1;
 

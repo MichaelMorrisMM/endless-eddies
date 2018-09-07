@@ -10,13 +10,17 @@ public class Command {
 
     private List<String> command;
     private List<Input> inputs;
+    public int executeOrder;
+    public boolean isLastOfGroup;
 
     public Application application;
     public String requestName;
     public User user;
 
-    public Command(List<Input> inputs, Application application, String requestName, User user) {
-        this.command = new ArrayList<>(Arrays.asList(application.command.split(commandDelimiter)));
+    public Command(String commandString, int order, boolean isLast, List<Input> inputs, Application application, String requestName, User user) {
+        this.command = new ArrayList<>(Arrays.asList(commandString.split(commandDelimiter)));
+        this.executeOrder = order;
+        this.isLastOfGroup = isLast;
         this.inputs = inputs;
         this.application = application;
         this.requestName = requestName;

@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ConfiguratorService} from '../services/configurator.service';
 import {ConstantsService} from "../services/constants.service";
-import {FormControl, FormGroup} from "@angular/forms";
-import {ParameterPlaceholder} from "./parameter-placeholder.model";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Parameter} from "./parameter.model";
 import {Config} from "./config.interface";
 import {PostResult} from "./post-result.interface";
@@ -13,6 +12,7 @@ import {OptionsComponent} from "./options.component";
 import {ApplicationPickerComponent} from "./application-picker.component";
 import {Application} from "./application.model";
 import { DeleteApplicationDialogComponent } from './delete-application-dialog.component';
+import {CommandGroup} from "./command-group.model";
 
 @Component({
     selector: 'configurator-execution',
@@ -22,28 +22,33 @@ import { DeleteApplicationDialogComponent } from './delete-application-dialog.co
 })
 export class ConfiguratorExecutionComponent implements OnInit {
     public config: Config;
-    public parameterPlaceholders: ParameterPlaceholder[];
-    public form: FormGroup;
-    private counter: number;
-    private validatorBlueprints: ValidatorBlueprint[];
     public application: Application;
+    public form: FormGroup;
+    private validatorBlueprints: ValidatorBlueprint[];
+
+    private counterCommandGroups: number;
+    private commandGroups: CommandGroup[];
+
+    private counterParameters: number;
 
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService,
                 private dialog: MatDialog) {
-        this.form = new FormGroup({});
-        this.counter = 1;
     }
 
 
     ngOnInit() {
+        this.configuratorService.getValidatorBlueprints().subscribe((response: ValidatorBlueprint[]) => {
+            this.validatorBlueprints = response;
+        });
+
+        this.refresh();
+    }
+
+    private refresh(): void {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
             this.showAppPicker();
-        });
-
-        this.configuratorService.getValidatorBlueprints().subscribe((response: ValidatorBlueprint[]) => {
-            this.validatorBlueprints = response;
         });
     }
 
@@ -58,7 +63,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
 
             dialog.afterClosed().subscribe((result: any) => {
                 if (result === "new") {
-                    this.application = new Application("", [], "", [], []);
+                    this.application = new Application("", [], [], []);
                     this.config.applications.push(this.application);
                 } else if (result) {
                     this.application = result;
@@ -66,64 +71,86 @@ export class ConfiguratorExecutionComponent implements OnInit {
                     this.application = null;
                     return;
                 }
-                this.form = new FormGroup({});
-                this.counter = 1;
-                this.form.addControl("command", new FormControl(this.application.command));
-                this.form.addControl("applicationName", new FormControl(this.application.name));
-                this.parameterPlaceholders = [];
-                this.application.parameters.forEach((parameter: Parameter) => {
-                    this.makeNewPlaceholder(parameter);
-                });
+                this.setUpForm();
             });
         }
     }
 
-    public addParameter(): void {
-        this.makeNewPlaceholder(null);
-        this.form.markAsDirty();
-    }
+    private setUpForm(): void {
+        this.form = new FormGroup({});
+        this.form.addControl("applicationName", new FormControl((this.application && this.application.name) ? this.application.name : '', Validators.required));
 
-    private makeNewPlaceholder(param: Parameter): void {
-        let placeholder: ParameterPlaceholder = new ParameterPlaceholder(this.counter);
-        if (param) {
-            this.form.addControl(placeholder.nameKey, new FormControl(param.name));
-            this.form.addControl(placeholder.typeKey, new FormControl(param.type));
-            this.form.addControl(placeholder.codeKey, new FormControl(param.code));
-            this.form.addControl(placeholder.sortOrderKey, new FormControl(param.sortOrder));
-            this.form.addControl(placeholder.toolTipKey, new FormControl(param.toolTip));
-            placeholder.validators = param.validators;
-            placeholder.selectOptions = param.selectOptions;
-        } else {
-            this.form.addControl(placeholder.nameKey, new FormControl(""));
-            this.form.addControl(placeholder.typeKey, new FormControl(""));
-            this.form.addControl(placeholder.codeKey, new FormControl(""));
-            this.form.addControl(placeholder.sortOrderKey, new FormControl(this.counter));
-            this.form.addControl(placeholder.toolTipKey, new FormControl(""));
+        this.counterParameters = 1;
+
+        this.counterCommandGroups = 1;
+        this.commandGroups = [];
+        if (this.application && this.application.commandGroups) {
+            for (let commandGroup of this.application.commandGroups) {
+                this.makeNewCommandGroup(commandGroup);
+            }
         }
-        this.counter = this.counter + 1;
-        this.parameterPlaceholders.push(placeholder);
     }
 
-    public deleteParameter(placeholder: ParameterPlaceholder): void {
-        this.parameterPlaceholders.splice(this.parameterPlaceholders.indexOf(placeholder),1);
-        this.form.removeControl(placeholder.nameKey);
-        this.form.removeControl(placeholder.typeKey);
-        this.form.removeControl(placeholder.codeKey);
-        this.form.removeControl(placeholder.sortOrderKey);
-        this.form.removeControl(placeholder.toolTipKey);
+    public addCommandGroup(): void {
+        this.makeNewCommandGroup(null);
         this.form.markAsDirty();
     }
 
-    public openValidatorsDialog(paramPlaceholder: ParameterPlaceholder) {
+    private makeNewCommandGroup(cg: CommandGroup): void {
+        let commandGroup: CommandGroup = new CommandGroup(this.counterCommandGroups, cg);
+        this.counterCommandGroups = this.counterCommandGroups + 1;
+        this.form.addControl(commandGroup.keyCommand, new FormControl(commandGroup.command, Validators.required));
+
+        let tempParamArray = commandGroup.parameters;
+        commandGroup.parameters = []; // Parameters will be added back as form is built
+        for (let param of tempParamArray) {
+            this.makeNewParameter(param, commandGroup);
+        }
+
+        this.commandGroups.push(commandGroup);
+    }
+
+    public deleteCommandGroup(cg: CommandGroup): void {
+        this.commandGroups.splice(this.commandGroups.indexOf(cg),1);
+        this.form.removeControl(cg.keyCommand);
+        this.form.markAsDirty();
+    }
+
+    public addParameter(group: CommandGroup): void {
+        this.makeNewParameter(null, group);
+        this.form.markAsDirty();
+    }
+
+    private makeNewParameter(p: Parameter, group: CommandGroup): void {
+        let param: Parameter = new Parameter(this.counterParameters, p);
+        this.counterParameters = this.counterParameters + 1;
+        this.form.addControl(param.keyName, new FormControl(param.name, Validators.required));
+        this.form.addControl(param.keyType, new FormControl(param.type, Validators.required));
+        this.form.addControl(param.keyCode, new FormControl(param.code));
+        this.form.addControl(param.keySortOrder, new FormControl(param.sortOrder));
+        this.form.addControl(param.keyToolTip, new FormControl(param.toolTip));
+        group.parameters.push(param);
+    }
+
+    public deleteParameter(p: Parameter, group: CommandGroup): void {
+        group.parameters.splice(group.parameters.indexOf(p),1);
+        this.form.removeControl(p.keyName);
+        this.form.removeControl(p.keyType);
+        this.form.removeControl(p.keyCode);
+        this.form.removeControl(p.keySortOrder);
+        this.form.removeControl(p.keyToolTip);
+        this.form.markAsDirty();
+    }
+
+    public openValidatorsDialog(param: Parameter) {
         let dialog: MatDialogRef<ValidatorsComponent> = this.dialog.open(ValidatorsComponent, {
             data: {
-                paramPlaceholder: paramPlaceholder,
-                name: this.form.controls[paramPlaceholder.nameKey].value,
+                parameter: param,
+                name: this.form.controls[param.keyName].value,
                 blueprints: this.validatorBlueprints,
-                type: this.form.controls[paramPlaceholder.typeKey].value,
+                type: this.form.controls[param.keyType].value,
             }
         });
-
         dialog.afterClosed().subscribe((result: any) => {
             if (result) {
                 this.form.markAsDirty();
@@ -131,14 +158,13 @@ export class ConfiguratorExecutionComponent implements OnInit {
         });
     }
 
-    public openOptionsDialog(paramPlaceholder: ParameterPlaceholder) {
+    public openOptionsDialog(param: Parameter) {
         let dialog: MatDialogRef<OptionsComponent> = this.dialog.open(OptionsComponent, {
             data: {
-                paramPlaceholder: paramPlaceholder,
-                name: this.form.controls[paramPlaceholder.nameKey].value,
+                parameter: param,
+                name: this.form.controls[param.keyName].value,
             }
         });
-
         dialog.afterClosed().subscribe((result: any) => {
             if (result) {
                 this.form.markAsDirty();
@@ -146,65 +172,47 @@ export class ConfiguratorExecutionComponent implements OnInit {
         });
     }
 
-    public onTypeChange(paramPlaceholder: ParameterPlaceholder) {
-        paramPlaceholder.validators = [];
-        paramPlaceholder.selectOptions = [];
+    public onTypeChange(param: Parameter) {
+        param.validators = [];
+        param.selectOptions = [];
+        this.form.markAsDirty();
     }
 
     public save(): void {
-        let newParams: Parameter[] = [];
-        this.parameterPlaceholders.forEach((placeholder: ParameterPlaceholder) => {
-            newParams.push(new Parameter(
-                this.form.controls[placeholder.nameKey].value,
-                this.form.controls[placeholder.typeKey].value,
-                this.form.controls[placeholder.codeKey].value,
-                this.form.controls[placeholder.sortOrderKey].value,
-                this.form.controls[placeholder.toolTipKey].value,
-                placeholder.validators,
-                placeholder.selectOptions,
-            ));
-        });
-        this.application.parameters = newParams;
-        this.application.command = this.form.controls["command"].value;
-        this.application.name = this.form.controls['applicationName'].value;
+        for (let group of this.commandGroups) {
+            group.command = this.form.controls[group.keyCommand].value;
+            for (let param of group.parameters) {
+                param.name = this.form.controls[param.keyName].value;
+                param.type = this.form.controls[param.keyType].value;
+                param.code = this.form.controls[param.keyCode].value;
+                param.sortOrder = this.form.controls[param.keySortOrder].value;
+                param.toolTip = this.form.controls[param.keyToolTip].value;
+            }
+        }
 
+        this.application.name = this.form.controls['applicationName'].value;
+        this.application.commandGroups = this.commandGroups;
         this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
             if (response.success) {
                 this.form.markAsPristine();
+                this.refresh();
             }
         });
     }
 
     public deleteApplication(): void {
-        let dialog: MatDialogRef<DeleteApplicationDialogComponent> = this.dialog.open(DeleteApplicationDialogComponent, {
-            data: {
-                config: this.config
-            }
-        });
+        let dialog: MatDialogRef<DeleteApplicationDialogComponent> = this.dialog.open(DeleteApplicationDialogComponent);
 
         dialog.afterClosed().subscribe((result: any) => {
             if (result === "delete") {
                 let index: number = this.config.applications.indexOf(this.application);
                 this.config.applications.splice(index, 1);
                 this.application = null;
-                
+
                 this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
                     if (response.success) {
-                        this.form.markAsPristine();
+                        this.refresh();
                     }
-                });
-
-                this.showAppPicker();
-            } else if (result) {
-                this.application = result;
-                
-                this.form = new FormGroup({});
-                this.counter = 1;
-                this.form.addControl("command", new FormControl(this.application.command));
-                this.form.addControl("applicationName", new FormControl(this.application.name));
-                this.parameterPlaceholders = [];
-                this.application.parameters.forEach((parameter: Parameter) => {
-                    this.makeNewPlaceholder(parameter);
                 });
             }
         });
