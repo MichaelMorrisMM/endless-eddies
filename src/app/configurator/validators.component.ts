@@ -31,10 +31,16 @@ export class ValidatorsComponent implements OnInit {
                 return type === this.data.type
             }).length > 0;
         });
+        let existingValidatorList: Validator[];
+        let existingValidator: Validator;
         for (let blue of this.blueprints) {
-            this.form.addControl(blue.name, new FormControl(false));
-            this.form.addControl(blue.name + "val", new FormControl(""));
-            this.form.addControl(blue.name + "mes", new FormControl(""));
+            existingValidatorList = this.parameter.validators.filter((validator: Validator) => {
+                return validator.validatorType === blue.validatorType;
+            });
+            existingValidator = existingValidatorList.length === 1 ? existingValidatorList[0] : null;
+            this.form.addControl(blue.name, new FormControl(existingValidator !== null));
+            this.form.addControl(blue.name + "val", new FormControl(existingValidator ? existingValidator.value : ""));
+            this.form.addControl(blue.name + "mes", new FormControl(existingValidator ? existingValidator.message : ""));
         }
     }
 
