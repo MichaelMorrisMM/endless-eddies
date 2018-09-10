@@ -1,5 +1,6 @@
 import javax.json.JsonNumber;
 import javax.json.JsonObject;
+import javax.json.JsonString;
 import javax.json.JsonValue;
 
 public class Input {
@@ -27,11 +28,11 @@ public class Input {
             JsonValue val = obj.get(param.name);
             if (val != null && !val.equals(JsonValue.NULL)) {
                 switch (this.type) {
-                    case ConfigSettings.TYPE_FLAG: return val.equals(JsonValue.TRUE) ? this.code : "";
-                    case ConfigSettings.TYPE_STRING: return Util.getStringSafeNonNull(obj, param.name);
-                    case ConfigSettings.TYPE_INTEGER: return "" + ((JsonNumber) val).longValueExact();
-                    case ConfigSettings.TYPE_FLOAT: return "" + ((JsonNumber) val).doubleValue();
-                    case ConfigSettings.TYPE_SELECT: return Util.getStringSafeNonNull(obj, param.name);
+                    case ConfigSettings.TYPE_FLAG: return parseFlagParameter(val) ? this.code : "";
+                    case ConfigSettings.TYPE_STRING: return parseStringParameter(val);
+                    case ConfigSettings.TYPE_INTEGER: return "" + parseIntegerParameter(val);
+                    case ConfigSettings.TYPE_FLOAT: return "" + parseFloatParameter(val);
+                    case ConfigSettings.TYPE_SELECT: return parseStringParameter(val);
                 }
             }
             return "";
@@ -50,6 +51,22 @@ public class Input {
 
     public boolean hasValue() {
         return Util.isNonEmpty(this.value);
+    }
+
+    public static boolean parseFlagParameter(JsonValue val) {
+        return val.equals(JsonValue.TRUE);
+    }
+
+    public static String parseStringParameter(JsonValue val) {
+        return ((JsonString) val).getString();
+    }
+
+    public static long parseIntegerParameter(JsonValue val) {
+        return ((JsonNumber) val).longValueExact();
+    }
+
+    public static double parseFloatParameter(JsonValue val) {
+        return ((JsonNumber) val).doubleValue();
     }
 
 }

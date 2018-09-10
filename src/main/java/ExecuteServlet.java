@@ -1,6 +1,7 @@
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import javax.json.JsonValue;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +53,11 @@ public class ExecuteServlet extends HttpServlet {
                     CommandGroup commandGroup = application.commandGroups.get(i);
                     List<Input> inputs = new ArrayList<>();
                     for (Parameter param : commandGroup.getParameters()) {
+                        String validationError = checkParameterValidation(param, requestObject);
+                        if (validationError != null) {
+                            HttpUtil.printPOSTResult(response, false, validationError);
+                            return;
+                        }
                         inputs.add(new Input(param, requestObject));
                     }
                     commands.add(new Command(commandGroup.command, i, i == application.commandGroups.size() - 1, inputs, application, requestName, user));
@@ -69,6 +75,71 @@ public class ExecuteServlet extends HttpServlet {
         } catch (Exception e) {
             HttpUtil.printPOSTResult(response, false, "An error occurred");
         }
+    }
+
+    private static String checkParameterValidation(Parameter param, JsonObject requestObject) {
+        try {
+            if (param.validators.size() > 0) {
+                JsonValue val = requestObject.get(param.name);
+                boolean valIsNull = val == null || val.equals(JsonValue.NULL);
+                if (param.type.equals(ConfigSettings.TYPE_FLAG)) {
+                    for (Validator validator : param.validators) {
+                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && (valIsNull || !Input.parseFlagParameter(val))) {
+                            return printValidationError(param, "Required");
+                        }
+                    }
+                } else if (param.type.equals(ConfigSettings.TYPE_STRING)) {
+                    String parsedValue = valIsNull ? null : Input.parseStringParameter(val);
+                    for (Validator validator : param.validators) {
+                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && (parsedValue == null || parsedValue.equals(""))) {
+                            return printValidationError(param, "Required");
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN_LENGTH) && (parsedValue == null || parsedValue.length() < Long.parseLong(Input.parseStringParameter(validator.value)))) {
+                            return printValidationError(param, "Minimum length not met");
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX_LENGTH) && parsedValue != null && parsedValue.length() > Long.parseLong(Input.parseStringParameter(validator.value))) {
+                            return printValidationError(param, "Maximum length exceeded");
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REGEX) && (parsedValue == null || !parsedValue.matches(Input.parseStringParameter(validator.value)))) {
+                            return printValidationError(param, "Fails to match regular expression");
+                        }
+                    }
+                } else if (param.type.equals(ConfigSettings.TYPE_INTEGER)) {
+                    Long parsedValue = valIsNull ? null : Input.parseIntegerParameter(val);
+                    for (Validator validator : param.validators) {
+                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && parsedValue == null) {
+                            return printValidationError(param, "Required");
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN) && (parsedValue == null || parsedValue < Long.parseLong(Input.parseStringParameter(validator.value)))) {
+                            return printValidationError(param, "Minimum not met");
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX) && parsedValue != null && parsedValue > Long.parseLong(Input.parseStringParameter(validator.value))) {
+                            return printValidationError(param, "Maximum exceeded");
+                        }
+                    }
+                } else if (param.type.equals(ConfigSettings.TYPE_FLOAT)) {
+                    Double parsedValue = valIsNull ? null : Input.parseFloatParameter(val);
+                    for (Validator validator : param.validators) {
+                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && parsedValue == null) {
+                            return printValidationError(param, "Required");
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN) && (parsedValue == null || parsedValue < Double.parseDouble(Input.parseStringParameter(validator.value)))) {
+                            return printValidationError(param, "Minimum not met");
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX) && parsedValue != null && parsedValue > Double.parseDouble(Input.parseStringParameter(validator.value))) {
+                            return printValidationError(param, "Maximum exceeded");
+                        }
+                    }
+                } else if (param.type.equals(ConfigSettings.TYPE_SELECT)) {
+                    String parsedValue = valIsNull ? null : Input.parseStringParameter(val);
+                    for (Validator validator : param.validators) {
+                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && (parsedValue == null || parsedValue.equals(""))) {
+                            return printValidationError(param, "Required");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            return "An error occurred while validating parameters";
+        }
+        return null;
+    }
+
+    private static String printValidationError(Parameter param, String error) {
+        return "Validation Error for " + param.name + ": " + error;
     }
 
 }
