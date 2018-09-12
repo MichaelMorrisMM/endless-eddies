@@ -1,12 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {ConfiguratorService} from '../services/configurator.service';
 import {ConstantsService} from "../services/constants.service";
 import {Config} from "../configurator/config.interface";
-import {Parameter} from "../configurator/parameter.model";
 import {ResultsService} from "../services/results.service";
 import {Router} from "@angular/router";
-import {Validator} from "../configurator/validator.model";
 import {Application} from "../configurator/application.model";
 import {ApplicationPickerComponent} from "../configurator/application-picker.component";
 import {MatDialog, MatDialogRef} from "@angular/material";
@@ -98,6 +96,8 @@ export class NewRequestComponent implements OnInit {
                             validatorArray.push(Validators.maxLength(parseInt(validator.value)));
                         } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REGEX) {
                             validatorArray.push(Validators.pattern(validator.value));
+                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MOD) {
+                            validatorArray.push(NewRequestComponent.moduloValidator(parseInt(validator.value)))
                         }
                     }
                     this.form.controls[param.name].setValidators(validatorArray);
@@ -124,4 +124,12 @@ export class NewRequestComponent implements OnInit {
             }
         });
     }
+
+    private static moduloValidator(value: number): ValidatorFn {
+        return (control: AbstractControl): {[key: string]: any} | null => {
+            const remainder: number = control.value && !isNaN(value) ? control.value % value : -1;
+            return remainder !== 0 ? {'modulo': {value: control.value}} : null;
+        };
+    }
+
 }

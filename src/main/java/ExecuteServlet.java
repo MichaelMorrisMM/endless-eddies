@@ -110,6 +110,8 @@ public class ExecuteServlet extends HttpServlet {
                             return printValidationError(param, "Minimum not met");
                         } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX) && parsedValue != null && parsedValue > Long.parseLong(Input.parseStringParameter(validator.value))) {
                             return printValidationError(param, "Maximum exceeded");
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MOD) && (parsedValue == null || parsedValue % Long.parseLong(Input.parseStringParameter(validator.value)) != 0)) {
+                            return printValidationError(param, "Modulo validation not met");
                         }
                     }
                 } else if (param.type.equals(ConfigSettings.TYPE_FLOAT)) {

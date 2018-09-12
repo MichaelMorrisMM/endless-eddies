@@ -16,6 +16,7 @@ public class ValidatorsServlet extends HttpServlet {
     public static final String VALIDATOR_TYPE_MIN_LENGTH = "minlength";
     public static final String VALIDATOR_TYPE_MAX_LENGTH = "maxlength";
     public static final String VALIDATOR_TYPE_REGEX = "pattern";
+    public static final String VALIDATOR_TYPE_MOD = "modulo";
 
     public static List<ValidatorBlueprint> blueprints;
     static {
@@ -32,6 +33,7 @@ public class ValidatorsServlet extends HttpServlet {
             ConfigSettings.TYPE_STRING));
         blueprints.add(new ValidatorBlueprint("String must match regex pattern", VALIDATOR_TYPE_REGEX, true,
             ConfigSettings.TYPE_STRING));
+        blueprints.add(new ValidatorBlueprint("Modulo", VALIDATOR_TYPE_MOD, true, ConfigSettings.TYPE_INTEGER));
     }
 
     @Override
