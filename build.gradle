@@ -5,35 +5,35 @@
  * Learn how to create Gradle builds at https://guides.gradle.org/creating-new-gradle-builds/
  */
 plugins {
-    id "com.moowork.node" version "1.2.0"
+    id 'com.moowork.node' version '1.2.0'
 }
 
 apply plugin: 'java'
 
-def serverDir = System.getenv("CATALINA_HOME")
-def deployPath = serverDir + "/webapps/" + rootProject.name
-def javaDestPath = deployPath + "/WEB-INF/classes"
-def serverLibPath = serverDir + "/lib"
+def serverDir = System.getenv('CATALINA_HOME')
+def deployPath = serverDir + '/webapps/' + rootProject.name
+def javaDestPath = deployPath + '/WEB-INF/classes'
+def serverLibPath = serverDir + '/lib'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile fileTree(dir: "libs", include: "**/*.jar")
+    compile fileTree(dir: 'libs', include: '**/*.jar')
     compile 'com.auth0:java-jwt:3.3.0'
 }
 
 task deployAll(type: GradleBuild) {
-    tasks = ["cleanAll", "deployJava", "deployAngular"]
+    tasks = ['cleanAll', 'deployJava', 'deployAngular']
 }
 
 task cleanAll(type: GradleBuild) {
-    tasks = ["clean", "cleanDeployment", "cleanAngular"]
+    tasks = ['clean', 'cleanDeployment', 'cleanAngular']
 }
 
 task cleanProject(type: GradleBuild) {
-    tasks = ["clean", "cleanAngular"]
+    tasks = ['clean', 'cleanAngular']
 }
 
 task cleanDeployment(type: Delete) {
@@ -41,7 +41,7 @@ task cleanDeployment(type: Delete) {
 }
 
 task cleanAngular(type: Delete) {
-    delete "dist"
+    delete 'dist'
 }
 
 task cleanJavaDeploy(type: Delete) {
@@ -49,9 +49,9 @@ task cleanJavaDeploy(type: Delete) {
 }
 
 task deployLibs(type: Copy) {
-    from "libs"
+    from 'libs'
     into serverLibPath
-    include "**/*.jar"
+    include '**/*.jar'
     eachFile {
         if (it.relativePath.getFile(destinationDir).exists()) {
             it.exclude()
@@ -82,7 +82,7 @@ deployJava.dependsOn deployLibs, cleanJavaDeploy, seedJava, classes
 npm_run_build.dependsOn npmInstall
 
 task deployAngular(type: Copy) {
-    from "dist"
+    from 'dist'
     into deployPath
 }
 deployAngular.dependsOn seedDeployment, npm_run_build
