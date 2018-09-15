@@ -13,6 +13,7 @@ import {ApplicationPickerComponent} from "./application-picker.component";
 import {Application} from "./application.model";
 import { DeleteApplicationDialogComponent } from './delete-application-dialog.component';
 import {CommandGroup} from "./command-group.model";
+import {ParentPickerComponent} from "./parent-picker.component";
 
 @Component({
     selector: 'configurator-execution',
@@ -106,6 +107,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
         for (let param of tempParamArray) {
             this.makeNewParameter(param, commandGroup);
         }
+        Parameter.establishRelationships(commandGroup.parameters);
 
         this.commandGroups.push(commandGroup);
     }
@@ -133,6 +135,8 @@ export class ConfiguratorExecutionComponent implements OnInit {
     }
 
     public deleteParameter(p: Parameter, group: CommandGroup): void {
+        p.breakAllRelationships();
+
         group.parameters.splice(group.parameters.indexOf(p),1);
         this.form.removeControl(p.keyName);
         this.form.removeControl(p.keyType);
@@ -149,6 +153,21 @@ export class ConfiguratorExecutionComponent implements OnInit {
                 name: this.form.controls[param.keyName].value,
                 blueprints: this.validatorBlueprints,
                 type: this.form.controls[param.keyType].value,
+            }
+        });
+        dialog.afterClosed().subscribe((result: any) => {
+            if (result) {
+                this.form.markAsDirty();
+            }
+        });
+    }
+
+    public openParentDialog(param: Parameter, group: CommandGroup) {
+        this.synchronizeParameters(group.parameters);
+        let dialog: MatDialogRef<ParentPickerComponent> = this.dialog.open(ParentPickerComponent, {
+            data: {
+                childParameter: param,
+                allParametersList: group.parameters
             }
         });
         dialog.afterClosed().subscribe((result: any) => {
@@ -175,18 +194,17 @@ export class ConfiguratorExecutionComponent implements OnInit {
     public onTypeChange(param: Parameter) {
         param.validators = [];
         param.selectOptions = [];
+        param.breakAllChildren();
         this.form.markAsDirty();
     }
 
     public save(): void {
         for (let group of this.commandGroups) {
             group.command = this.form.controls[group.keyCommand].value;
+            this.synchronizeParameters(group.parameters);
             for (let param of group.parameters) {
-                param.name = this.form.controls[param.keyName].value;
-                param.type = this.form.controls[param.keyType].value;
-                param.code = this.form.controls[param.keyCode].value;
-                param.sortOrder = this.form.controls[param.keySortOrder].value;
-                param.toolTip = this.form.controls[param.keyToolTip].value;
+                param.parent = null; // Necessary for saving, otherwise JSON.stringify circular structure error occurs
+                param.children = null;
             }
         }
 
@@ -198,6 +216,23 @@ export class ConfiguratorExecutionComponent implements OnInit {
                 this.refresh();
             }
         });
+    }
+
+    private synchronizeParameters(params: Parameter[]) {
+        for (let param of params) {
+            param.name = this.form.controls[param.keyName].value;
+            param.type = this.form.controls[param.keyType].value;
+            param.code = this.form.controls[param.keyCode].value;
+            param.sortOrder = this.form.controls[param.keySortOrder].value;
+            param.toolTip = this.form.controls[param.keyToolTip].value;
+
+            if (param.parent) {
+                param.parentString = param.parent.name;
+            } else {
+                param.parentString = "";
+                param.parentOption = "";
+            }
+        }
     }
 
     public deleteApplication(): void {

@@ -11,6 +11,8 @@ public class Parameter extends ConfigObject {
     public String toolTip;
     public List<Validator> validators;
     public List<String> selectOptions;
+    public String parentString;
+    public String parentOption;
 
     public Parameter() {
         this.name = "";
@@ -20,9 +22,11 @@ public class Parameter extends ConfigObject {
         this.toolTip = "";
         this.validators = new ArrayList<>();
         this.selectOptions = new ArrayList<>();
+        this.parentString = "";
+        this.parentOption = "";
     }
 
-    public Parameter(String n, String t, String c, int so, String tt, List<Validator> validators, List<String> selectOptions) {
+    public Parameter(String n, String t, String c, int so, String tt, List<Validator> validators, List<String> selectOptions, String ps, String po) {
         this.name = n;
         this.type = t;
         this.code = c;
@@ -34,6 +38,8 @@ public class Parameter extends ConfigObject {
         if (selectOptions != null) {
             this.selectOptions = selectOptions;
         }
+        this.parentString = ps;
+        this.parentOption = po;
     }
 
     public Parameter(JsonObject obj) {
@@ -64,6 +70,8 @@ public class Parameter extends ConfigObject {
                     this.selectOptions.add(opt.getString());
                 }
             }
+            this.parentString = Util.getStringSafeNonNull(obj, PARENT_STRING);
+            this.parentOption = Util.getStringSafeNonNull(obj, PARENT_OPTION);
             return true;
         }
         return false;
@@ -88,6 +96,8 @@ public class Parameter extends ConfigObject {
             .add(TOOL_TIP, this.toolTip)
             .add(VALIDATORS, validatorsBuilder.build())
             .add(SELECT_OPTIONS, optionsBuilder.build())
+            .add(PARENT_STRING, this.parentString)
+            .add(PARENT_OPTION, this.parentOption)
             .build();
     }
 
@@ -115,7 +125,8 @@ public class Parameter extends ConfigObject {
             return this.name.equals(otherAsP.name) && this.type.equals(otherAsP.type)
                 && this.code.equals(otherAsP.code) && this.sortOrder == otherAsP.sortOrder
                 && this.toolTip.equals(otherAsP.toolTip) && this.validators.equals(otherAsP.validators)
-                && this.selectOptions.equals(otherAsP.selectOptions);
+                && this.selectOptions.equals(otherAsP.selectOptions) && this.parentString.equals(otherAsP.parentString)
+                && this.parentOption.equals(otherAsP.parentOption);
         }
         return false;
     }

@@ -16,6 +16,8 @@ export class OptionsComponent implements OnInit {
     public index: number;
     public keys: string[];
 
+    private originalOptions: string[];
+
     constructor(@Inject(MAT_DIALOG_DATA) private data: any,
                 private dialogRef: MatDialogRef<OptionsComponent>) {
         this.form = new FormGroup({});
@@ -26,6 +28,9 @@ export class OptionsComponent implements OnInit {
     ngOnInit() {
         this.parameter = this.data.parameter;
         this.paramName = this.data.name;
+
+        this.originalOptions = this.parameter.selectOptions;
+
         for (let opt of this.parameter.selectOptions) {
             this.addOption(opt);
         }
@@ -51,6 +56,14 @@ export class OptionsComponent implements OnInit {
         for (let key of this.keys) {
             optionsArray.push(this.form.get(key).value);
         }
+
+        for (let originalOption of this.originalOptions) {
+            let newIndex: number = optionsArray.indexOf(originalOption);
+            if (newIndex === -1) {
+                this.parameter.breakChildrenWithOption(originalOption);
+            }
+        }
+
         this.parameter.selectOptions = optionsArray;
         this.dialogRef.close(true);
     }

@@ -51,6 +51,7 @@ import {AuthGuardNonGuestService} from "./services/auth-guard-non-guest.service"
 import {LoadingComponent} from "./requests/loading.component";
 import {CustomGraphRendererComponent} from "./custom-charts/custom-graph-renderer.component";
 import { DeleteApplicationDialogComponent } from './configurator/delete-application-dialog.component';
+import {ParentPickerComponent} from "./configurator/parent-picker.component";
 
 
 @NgModule({
@@ -76,6 +77,7 @@ import { DeleteApplicationDialogComponent } from './configurator/delete-applicat
         LoadingComponent,
         CustomGraphRendererComponent,
         DeleteApplicationDialogComponent,
+        ParentPickerComponent,
     ],
     imports: [
         BrowserModule,
@@ -113,7 +115,8 @@ import { DeleteApplicationDialogComponent } from './configurator/delete-applicat
         ValidatorsComponent,
         OptionsComponent,
         ApplicationPickerComponent,
-        DeleteApplicationDialogComponent
+        DeleteApplicationDialogComponent,
+        ParentPickerComponent,
     ],
     bootstrap: [AppComponent]
 })

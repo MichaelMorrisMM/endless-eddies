@@ -54,6 +54,8 @@
                                 <input matInput placeholder="Description" [formControlName]="parameter.keyToolTip">
                             </mat-form-field>
                             <button mat-raised-button (click)="this.openValidatorsDialog(parameter)">Validation</button>
+                            <span class="spacer"></span>
+                            <button mat-raised-button (click)="this.openParentDialog(parameter, group)">Parent</button>
                         </div>
                     </div>
                     <div class="flex-container-row full-width justify-center">

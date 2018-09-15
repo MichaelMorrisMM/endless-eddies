@@ -24,6 +24,8 @@ public abstract class ConfigObject {
     public static final String CONTENT = "content";
     public static final String PARAMETERS = "parameters";
     public static final String COMMAND = "command";
+    public static final String PARENT_STRING = "parentString";
+    public static final String PARENT_OPTION = "parentOption";
 
     public static final int DEFAULT_SORT_ORDER = 1;
 
