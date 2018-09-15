@@ -24,6 +24,8 @@ export class Parameter {
     public parentString: string;
     public parentOption: string;
 
+    public currentlyDisplayedChildren?: Parameter[] = null;
+
     public constructor(i: number, p: Parameter) {
         this.id = i;
         if (p) {
@@ -72,6 +74,12 @@ export class Parameter {
         if (index === -1) {
             this.children.push(child);
         }
+    }
+
+    public getChildrenWithOption(option: string): Parameter[] {
+        return this.children.filter((p: Parameter) => {
+            return p.parentOption === option;
+        });
     }
 
     public removeParent(): void {

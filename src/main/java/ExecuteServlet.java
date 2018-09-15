@@ -53,6 +53,9 @@ public class ExecuteServlet extends HttpServlet {
                     CommandGroup commandGroup = application.commandGroups.get(i);
                     List<Input> inputs = new ArrayList<>();
                     for (Parameter param : commandGroup.getParameters()) {
+                        if (isParentNotPresent(param, requestObject)) {
+                            continue;
+                        }
                         String validationError = checkParameterValidation(param, requestObject);
                         if (validationError != null) {
                             HttpUtil.printPOSTResult(response, false, validationError);
@@ -75,6 +78,16 @@ public class ExecuteServlet extends HttpServlet {
         } catch (Exception e) {
             HttpUtil.printPOSTResult(response, false, "An error occurred");
         }
+    }
+
+    private static boolean isParentNotPresent(Parameter param, JsonObject requestObject) {
+        if (!param.parentString.equals("")) {
+            JsonValue parentValue = requestObject.get(param.parentString);
+            if (parentValue == null || parentValue.equals(JsonValue.NULL) || !Input.parseStringParameter(parentValue).equals(param.parentOption)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static String checkParameterValidation(Parameter param, JsonObject requestObject) {

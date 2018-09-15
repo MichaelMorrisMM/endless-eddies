@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {ConfiguratorService} from '../services/configurator.service';
 import {ConstantsService} from "../services/constants.service";
@@ -11,6 +11,7 @@ import {MatDialog, MatDialogRef} from "@angular/material";
 import {PostResult} from "../configurator/post-result.interface";
 import {UsersService} from "../services/users.service";
 import {CheckUserStorageResult} from "./check-user-storage-result.interface";
+import {Parameter} from "../configurator/parameter.model";
 
 @Component({
     selector: 'new-request',
@@ -23,12 +24,16 @@ export class NewRequestComponent implements OnInit {
     public application: Application;
     public form: FormGroup;
 
+    private parameterCounter: number;
+    public currentParameters: Parameter[] = [];
+
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService,
                 private resultsService: ResultsService,
                 private usersService: UsersService,
                 private router: Router,
-                private dialog: MatDialog) {
+                private dialog: MatDialog,
+                private changeDetector: ChangeDetectorRef) {
         this.form = new FormGroup({});
     }
 
@@ -73,46 +78,84 @@ export class NewRequestComponent implements OnInit {
     }
 
     public setUpForm():void {
+        this.parameterCounter = 1;
         this.form = new FormGroup({});
-        if (this.application.parameters) {
-            for (let param of this.application.parameters) {
-                this.form.addControl(param.name, new FormControl());
-                if (param.validators.length > 0) {
-                    let validatorArray: ValidatorFn[] = [];
-                    for (let validator of param.validators) {
-                        if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REQUIRED) {
-                            if (param.type === this.configuratorService.TYPE_FLAG) {
-                                validatorArray.push(Validators.requiredTrue);
-                            } else {
-                                validatorArray.push(Validators.required);
-                            }
-                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN) {
-                            validatorArray.push(Validators.min(parseFloat(validator.value)));
-                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX) {
-                            validatorArray.push(Validators.max(parseFloat(validator.value)));
-                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN_LENGTH) {
-                            validatorArray.push(Validators.minLength(parseInt(validator.value)));
-                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX_LENGTH) {
-                            validatorArray.push(Validators.maxLength(parseInt(validator.value)));
-                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REGEX) {
-                            validatorArray.push(Validators.pattern(validator.value));
-                        } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MOD) {
-                            validatorArray.push(NewRequestComponent.moduloValidator(parseInt(validator.value)))
-                        }
-                    }
-                    this.form.controls[param.name].setValidators(validatorArray);
-                }
-            }
-            for (let key of Object.keys(this.form.controls)) {
-                this.form.get(key).markAsTouched();
+        let allParameters: Parameter[] = [];
+        for (let param of this.application.parameters) {
+            let p: Parameter = new Parameter(this.parameterCounter, param);
+            this.parameterCounter++;
+            allParameters.push(p);
+        }
+        Parameter.establishRelationships(allParameters);
+
+        for (let param of allParameters) {
+            if (!param.parent) {
+                this.addParameter(param);
             }
         }
+    }
+
+    private addParameter(param: Parameter, index: number = -1): void {
+        this.form.addControl(param.name, new FormControl());
+        if (param.validators.length > 0) {
+            let validatorArray: ValidatorFn[] = [];
+            for (let validator of param.validators) {
+                if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REQUIRED) {
+                    if (param.type === this.configuratorService.TYPE_FLAG) {
+                        validatorArray.push(Validators.requiredTrue);
+                    } else {
+                        validatorArray.push(Validators.required);
+                    }
+                } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN) {
+                    validatorArray.push(Validators.min(parseFloat(validator.value)));
+                } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX) {
+                    validatorArray.push(Validators.max(parseFloat(validator.value)));
+                } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MIN_LENGTH) {
+                    validatorArray.push(Validators.minLength(parseInt(validator.value)));
+                } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX_LENGTH) {
+                    validatorArray.push(Validators.maxLength(parseInt(validator.value)));
+                } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REGEX) {
+                    validatorArray.push(Validators.pattern(validator.value));
+                } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MOD) {
+                    validatorArray.push(NewRequestComponent.moduloValidator(parseInt(validator.value)))
+                }
+            }
+            this.form.controls[param.name].setValidators(validatorArray);
+            this.form.controls[param.name].markAsTouched();
+        }
+        if (index > -1) {
+            this.currentParameters.splice(index + 1, 0, param);
+        } else {
+            this.currentParameters.push(param);
+        }
+    }
+
+    private removeParameter(param: Parameter): void {
+        this.form.removeControl(param.name);
+        this.currentParameters.splice(this.currentParameters.indexOf(param), 1);
+    }
+
+    public onSelectParamChange(param: Parameter): void {
+        if (param.currentlyDisplayedChildren) {
+            for (let p of param.currentlyDisplayedChildren) {
+                this.removeParameter(p);
+            }
+        }
+        param.currentlyDisplayedChildren = [];
+        if (this.form.controls[param.name].value) {
+            let parentIndex: number = this.currentParameters.indexOf(param);
+            for (let p of param.getChildrenWithOption(this.form.controls[param.name].value)) {
+                this.addParameter(p, parentIndex);
+                param.currentlyDisplayedChildren.push(p);
+            }
+        }
+        this.changeDetector.detectChanges();
     }
 
     public submit(): void {
         let request: any = {};
         request.targetApplication = this.application.name;
-        for (let param of this.application.parameters) {
+        for (let param of this.currentParameters) {
             request[param.name] = this.form.controls[param.name].value;
         }
 
