@@ -4,7 +4,6 @@
 plugins {
     id 'com.github.gmazzo.sqlite' version '0.2'
     id 'com.moowork.node' version '1.2.0'
-    id 'java'
     id 'war'
 }
 
@@ -98,6 +97,13 @@ task deployAngular(type: Copy) {
 war {
     from 'dist'
     dependsOn npm_run_build
+}
+
+task deployWar(type: Copy) {
+    from "$buildDir/libs"
+    into serverDir + '/webapps/'
+    include '*.war'
+    dependsOn war
 }
 
 sqlite {
