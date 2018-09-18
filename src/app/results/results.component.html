@@ -11,7 +11,10 @@
     </div>
     <div *ngIf="this.application.graphs && this.application.graphs.length > 0 && this.graphResults">
         <h2 class="subtitle">Graph(s)</h2>
-        <custom-graph-renderer *ngFor="let g of this.application.graphs; let i = index" [data]="this.graphResults[i]" [graph]="g"></custom-graph-renderer>
+        <button mat-button (click)="this.printGraphs()"><img src="./assets/icons/icons8-print-50.png" class="embeddedIcon">Print</button>
+        <div #graphContainer>
+            <custom-graph-renderer *ngFor="let g of this.application.graphs; let i = index" [data]="this.graphResults[i]" [graph]="g"></custom-graph-renderer>
+        </div>
     </div>
 </div>
 <div class="margin-bottom">

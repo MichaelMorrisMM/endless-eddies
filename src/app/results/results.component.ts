@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ConfiguratorService} from '../services/configurator.service';
 import {Config} from '../configurator/config.interface';
 import {ResultsService} from '../services/results.service';
@@ -8,6 +8,8 @@ import {ActivatedRoute, ParamMap, Router} from "@angular/router";
 import {GetRequestResult} from "../requests/get-request-result.interface";
 import {Request} from "../requests/request.interface";
 import {Application} from "../configurator/application.model";
+
+import * as html2canvas from "html2canvas";
 
 @Component({
     selector: 'app-results',
@@ -20,6 +22,8 @@ export class ResultsComponent implements OnInit {
     public request: Request;
     public application: Application;
     public result: GetRequestResult;
+
+    @ViewChild("graphContainer") graphContainer: ElementRef;
 
     public graphResults: any[];
 
@@ -59,6 +63,22 @@ export class ResultsComponent implements OnInit {
         if (this.request) {
             this.resultsService.downloadFile(this.request.name, rf).subscribe((blob: Blob) => {
                 saveAs(blob, rf.filename);
+            });
+        }
+    }
+
+    public printGraphs(): void {
+        if (this.application.graphs && this.application.graphs.length > 0 && this.graphResults) {
+            let printWindow = window.open();
+            printWindow.document.open();
+            html2canvas(this.graphContainer.nativeElement).then((canvas) => {
+                printWindow.document.write('<img style="width: 100%;" src="' + canvas.toDataURL() + '" />');
+                printWindow.document.close(); // necessary for IE >= 10
+                printWindow.addEventListener("load", function() {
+                    printWindow.focus(); // necessary for IE >= 10
+                    printWindow.print();
+                    printWindow.close();
+                });
             });
         }
     }
