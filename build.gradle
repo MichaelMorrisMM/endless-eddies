@@ -4,22 +4,24 @@
 plugins {
     id 'com.github.gmazzo.sqlite' version '0.2'
     id 'com.moowork.node' version '1.2.0'
-    id 'java'
+    id 'war'
 }
 
 def confDir = System.getenv('ENDLESS_EDDIES_CONFIG_DIR')
 def serverDir = System.getenv('CATALINA_HOME')
 def deployPath = serverDir + '/webapps/' + rootProject.name
 def javaDestPath = deployPath + '/WEB-INF/classes'
-def serverLibPath = serverDir + '/lib'
+def serverLibPath = deployPath + '/WEB-INF/lib'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '**/*.jar')
-    compile 'com.auth0:java-jwt:3.3.0'
+    implementation 'com.auth0:java-jwt:3.4.0'
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'org.glassfish:javax.json:1.1.2'
+    implementation 'org.xerial:sqlite-jdbc:3.23.1'
 }
 
 task deployAll(type: GradleBuild) {
@@ -46,15 +48,22 @@ task cleanJavaDeploy(type: Delete) {
     delete new File(javaDestPath)
 }
 
+task seedLibs {
+    def libDest = new File(serverLibPath)
+    if (!libDest.exists()) {
+        libDest.mkdirs()
+    }
+}
+
 task deployLibs(type: Copy) {
-    from 'libs'
+    from configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }
     into serverLibPath
-    include '**/*.jar'
     eachFile {
         if (it.relativePath.getFile(destinationDir).exists()) {
             it.exclude()
         }
     }
+    dependsOn seedLibs
 }
 
 task seedDeployment {
@@ -74,16 +83,28 @@ task seedJava {
 task deployJava(type: Copy) {
     from sourceSets.main.output.classesDirs
     into javaDestPath
+    dependsOn deployLibs, cleanJavaDeploy, seedJava, classes
 }
-deployJava.dependsOn deployLibs, cleanJavaDeploy, seedJava, classes
 
 npm_run_build.dependsOn npmInstall
 
 task deployAngular(type: Copy) {
     from 'dist'
     into deployPath
+    dependsOn seedDeployment, npm_run_build
 }
-deployAngular.dependsOn seedDeployment, npm_run_build
+
+war {
+    from 'dist'
+    dependsOn npm_run_build
+}
+
+task deployWar(type: Copy) {
+    from "$buildDir/libs"
+    into serverDir + '/webapps/'
+    include '*.war'
+    dependsOn war
+}
 
 sqlite {
     driverDependency 'org.xerial:sqlite-jdbc:3.23.1'
