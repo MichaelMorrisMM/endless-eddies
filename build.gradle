@@ -33,7 +33,7 @@ task cleanProject(type: GradleBuild) {
 }
 
 task cleanDeployment(type: Delete) {
-    delete new File(deployPath)
+    delete file(deployPath)
 }
 
 task cleanWar(type: Delete) {
@@ -45,13 +45,12 @@ task cleanAngular(type: Delete) {
 }
 
 task cleanJavaDeploy(type: Delete) {
-    delete new File(javaDestPath)
+    delete file(javaDestPath)
 }
 
 task seedLibs {
-    def libDest = new File(serverLibPath)
-    if (!libDest.exists()) {
-        libDest.mkdirs()
+    doLast {
+        mkdir serverLibPath
     }
 }
 
@@ -67,16 +66,14 @@ task deployLibs(type: Copy) {
 }
 
 task seedDeployment {
-    def deploy = new File(deployPath)
-    if (!deploy.exists()) {
-        deploy.mkdirs()
+    doLast {
+        mkdir deployPath
     }
 }
 
 task seedJava {
-    def javaDest = new File(javaDestPath)
-    if (!javaDest.exists()) {
-        javaDest.mkdirs()
+    doLast {
+        mkdir javaDestPath
     }
 }
 
