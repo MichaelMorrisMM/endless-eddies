@@ -23,8 +23,9 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT idUser FROM user WHERE email = ?;");
             pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
-            return !rs.next();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return !rs.next();
+            }
         } catch (SQLException e) {
             return false;
         }
@@ -62,12 +63,13 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT name FROM request WHERE idUser = ? AND idGuest IS NULL;");
             pstmt.setInt(1, idUser);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                try {
-                    Util.deleteRequestFiles(rs.getString("name"));
-                } catch (IOException e) {
-                    // Continue attempting to delete user
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    try {
+                        Util.deleteRequestFiles(rs.getString("name"));
+                    } catch (IOException e) {
+                        // Continue attempting to delete user
+                    }
                 }
             }
 
@@ -148,8 +150,9 @@ public class DatabaseConnector {
     public static boolean isFirstUser() {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT idUser FROM user;");
-            return !rs.next();
+            try (ResultSet rs = stmt.executeQuery("SELECT idUser FROM user;")) {
+                return !rs.next();
+            }
         } catch (SQLException e) {
             return false;
         }
@@ -159,8 +162,9 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest FROM request WHERE idRequest = ?;");
             pstmt.setInt(1, idRequest);
-            ResultSet rs = pstmt.executeQuery();
-            return rs.next();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next();
+            }
         } catch (SQLException e) {
             return false;
         }
@@ -170,11 +174,12 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest FROM request WHERE name = ?;");
             pstmt.setString(1, requestName);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return "" + rs.getInt("idRequest");
-            } else {
-                return "";
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return "" + rs.getInt("idRequest");
+                } else {
+                    return "";
+                }
             }
         } catch (SQLException e) {
             return "";
@@ -197,8 +202,9 @@ public class DatabaseConnector {
                 pstmt.setInt(1, idRequest);
                 pstmt.setLong(2, user.idGuest);
             }
-            ResultSet rs = pstmt.executeQuery();
-            return rs.next();
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next();
+            }
         } catch (SQLException e) {
             return false;
         }
@@ -208,12 +214,13 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT name FROM request WHERE idRequest = ?;");
             pstmt.setInt(1, idRequest);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                try {
-                    Util.deleteRequestFiles(rs.getString("name"));
-                } catch (IOException e) {
-                    return false;
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    try {
+                        Util.deleteRequestFiles(rs.getString("name"));
+                    } catch (IOException e) {
+                        return false;
+                    }
                 }
             }
 
@@ -231,11 +238,12 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM user WHERE email = ?;");
             pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return new User(rs);
-            } else {
-                return null;
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new User(rs);
+                } else {
+                    return null;
+                }
             }
         } catch (SQLException e) {
             return null;
@@ -246,11 +254,12 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM user WHERE idUser = ?;");
             pstmt.setInt(1, idUser);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return new User(rs);
-            } else {
-                return null;
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new User(rs);
+                } else {
+                    return null;
+                }
             }
         } catch (SQLException e) {
             return null;
@@ -262,9 +271,10 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT idUser, email, isAdmin FROM user WHERE idUser != ?;");
             pstmt.setInt(1, idUser);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                users.add(new User(rs, true));
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    users.add(new User(rs, true));
+                }
             }
         } catch (SQLException e) {
             return null;
@@ -285,15 +295,17 @@ public class DatabaseConnector {
                 pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser WHERE request.idUser = ? AND request.idGuest IS NULL;");
                 pstmt.setInt(1, user.idUser);
             }
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                requests.add(new Request(rs));
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    requests.add(new Request(rs));
+                }
             }
             if (user.isAdmin) {
                 pstmt = conn.prepareStatement("SELECT idRequest, name, idGuest, date, expiration FROM request WHERE request.idUser IS NULL;");
-                rs = pstmt.executeQuery();
-                while (rs.next()) {
-                    requests.add(new Request(rs));
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    while (rs.next()) {
+                        requests.add(new Request(rs));
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -306,17 +318,19 @@ public class DatabaseConnector {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser WHERE idRequest = ? AND request.idGuest IS NULL;");
             pstmt.setInt(1, idRequest);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return new Request(rs);
-            } else {
-                pstmt = conn.prepareStatement("SELECT idRequest, name, idGuest, date, expiration FROM request WHERE idRequest = ? AND request.idUser IS NULL;");
-                pstmt.setInt(1, idRequest);
-                rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    return new Request(rs);
+            try (ResultSet rsFirst = pstmt.executeQuery()) {
+                if (rsFirst.next()) {
+                    return new Request(rsFirst);
                 } else {
-                    return null;
+                    pstmt = conn.prepareStatement("SELECT idRequest, name, idGuest, date, expiration FROM request WHERE idRequest = ? AND request.idUser IS NULL;");
+                    pstmt.setInt(1, idRequest);
+                    try (ResultSet rsSecond = pstmt.executeQuery()) {
+                        if (rsSecond.next()) {
+                            return new Request(rsSecond);
+                        } else {
+                            return null;
+                        }
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -329,12 +343,13 @@ public class DatabaseConnector {
             long expirationThreshold = Instant.now().getEpochSecond();
             PreparedStatement pstmt = conn.prepareStatement("SELECT name FROM request WHERE expiration IS NOT NULL AND expiration < ?;");
             pstmt.setLong(1, expirationThreshold);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                try {
-                    Util.deleteRequestFiles(rs.getString("name"));
-                } catch (IOException e) {
-                    return -1;
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    try {
+                        Util.deleteRequestFiles(rs.getString("name"));
+                    } catch (IOException e) {
+                        return -1;
+                    }
                 }
             }
 
