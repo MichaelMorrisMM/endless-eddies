@@ -46,6 +46,15 @@ public class SessionManager {
         }
     }
 
+    public static void endSession(HttpServletResponse response) {
+        response.setContentType("text/html");
+        Cookie sessionCookie = new Cookie(SESSION_COOKIE_NAME, "");
+        // TODO add secure when https is working
+        sessionCookie.setHttpOnly(true);
+        sessionCookie.setMaxAge(0);
+        response.addCookie(sessionCookie);
+    }
+
     public static boolean createGuestSession(User guest, HttpServletResponse response) {
         try {
             String xsrfToken = PasswordUtil.createSalt();
@@ -74,7 +83,9 @@ public class SessionManager {
             DecodedJWT jwt = getJWT(request);
             Instant now = Instant.now();
             if (now.compareTo(jwt.getIssuedAt().toInstant()) > 0 && now.compareTo(jwt.getExpiresAt().toInstant()) < 0) {
-                return DatabaseConnector.getUserById(jwt.getClaim("idUser").asInt());
+                User user = DatabaseConnector.getUserById(jwt.getClaim("idUser").asInt());
+                user.currentXSRFToken = jwt.getClaim(XSRF_TOKEN).asString();
+                return user;
             }
         } catch (Exception e) {
             return null;

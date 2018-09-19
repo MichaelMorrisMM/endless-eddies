@@ -29,7 +29,7 @@ const routes: Routes = [
     { path: 'my-account', component: MyAccountComponent, canActivate: [AuthGuardNonGuestService] },
     { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
     { path: '',   redirectTo: '/home', pathMatch: 'full' },
-    { path: '**', component: NotFoundComponent },
+    { path: '**', component: NotFoundComponent, canActivate: [AuthGuardService] },
 ];
 
 @NgModule({

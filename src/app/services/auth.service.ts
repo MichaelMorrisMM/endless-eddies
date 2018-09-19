@@ -6,13 +6,13 @@ import {ConstantsService} from "./constants.service";
 import {Router} from "@angular/router";
 import {User} from "../login/user.interface";
 import {map} from "rxjs/operators";
+import {CheckUserSessionResult} from "../users/check-user-session-result.interface";
 
 @Injectable()
 export class AuthService {
     private currentUser: User;
 
-    @Output() onLogIn: EventEmitter<User> = new EventEmitter<User>();
-    @Output() onLogOut: EventEmitter<any> = new EventEmitter<any>();
+    @Output() onUserChange: EventEmitter<User> = new EventEmitter<User>();
 
     constructor(private http: HttpClient,
                 private router: Router) {
@@ -26,7 +26,7 @@ export class AuthService {
         this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/login', null, {params: params}).subscribe((pr: PostResult) => {
             if (pr && pr.success && pr.user) {
                 this.currentUser = pr.user;
-                this.onLogIn.emit(this.currentUser);
+                this.onUserChange.emit(this.currentUser);
                 this.router.navigateByUrl('/home');
             } else {
                 alert(pr.message);
@@ -34,11 +34,23 @@ export class AuthService {
         });
     }
 
+    public checkUserSession(): Observable<boolean> {
+        return this.http.get<CheckUserSessionResult>(ConstantsService.URL_PREFIX + '/check-user-session-status').pipe(map((r: CheckUserSessionResult) => {
+            if (r && r.sessionPresent && r.user) {
+                this.currentUser = r.user;
+                this.onUserChange.emit(this.currentUser);
+                return true;
+            } else {
+                return false;
+            }
+        }));
+    }
+
     public guestLogIn(): void {
         this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/guest-login', null).subscribe((pr: PostResult) => {
             if (pr && pr.success && pr.user) {
                 this.currentUser = pr.user;
-                this.onLogIn.emit(this.currentUser);
+                this.onUserChange.emit(this.currentUser);
                 this.router.navigateByUrl('/home');
             } else {
                 alert(pr.message);
@@ -47,8 +59,10 @@ export class AuthService {
     }
 
     public logOut(): void {
-        this.currentUser = null;
-        this.onLogOut.emit(null);
+        this.http.post(ConstantsService.URL_PREFIX + '/logOut', null).subscribe(() => {
+            this.currentUser = null;
+            this.onUserChange.emit(null);
+        });
     }
 
     public updateMyAccount(params: HttpParams): Observable<boolean> {
