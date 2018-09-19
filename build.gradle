@@ -24,12 +24,8 @@ dependencies {
     implementation 'org.xerial:sqlite-jdbc:3.23.1'
 }
 
-task deployAll(type: GradleBuild) {
-    tasks = ['cleanAll', 'deployJava', 'deployAngular']
-}
-
 task cleanAll(type: GradleBuild) {
-    tasks = ['clean', 'cleanDeployment', 'cleanAngular']
+    tasks = ['cleanProject', 'cleanDeployment', 'cleanWar']
 }
 
 task cleanProject(type: GradleBuild) {
@@ -38,6 +34,10 @@ task cleanProject(type: GradleBuild) {
 
 task cleanDeployment(type: Delete) {
     delete new File(deployPath)
+}
+
+task cleanWar(type: Delete) {
+    delete new File(deployPath + '.war')
 }
 
 task cleanAngular(type: Delete) {
@@ -103,7 +103,7 @@ task deployWar(type: Copy) {
     from "$buildDir/libs"
     into serverDir + '/webapps/'
     include '*.war'
-    dependsOn war
+    dependsOn war, cleanDeployment
 }
 
 sqlite {
