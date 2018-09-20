@@ -12,6 +12,7 @@ def serverDir = System.getenv('CATALINA_HOME')
 def deployPath = serverDir + '/webapps/' + rootProject.name
 def javaDestPath = deployPath + '/WEB-INF/classes'
 def serverLibPath = deployPath + '/WEB-INF/lib'
+def databaseName = 'endless_eddies.db'
 
 repositories {
     mavenCentral()
@@ -108,9 +109,7 @@ sqlite {
 }
 
 task makeDatabase {
-    def databaseFile = file("$confDir/endless_eddies.db")
-
-    outputs.file databaseFile
+    def databaseFile = file("$buildDir/database/$databaseName")
 
     doLast {
         def db = openSQLiteDatabase(databaseFile)
@@ -133,4 +132,15 @@ task makeDatabase {
                         FOREIGN KEY(idUser) REFERENCES user(idUser)
                    )'''
     }
+}
+
+task deployDatabase(type: Copy) {
+    from "$buildDir/database/$databaseName"
+    into "$confDir"
+    dependsOn makeDatabase
+}
+
+task buildDockerImage(type: Exec) {
+    dependsOn war, makeDatabase
+    commandLine 'docker', 'build', '-t', 'endless-eddies', '.'
 }
