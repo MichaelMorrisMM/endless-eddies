@@ -165,6 +165,8 @@ Add the following Connector tag to $serverDir/conf/server.xml within the <Servic
         <Certificate certificateKeystoreFile="conf/localhost-rsa.jks" type="RSA" />
     </SSLHostConfig>
 </Connector>
+
+Detailed Tomcat SSL Documentation: https://tomcat.apache.org/tomcat-9.0-doc/ssl-howto.html
     """
     }
 }
