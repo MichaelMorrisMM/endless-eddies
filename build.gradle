@@ -9,6 +9,7 @@ plugins {
 
 def confDir = System.getenv('ENDLESS_EDDIES_CONFIG_DIR')
 def serverDir = System.getenv('CATALINA_HOME')
+def javaHome = System.getenv('JAVA_HOME')
 def deployPath = serverDir + '/webapps/' + rootProject.name
 def javaDestPath = deployPath + '/WEB-INF/classes'
 def serverLibPath = deployPath + '/WEB-INF/lib'
@@ -143,4 +144,29 @@ task deployDatabase(type: Copy) {
 task buildDockerImage(type: Exec) {
     dependsOn war, makeDatabase
     commandLine 'docker', 'build', '-t', 'endless-eddies', '.'
+}
+
+task createSelfSignedCert(type: Exec) {
+    commandLine "$javaHome/bin/keytool",
+        '-genkey',
+        '-alias', 'tomcat',
+        '-keyalg', 'RSA',
+        '-keystore', "$serverDir/conf/localhost-rsa.jks",
+        '-keypass', 'changeit',
+        '-storepass', 'changeit',
+        '-dname', 'CN=EndlessEddies'
+    doLast {
+        println """
+Keystore Created:
+Add the following Connector tag to $serverDir/conf/server.xml within the <Service name="Catalina"> tag
+
+<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol" maxThreads="150" SSLEnabled="true">
+    <SSLHostConfig>
+        <Certificate certificateKeystoreFile="conf/localhost-rsa.jks" type="RSA" />
+    </SSLHostConfig>
+</Connector>
+
+Detailed Tomcat SSL Documentation: https://tomcat.apache.org/tomcat-9.0-doc/ssl-howto.html
+    """
+    }
 }
