@@ -5,7 +5,7 @@
             <input matInput placeholder="Email" [formControl]="this.emailControl">
         </mat-form-field>
     </div>
-    <button mat-button color="accent" (click)="this.toggleChangePassword()">{{this.showChangePassword ? 'Cancel' : 'Change Password'}}</button>
+    <button mat-button color="accent" class="accent-default" (click)="this.toggleChangePassword()">{{this.showChangePassword ? 'Cancel' : 'Change Password'}}</button>
     <div [hidden]="!this.showChangePassword" class="padded-top">
         <mat-form-field class="half-width">
             <input matInput placeholder="New Password" type="password" [formControl]="this.passwordControl">
