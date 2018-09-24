@@ -52,7 +52,7 @@ import {LoadingComponent} from "./requests/loading.component";
 import {CustomGraphRendererComponent} from "./custom-charts/custom-graph-renderer.component";
 import { DeleteApplicationDialogComponent } from './configurator/delete-application-dialog.component';
 import {ParentPickerComponent} from "./configurator/parent-picker.component";
-
+import {ThemesService} from './services/themes.service';
 
 @NgModule({
     declarations: [
@@ -110,6 +110,7 @@ import {ParentPickerComponent} from "./configurator/parent-picker.component";
         AuthGuardAdminService,
         AuthGuardNonGuestService,
         UsersService,
+        ThemesService,
     ],
     entryComponents: [
         ValidatorsComponent,
