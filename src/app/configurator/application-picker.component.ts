@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {Config} from "./config.interface";
 import {Application} from "./application.model";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'application-picker',
@@ -14,7 +15,8 @@ export class ApplicationPickerComponent implements OnInit {
     public showAdder: boolean;
 
     constructor(@Inject(MAT_DIALOG_DATA) private data: any,
-                private dialogRef: MatDialogRef<ApplicationPickerComponent>) {
+                private dialogRef: MatDialogRef<ApplicationPickerComponent>,
+                public themesService: ThemesService) {
         this.showAdder = false;
     }
 

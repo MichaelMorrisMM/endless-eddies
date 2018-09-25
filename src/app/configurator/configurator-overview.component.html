@@ -13,7 +13,7 @@
                             <input matInput placeholder="Title" [formControlName]="page.keyTitle">
                         </mat-form-field>
                         <div class="flex-one">
-                            <button mat-raised-button color="warn" (click)="this.deleteHomePage(page)">
+                            <button class="{{this.themesService.getButtonWarn()}}" (click)="this.deleteHomePage(page)">
                                 <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
                             </button>
                         </div>
@@ -24,12 +24,12 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <button mat-raised-button color="accent" (click)="this.addHomePage()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add</button>
+                <button class="{{this.themesService.getButtonAccent()}}" (click)="this.addHomePage()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add</button>
             </mat-expansion-panel>
         </mat-accordion>
         <div class="flex-container-row">
-            <button mat-raised-button color="primary" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
-            <span *ngIf="this.form.dirty" class="dirty-note"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
+            <button class="{{this.themesService.getButtonPrimary()}}" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
+            <span *ngIf="this.form.dirty" class="{{this.themesService.getDirtyNote()}}"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
         </div>
     </form>
 </ng-container>

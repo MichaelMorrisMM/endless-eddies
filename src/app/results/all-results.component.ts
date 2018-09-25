@@ -5,6 +5,7 @@ import {Request} from "../requests/request.interface";
 import {PostResult} from "../configurator/post-result.interface";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'all-results',
@@ -23,7 +24,8 @@ export class AllResultsComponent implements OnInit {
 
     constructor(private resultsService: ResultsService,
                 public authService: AuthService,
-                private router: Router) {
+                private router: Router,
+                public themesService: ThemesService) {
     }
 
     ngOnInit() {

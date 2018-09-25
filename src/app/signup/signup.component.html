@@ -9,7 +9,7 @@
         <mat-form-field>
             <input matInput placeholder="Confirm Password" type="password" [formControlName]="'passwordConfirm'">
         </mat-form-field>
-        <button mat-raised-button color="primary" [disabled]="this.form.invalid" (click)="submit()">
+        <button class="{{this.themesService.getButtonPrimary()}}" [disabled]="this.form.invalid" (click)="submit()">
             <img src="./assets/icons/icons8-add-user-group-woman-man-50.png" class="embeddedIcon">Create Account
         </button>
     </form>

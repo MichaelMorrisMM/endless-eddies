@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from "@angular/material";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'delete-application-dialog',
@@ -9,7 +10,8 @@ import {MatDialogRef} from "@angular/material";
 })
 export class DeleteApplicationDialogComponent implements OnInit {
 
-    constructor(private dialogRef: MatDialogRef<DeleteApplicationDialogComponent>) {
+    constructor(private dialogRef: MatDialogRef<DeleteApplicationDialogComponent>,
+                public themesService: ThemesService) {
     }
 
     ngOnInit() {

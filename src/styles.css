@@ -78,12 +78,6 @@ body {
     flex: 9;
 }
 
-span.dirty-note {
-    background: yellow;
-    padding: 0.5rem;
-    margin-left: 1rem;
-}
-
 .margin-right {
     margin-right: 2rem;
 }
@@ -146,10 +140,6 @@ a.nav-item-active {
     background: lightgrey;
 }
 
-.danger{
-    background: #EF9A9A;
-}
-
 img.embeddedIcon {
     margin-right: 0.5em;
     max-height: 20px;
@@ -195,14 +185,40 @@ div.home-page {
     align-items: center;
 }
 
-.primary-default {
+/* Themes (source http://blog.visme.co/color-combinations/) */
 
+.theme-default-button {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
 
-.secondary-default {
-
+.theme-default-dirty-note {
+    padding: 0.5rem;
+    margin-left: 1rem;
 }
 
-.accent-default {
-    
+.theme-blue-sunset-background-color-primary {
+    background-color: #36688D;
+}
+
+.theme-blue-sunset-background-color-accent {
+    background-color: #F3CD05;
+}
+
+.theme-blue-sunset-background-color-warn {
+    background-color: #BDA589;
+}
+
+.theme-mediterranean-background-color-primary {
+    background-color: #595775;
+}
+
+.theme-mediterranean-background-color-accent {
+    background-color: #F1E0D6;
+}
+
+.theme-mediterranean-background-color-warn {
+    background-color: #583E2E;
 }

@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpParams} from "@angular/common/http";
 import {ConfiguratorService} from "../services/configurator.service";
 import {Config} from "../configurator/config.interface";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'app-login',
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit {
     constructor(public authService: AuthService,
                 private router: Router,
                 private configuratorService: ConfiguratorService,
+                public themesService: ThemesService,
                 @Inject(FormBuilder) fb: FormBuilder) {
         this.form = fb.group({
             email: ['', [Validators.required, Validators.email]],

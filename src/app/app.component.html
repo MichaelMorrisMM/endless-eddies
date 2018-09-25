@@ -8,11 +8,14 @@
             *ngFor="let item of menuItemsArray" [routerLink]="[item.link]"><img src="{{item.icon}}" class="embeddedIcon">{{item.title}}</a>
         </mat-sidenav>
         <mat-sidenav-content class="main">
-            <mat-toolbar color="primary" class="justify-space-between">
-                <button mat-raised-button color="accent" (click)="sidenav.toggle()"><img src="./assets/icons/icons8-menu-50.png" class="embeddedIcon">Menu</button>
-                <div>
-                    <button mat-raised-button color="accent" routerLink="/my-account" [disabled]="this.authService.getCurrentUser().isGuest"><img src="./assets/icons/icons8-account-50.png" class="embeddedIcon">My Account</button>
-                    <button mat-raised-button color="warn" (click)="this.authService.logOut()"><img src="./assets/icons/icons8-sign-out-50.png" class="embeddedIcon">Logout</button>
+            <mat-toolbar class="justify-space-between {{this.themesService.getToolbar()}}">
+                <button class="{{this.themesService.getButtonAccent()}}" (click)="sidenav.toggle()"><img src="./assets/icons/icons8-menu-50.png" class="embeddedIcon">Menu</button>
+                <div class="flex-container-row">
+                    <button mat-raised-button (click)="this.themesService.switch()">DEMO change theme</button>
+                    <span class="spacer"></span>
+                    <button class="{{this.themesService.getButtonAccent()}}" routerLink="/my-account" [disabled]="this.authService.getCurrentUser().isGuest"><img src="./assets/icons/icons8-account-50.png" class="embeddedIcon">My Account</button>
+                    <span class="spacer"></span>
+                    <button class="{{this.themesService.getButtonWarn()}}" (click)="this.authService.logOut()"><img src="./assets/icons/icons8-sign-out-50.png" class="embeddedIcon">Logout</button>
                 </div>
             </mat-toolbar>
             <router-outlet></router-outlet>

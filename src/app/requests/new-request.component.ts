@@ -12,6 +12,7 @@ import {PostResult} from "../configurator/post-result.interface";
 import {UsersService} from "../services/users.service";
 import {CheckUserStorageResult} from "./check-user-storage-result.interface";
 import {Parameter} from "../configurator/parameter.model";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'new-request',
@@ -33,7 +34,8 @@ export class NewRequestComponent implements OnInit {
                 private usersService: UsersService,
                 private router: Router,
                 private dialog: MatDialog,
-                private changeDetector: ChangeDetectorRef) {
+                private changeDetector: ChangeDetectorRef,
+                public themesService: ThemesService) {
         this.form = new FormGroup({});
     }
 

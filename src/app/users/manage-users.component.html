@@ -12,15 +12,18 @@
         >
         </ag-grid-angular>
     </div>
-    <div>
+    <div class="flex-container-row align-center">
         <label>{{this.selectedList.length}} selected</label>
-        <button mat-raised-button [disabled]="this.disableNormal" color="primary" (click)="this.giveNormal()">
+        <span class="spacer"></span>
+        <button [disabled]="this.disableNormal" class="{{this.themesService.getButtonPrimary()}}" (click)="this.giveNormal()">
             <img src="./assets/icons/icons8-chevron-down-50.png" class="embeddedIcon">Give Normal Permissions
         </button>
-        <button mat-raised-button [disabled]="this.disableAdmin" color="accent" (click)="this.giveAdmin()">
+        <span class="spacer"></span>
+        <button [disabled]="this.disableAdmin" class="{{this.themesService.getButtonAccent()}}" (click)="this.giveAdmin()">
             <img src="./assets/icons/icons8-chevron-up-50.png" class="embeddedIcon">Give Admin Permissions
         </button>
-        <button mat-raised-button [disabled]="this.disableDelete" color="warn" (click)="this.deleteUsers()">
+        <span class="spacer"></span>
+        <button [disabled]="this.disableDelete" class="{{this.themesService.getButtonWarn()}}" (click)="this.deleteUsers()">
             <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
         </button>
     </div>

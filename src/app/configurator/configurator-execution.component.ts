@@ -14,6 +14,7 @@ import {Application} from "./application.model";
 import { DeleteApplicationDialogComponent } from './delete-application-dialog.component';
 import {CommandGroup} from "./command-group.model";
 import {ParentPickerComponent} from "./parent-picker.component";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'configurator-execution',
@@ -34,7 +35,8 @@ export class ConfiguratorExecutionComponent implements OnInit {
 
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService,
-                private dialog: MatDialog) {
+                private dialog: MatDialog,
+                public themesService: ThemesService) {
     }
 
 

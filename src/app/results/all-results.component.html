@@ -11,16 +11,16 @@
         >
         </ag-grid-angular>
     </div>
-    <div>
-        <button mat-raised-button [disabled]="!this.selectedRequest" color="primary" (click)="this.viewRequest()">
+    <div class="flex-container-row">
+        <button [disabled]="!this.selectedRequest" class="{{this.themesService.getButtonPrimary()}}" (click)="this.viewRequest()">
             <img src="./assets/icons/icons8-search-50.png" class="embeddedIcon">View
         </button>
-        <button mat-raised-button [disabled]="!this.selectedRequest" color="warn" (click)="this.deleteRequest()">
+        <span class="spacer"></span>
+        <button [disabled]="!this.selectedRequest" class="{{this.themesService.getButtonWarn()}}" (click)="this.deleteRequest()">
             <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
         </button>
-    </div>
-    <div *ngIf="this.authService.getCurrentUser().isAdmin">
-        <button mat-raised-button color="warn" (click)="this.deleteExpiredResults()">
+        <span *ngIf="this.authService.getCurrentUser().isAdmin" class="spacer"></span>
+        <button *ngIf="this.authService.getCurrentUser().isAdmin" class="{{this.themesService.getButtonWarn()}}" (click)="this.deleteExpiredResults()">
             <img src="./assets/icons/icons8-expired-50.png" class="embeddedIcon">Delete Expired Results
         </button>
     </div>

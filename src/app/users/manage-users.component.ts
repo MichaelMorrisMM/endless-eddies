@@ -3,6 +3,7 @@ import {User} from "../login/user.interface";
 import {UsersService} from "../services/users.service";
 import {GridReadyEvent, SelectionChangedEvent} from "ag-grid";
 import {PostResult} from "../configurator/post-result.interface";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'manage-users',
@@ -22,7 +23,8 @@ export class ManageUsersComponent implements OnInit {
     public disableAdmin: boolean = true;
     public disableDelete: boolean = true;
 
-    constructor(private usersService: UsersService) {
+    constructor(private usersService: UsersService,
+                public themesService: ThemesService) {
     }
 
     ngOnInit() {

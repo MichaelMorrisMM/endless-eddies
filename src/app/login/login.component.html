@@ -7,7 +7,7 @@
             <input matInput placeholder="Password" type="password" [formControlName]="'password'">
         </mat-form-field>
         <div class="flex-container-row padding-bottom">
-            <button mat-raised-button color="primary" (click)="this.doLogIn()" [disabled]="this.form.invalid">
+            <button (click)="this.doLogIn()" [disabled]="this.form.invalid" class="{{this.themesService.getButtonPrimary()}}">
                 <img src="./assets/icons/icons8-login-50.png" class="embeddedIcon">Login
             </button>
             <span *ngIf="this.config?.allowGuestMode" class="spacer"></span>
@@ -16,14 +16,14 @@
             </button>
         </div>
         <div>
-            <button mat-raised-button color="accent" (click)="this.toggleSignup()">
+            <button (click)="this.toggleSignup()" class="{{this.themesService.getButtonAccent()}}">
                 <img src="./assets/icons/icons8-add-user-group-woman-man-50.png" class="embeddedIcon">Create New Account
             </button>
         </div>
     </form>
 </div>
 <div *ngIf="this.showCreateAccount" class="padded">
-    <button mat-raised-button color="accent" (click)="this.toggleSignup()">
+    <button (click)="this.toggleSignup()" class="{{this.themesService.getButtonAccent()}}">
         <img src="./assets/icons/icons8-back-50.png" class="embeddedIcon">Back to Sign In
     </button>
     <app-sign-up (accountCreated)="this.toggleSignup()"></app-sign-up>

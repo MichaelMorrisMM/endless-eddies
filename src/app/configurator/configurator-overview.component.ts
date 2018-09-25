@@ -5,6 +5,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {HomePage} from "./home-page.model";
 import {PostResult} from "./post-result.interface";
 import {ConstantsService} from "../services/constants.service";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'configurator-overview',
@@ -20,7 +21,8 @@ export class ConfiguratorOverviewComponent implements OnInit {
     private homePages: HomePage[];
 
     constructor(private configuratorService: ConfiguratorService,
-                public constantsService: ConstantsService) {
+                public constantsService: ConstantsService,
+                public themesService: ThemesService) {
     }
 
     ngOnInit() {

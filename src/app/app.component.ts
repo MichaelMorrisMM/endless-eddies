@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from './services/auth.service';
 import {User} from "./login/user.interface";
 import {ISubscription} from "rxjs/Subscription";
+import {ThemesService} from "./services/themes.service";
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public menuItemsArray: MenuItem[] = [];
     private onUserChangeSubscription: ISubscription;
 
-    constructor(public authService: AuthService) {
+    constructor(public authService: AuthService,
+                public themesService: ThemesService) {
     }
 
     ngOnInit() {

@@ -4,6 +4,7 @@ import {ConfiguratorService} from '../services/configurator.service';
 import {ConstantsService} from "../services/constants.service";
 import {Config} from "./config.interface";
 import {PostResult} from "./post-result.interface";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'configurator-users',
@@ -17,7 +18,8 @@ export class ConfiguratorUsersComponent implements OnInit {
 
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService,
-                @Inject(FormBuilder) private fb: FormBuilder) {
+                @Inject(FormBuilder) private fb: FormBuilder,
+                public themesService: ThemesService) {
         this.form = fb.group({
             resultLifespan: [0, [Validators.required, Validators.min(0)]],
             userStorageLimit: [0, [Validators.required, Validators.min(0)]],

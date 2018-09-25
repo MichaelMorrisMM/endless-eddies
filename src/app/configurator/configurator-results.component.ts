@@ -9,6 +9,7 @@ import {ApplicationPickerComponent} from "./application-picker.component";
 import {Application} from "./application.model";
 import {ResultFile} from "./result-file.model";
 import {GraphTemplate} from "./graph-template.model";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'configurator-results',
@@ -29,7 +30,8 @@ export class ConfiguratorResultsComponent implements OnInit {
 
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService,
-                private dialog: MatDialog) {
+                private dialog: MatDialog,
+                public themesService: ThemesService) {
     }
 
 

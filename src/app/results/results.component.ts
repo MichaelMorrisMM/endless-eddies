@@ -10,6 +10,7 @@ import {Request} from "../requests/request.interface";
 import {Application} from "../configurator/application.model";
 
 import * as html2canvas from "html2canvas";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'app-results',
@@ -30,7 +31,8 @@ export class ResultsComponent implements OnInit {
     constructor(private configuratorService: ConfiguratorService,
                 private resultsService: ResultsService,
                 private route: ActivatedRoute,
-                private router: Router) {
+                private router: Router,
+                public themesService: ThemesService) {
     }
 
     ngOnInit() {

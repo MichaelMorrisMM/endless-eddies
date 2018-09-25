@@ -3,6 +3,7 @@ import {AuthService} from '../services/auth.service';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {HttpParams} from "@angular/common/http";
 import {ConstantsService} from "../services/constants.service";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'my-account',
@@ -19,7 +20,8 @@ export class MyAccountComponent implements OnInit {
     public showChangePassword: boolean = false;
 
     constructor(public authService: AuthService,
-                public constantsService: ConstantsService) {
+                public constantsService: ConstantsService,
+                public themesService: ThemesService) {
     }
 
     ngOnInit() {

@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material";
 import {Parameter} from "./parameter.model";
 import {ConfiguratorService} from "../services/configurator.service";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'parent-picker',
@@ -24,8 +25,12 @@ import {ConfiguratorService} from "../services/configurator.service";
             </mat-form-field>
         </mat-dialog-content>
         <mat-dialog-actions>
-            <button mat-button color="primary" [disabled]="!this.parent && !this.option" (click)="this.save()">Save</button>
-            <button mat-button color="warn" [disabled]="!this.parent" (click)="this.delete()">Remove</button>
+            <button class="{{this.themesService.getButtonPrimary()}}" [disabled]="!this.parent && !this.option"
+                    (click)="this.save()">Save
+            </button>
+            <button class="{{this.themesService.getButtonWarn()}}" [disabled]="!this.parent"
+                    (click)="this.delete()">Remove
+            </button>
             <button mat-button mat-dialog-close>Close</button>
         </mat-dialog-actions>
     `,
@@ -41,7 +46,8 @@ export class ParentPickerComponent implements OnInit {
 
     constructor(@Inject(MAT_DIALOG_DATA) private data: any,
                 private dialogRef: MatDialogRef<ParentPickerComponent>,
-                private configuratorService: ConfiguratorService) {
+                private configuratorService: ConfiguratorService,
+                public themesService: ThemesService) {
     }
 
     ngOnInit() {

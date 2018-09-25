@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {HttpParams} from "@angular/common/http";
 import {AuthService} from "../services/auth.service";
 import {PostResult} from "../configurator/post-result.interface";
+import {ThemesService} from "../services/themes.service";
 
 @Component({
     selector: 'app-sign-up',
@@ -15,7 +16,8 @@ export class SignupComponent implements OnInit {
     @Output() accountCreated: EventEmitter<any> = new EventEmitter();
 
     constructor(@Inject(FormBuilder) fb: FormBuilder,
-                private authService: AuthService) {
+                private authService: AuthService,
+                public themesService: ThemesService) {
         this.form = fb.group({
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required],

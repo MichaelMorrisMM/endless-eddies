@@ -31,7 +31,6 @@ import {
     MatToolbarModule,
     MatTooltipModule
 } from '@angular/material';
-import {BasicInputComponent} from './components/basic-input/basic-input.component';
 import {ConfiguratorExecutionComponent} from './configurator/configurator-execution.component';
 import {NewRequestComponent} from './requests/new-request.component';
 import {ResultsService} from './services/results.service';
@@ -66,7 +65,6 @@ import {ThemesService} from './services/themes.service';
         NotFoundComponent,
         ResultsComponent,
         HomeComponent,
-        BasicInputComponent,
         NewRequestComponent,
         ValidatorsComponent,
         OptionsComponent,
