@@ -2,24 +2,31 @@ import {Injectable} from '@angular/core';
 import {ConfiguratorService} from "./configurator.service";
 import {Config} from "../configurator/config.interface";
 import {Theme} from "../themes/theme.interface";
+import {DomSanitizer, SafeStyle} from "@angular/platform-browser";
 
 @Injectable()
 export class ThemesService {
 
+    // Themes (source http://blog.visme.co/color-combinations/)
     public readonly THEMES: Theme[] = [
         {
-            displayName: "Blue Sunset",
-            name: "theme-blue-sunset",
+            name: "Blue Sunset",
+            primaryColor: "#36688D",
+            accentColor: "#F3CD05",
+            warnColor: "#BDA589",
         },
         {
-            displayName: "Mediterranean",
-            name: "theme-mediterranean",
+            name: "Mediterranean",
+            primaryColor: "#595775",
+            accentColor: "#F1E0D6",
+            warnColor: "#583E2E",
         },
     ];
 
     public currentTheme: Theme = this.THEMES[0]; // Default theme
 
-    constructor(private configuratorService: ConfiguratorService) {
+    constructor(private configuratorService: ConfiguratorService,
+                private sanitizer: DomSanitizer) {
         this.setTheme();
     }
 
@@ -35,7 +42,7 @@ export class ThemesService {
         } else {
             this.configuratorService.getConfiguration().subscribe((config: Config) => {
                 if (config && config.appTheme) {
-                    this.currentTheme = this.getThemeFromName(config.appTheme);
+                    this.currentTheme = config.appTheme;
                 } else {
                     this.currentTheme = this.THEMES[0]; // Default theme
                 }
@@ -43,36 +50,28 @@ export class ThemesService {
         }
     }
 
-    public getButtonPrimary(): string {
-        return " mat-raised-button theme-default-button " + this.getBackgroundColorPrimary();
+    public getButtonPrimaryStyles(): SafeStyle {
+        return this.sanitizer.bypassSecurityTrustStyle(" background-color: " + this.currentTheme.primaryColor + "; ");
     }
 
-    public getButtonAccent(): string {
-        return " mat-raised-button theme-default-button " + this.getBackgroundColorAccent();
+    public getButtonAccentStyles(): SafeStyle {
+        return this.sanitizer.bypassSecurityTrustStyle(" background-color: " + this.currentTheme.accentColor + "; ");
     }
 
-    public getButtonWarn(): string {
-        return " mat-raised-button theme-default-button " + this.getBackgroundColorWarn();
+    public getButtonWarnStyles(): SafeStyle {
+        return this.sanitizer.bypassSecurityTrustStyle(" background-color: " + this.currentTheme.warnColor + "; ");
     }
 
-    public getDirtyNote(): string {
-        return " theme-default-dirty-note " + this.getBackgroundColorAccent();
+    public getDirtyNoteClasses(): string {
+        return " default-dirty-note ";
     }
 
-    public getToolbar(): string {
-        return " mat-toolbar-single-row " + this.getBackgroundColorPrimary();
+    public getDirtyNoteStyles(): SafeStyle {
+        return this.sanitizer.bypassSecurityTrustStyle(" background-color: " + this.currentTheme.accentColor + "; ");
     }
 
-    private getBackgroundColorPrimary(): string {
-        return " " + this.currentTheme.name + "-background-color-primary ";
-    }
-
-    private getBackgroundColorAccent(): string {
-        return " " + this.currentTheme.name + "-background-color-accent ";
-    }
-
-    private getBackgroundColorWarn(): string {
-        return " " + this.currentTheme.name + "-background-color-warn ";
+    public getToolbarStyles(): SafeStyle {
+        return this.sanitizer.bypassSecurityTrustStyle(" background-color: " + this.currentTheme.primaryColor + "; ");
     }
 
 }

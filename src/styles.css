@@ -185,40 +185,7 @@ div.home-page {
     align-items: center;
 }
 
-/* Themes (source http://blog.visme.co/color-combinations/) */
-
-.theme-default-button {
-    display: flex !important;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.theme-default-dirty-note {
+.default-dirty-note {
     padding: 0.5rem;
     margin-left: 1rem;
-}
-
-.theme-blue-sunset-background-color-primary {
-    background-color: #36688D;
-}
-
-.theme-blue-sunset-background-color-accent {
-    background-color: #F3CD05;
-}
-
-.theme-blue-sunset-background-color-warn {
-    background-color: #BDA589;
-}
-
-.theme-mediterranean-background-color-primary {
-    background-color: #595775;
-}
-
-.theme-mediterranean-background-color-accent {
-    background-color: #F1E0D6;
-}
-
-.theme-mediterranean-background-color-warn {
-    background-color: #583E2E;
 }

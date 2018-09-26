@@ -3,6 +3,6 @@
     Are you absolutely sure you want to delete this application?
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button (click)="this.deleteApplication()" class="{{this.themesService.getButtonWarn()}}">Yes, Delete Application</button>
-    <button class="{{this.themesService.getButtonAccent()}}" mat-dialog-close>Cancel</button>
+    <button mat-raised-button (click)="this.deleteApplication()" [style]="this.themesService.getButtonWarnStyles()">Yes, Delete Application</button>
+    <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" mat-dialog-close>Cancel</button>
 </mat-dialog-actions>

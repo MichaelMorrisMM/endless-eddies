@@ -29,7 +29,7 @@
                 </div>
             </div>
         </ng-container>
-        <button class="{{this.themesService.getButtonPrimary()}}" [disabled]="this.form.invalid" (click)="this.submit()">
+        <button mat-raised-button [style]="this.themesService.getButtonPrimaryStyles()" [disabled]="this.form.invalid" (click)="this.submit()">
             <img src="./assets/icons/icons8-upload-to-cloud-50.png" class="embeddedIcon">Submit
         </button>
     </form>

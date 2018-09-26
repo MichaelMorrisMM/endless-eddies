@@ -12,15 +12,15 @@
         </ag-grid-angular>
     </div>
     <div class="flex-container-row">
-        <button [disabled]="!this.selectedRequest" class="{{this.themesService.getButtonPrimary()}}" (click)="this.viewRequest()">
+        <button mat-raised-button [disabled]="!this.selectedRequest" [style]="this.themesService.getButtonPrimaryStyles()" (click)="this.viewRequest()">
             <img src="./assets/icons/icons8-search-50.png" class="embeddedIcon">View
         </button>
         <span class="spacer"></span>
-        <button [disabled]="!this.selectedRequest" class="{{this.themesService.getButtonWarn()}}" (click)="this.deleteRequest()">
+        <button mat-raised-button [disabled]="!this.selectedRequest" [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteRequest()">
             <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
         </button>
         <span *ngIf="this.authService.getCurrentUser().isAdmin" class="spacer"></span>
-        <button *ngIf="this.authService.getCurrentUser().isAdmin" class="{{this.themesService.getButtonWarn()}}" (click)="this.deleteExpiredResults()">
+        <button mat-raised-button *ngIf="this.authService.getCurrentUser().isAdmin" [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteExpiredResults()">
             <img src="./assets/icons/icons8-expired-50.png" class="embeddedIcon">Delete Expired Results
         </button>
     </div>

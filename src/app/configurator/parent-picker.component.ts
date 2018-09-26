@@ -25,10 +25,10 @@ import {ThemesService} from "../services/themes.service";
             </mat-form-field>
         </mat-dialog-content>
         <mat-dialog-actions>
-            <button class="{{this.themesService.getButtonPrimary()}}" [disabled]="!this.parent && !this.option"
+            <button mat-button [style]="this.themesService.getButtonPrimaryStyles()" [disabled]="!this.parent && !this.option"
                     (click)="this.save()">Save
             </button>
-            <button class="{{this.themesService.getButtonWarn()}}" [disabled]="!this.parent"
+            <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" [disabled]="!this.parent"
                     (click)="this.delete()">Remove
             </button>
             <button mat-button mat-dialog-close>Close</button>

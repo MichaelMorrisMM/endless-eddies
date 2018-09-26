@@ -11,23 +11,23 @@ import {PostResult} from "../configurator/post-result.interface";
     selector: 'theme-picker',
     template: `
         <ng-container *ngIf="this.authService.getCurrentUser() && this.authService.getCurrentUser().isAdmin">
-            <h1 class="title">Theme - {{this.themesService.currentTheme.displayName}}</h1>
+            <h1 class="title">Theme - {{this.themesService.currentTheme.name}}</h1>
             <div>
                 <mat-form-field>
                     <mat-select placeholder="Change Theme" [formControl]="this.themeControl">
                         <mat-option *ngFor="let theme of this.themesService.THEMES" [value]="theme">
-                            {{theme.displayName}}
+                            {{theme.name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class="flex-container-row padded-top">
-                <button (click)="this.save()" class="{{this.themesService.getButtonPrimary()}}"
+                <button mat-raised-button (click)="this.save()" [style]="this.themesService.getButtonPrimaryStyles()"
                         [disabled]="this.themeControl.invalid || !this.themeControl.dirty || !this.config">
                     <img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save
                 </button>
                 <span class="spacer"></span>
-                <span [hidden]="!this.themeControl.dirty" class="{{this.themesService.getDirtyNote()}}">
+                <span [hidden]="!this.themeControl.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}">
                     <img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}
                 </span>
             </div>
@@ -59,7 +59,7 @@ export class ThemePickerComponent implements OnInit {
 
     public save(): void {
         if (this.themeControl.valid && this.config) {
-            this.config.appTheme = this.themeControl.value.name;
+            this.config.appTheme = this.themeControl.value;
             this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
                 if (response.success) {
                     this.themesService.setTheme(this.themeControl.value);

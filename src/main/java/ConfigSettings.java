@@ -44,7 +44,7 @@ public class ConfigSettings {
     public static final String ALLOW_GITHUB_LOGIN = "allowGithubLogin";
     public boolean allowGithubLogin;
     public static final String APP_THEME = "appTheme";
-    public String appTheme;
+    public Theme appTheme;
 
     public static final String HOME_PAGES = "homePages";
     private List<HomePage> homePages;
@@ -56,7 +56,7 @@ public class ConfigSettings {
         this.allowGuestMode = false;
         this.allowGoogleLogin = false;
         this.allowGithubLogin = false;
-        this.appTheme = "";
+        this.appTheme = new Theme();
         this.homePages = new ArrayList<>();
     }
 
@@ -96,7 +96,10 @@ public class ConfigSettings {
                 this.allowGithubLogin = config.getBoolean(ALLOW_GITHUB_LOGIN);
             }
             if (config.get(APP_THEME) != null) {
-                this.appTheme = Util.getStringSafeNonNull(config, APP_THEME);
+                Theme newTheme = new Theme();
+                if (newTheme.updateWith(config.getJsonObject(APP_THEME))) {
+                    this.appTheme = newTheme;
+                }
             }
 
             JsonArray homePagesArray = Util.getArraySafe(config, HOME_PAGES);
@@ -132,7 +135,7 @@ public class ConfigSettings {
             .add(ALLOW_GUEST_MODE, this.allowGuestMode)
             .add(ALLOW_GOOGLE_LOGIN, this.allowGoogleLogin)
             .add(ALLOW_GITHUB_LOGIN, this.allowGithubLogin)
-            .add(APP_THEME, this.appTheme)
+            .add(APP_THEME, this.appTheme.toJsonObject())
             .add(HOME_PAGES, getNode(this.homePages))
             .build();
     }

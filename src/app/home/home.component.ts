@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ConfiguratorService} from '../services/configurator.service';
 import {Config} from '../configurator/config.interface';
 import * as marked from 'marked';
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-home',
@@ -13,7 +14,8 @@ export class HomeComponent implements OnInit {
     public config: Config;
     public md = marked.setOptions({});
 
-    constructor(public configuratorService: ConfiguratorService) {
+    constructor(public configuratorService: ConfiguratorService,
+                public sanitizer: DomSanitizer) {
     }
 
     ngOnInit() {

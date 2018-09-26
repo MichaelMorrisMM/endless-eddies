@@ -5,7 +5,7 @@
             <input matInput placeholder="Email" [formControl]="this.emailControl">
         </mat-form-field>
     </div>
-    <button class="{{this.themesService.getButtonAccent()}}" (click)="this.toggleChangePassword()">{{this.showChangePassword ? 'Cancel' : 'Change Password'}}</button>
+    <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.toggleChangePassword()">{{this.showChangePassword ? 'Cancel' : 'Change Password'}}</button>
     <div [hidden]="!this.showChangePassword" class="padded-top">
         <mat-form-field class="half-width">
             <input matInput placeholder="New Password" type="password" [formControl]="this.passwordControl">
@@ -15,15 +15,15 @@
         </mat-form-field>
     </div>
     <div class="flex-container-row padded-top">
-        <button (click)="this.save()" class="{{this.themesService.getButtonPrimary()}}"
+        <button mat-raised-button (click)="this.save()" [style]="this.themesService.getButtonPrimaryStyles()"
                 [disabled]="this.form.invalid || !this.form.dirty">
             <img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save
         </button>
         <span class="spacer"></span>
-        <button (click)="this.deleteAccount()" class="{{this.themesService.getButtonWarn()}}">
+        <button mat-raised-button (click)="this.deleteAccount()" [style]="this.themesService.getButtonWarnStyles()">
             <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete Account
         </button>
-        <span [hidden]="!this.form.dirty" class="{{this.themesService.getDirtyNote()}}">
+        <span [hidden]="!this.form.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}">
             <img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}
         </span>
     </div>

@@ -26,6 +26,9 @@ public abstract class ConfigObject {
     public static final String COMMAND = "command";
     public static final String PARENT_STRING = "parentString";
     public static final String PARENT_OPTION = "parentOption";
+    public static final String PRIMARY_COLOR = "primaryColor";
+    public static final String ACCENT_COLOR = "accentColor";
+    public static final String WARN_COLOR = "warnColor";
 
     public static final int DEFAULT_SORT_ORDER = 1;
 

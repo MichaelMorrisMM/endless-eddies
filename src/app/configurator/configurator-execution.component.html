@@ -18,7 +18,7 @@
                             <input matInput placeholder="Command" [formControlName]="group.keyCommand">
                         </mat-form-field>
                         <div class="flex-one">
-                            <button class="{{this.themesService.getButtonWarn()}}" (click)="this.deleteCommandGroup(group)">
+                            <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteCommandGroup(group)">
                                 <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete Executable
                             </button>
                         </div>
@@ -44,7 +44,7 @@
                                 <input matInput type="number" placeholder="Sort Order" [formControlName]="parameter.keySortOrder">
                             </mat-form-field>
                             <div class="flex-one">
-                                <button class="{{this.themesService.getButtonWarn()}}" (click)="this.deleteParameter(parameter, group)">
+                                <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteParameter(parameter, group)">
                                     <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete Parameter
                                 </button>
                             </div>
@@ -59,20 +59,20 @@
                         </div>
                     </div>
                     <div class="flex-container-row full-width justify-center">
-                        <button class="{{this.themesService.getButtonAccent()}}" (click)="this.addParameter(group)">
+                        <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addParameter(group)">
                             <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add Parameter
                         </button>
                     </div>
                 </div>
-                <button class="{{this.themesService.getButtonAccent()}}" (click)="this.addCommandGroup()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add Executable</button>
+                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addCommandGroup()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add Executable</button>
             </mat-expansion-panel>
         </mat-accordion>
         <div class="flex-container-row margin-top justify-space-between">
             <div>
-                <button class="{{this.themesService.getButtonPrimary()}}" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
-                <span *ngIf="this.form.dirty" class="{{this.themesService.getDirtyNote()}}"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
+                <button mat-raised-button [style]="this.themesService.getButtonPrimaryStyles()" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
+                <span *ngIf="this.form.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
             </div>
-            <button class="{{this.themesService.getButtonWarn()}}" (click)="this.deleteApplication()">
+            <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteApplication()">
                 <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete Application
             </button>
         </div>

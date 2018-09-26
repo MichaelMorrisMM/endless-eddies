@@ -1,5 +1,6 @@
 import {Application} from "./application.model";
 import {HomePage} from "./home-page.model";
+import {Theme} from "../themes/theme.interface";
 
 export interface Config {
     applications: Application[];
@@ -8,6 +9,6 @@ export interface Config {
     allowGuestMode: boolean;
     allowGoogleLogin: boolean;
     allowGithubLogin: boolean;
-    appTheme: string;
+    appTheme: Theme;
     homePages: HomePage[];
 }

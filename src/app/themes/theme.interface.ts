@@ -1,4 +1,6 @@
 export interface Theme {
-    displayName: string;
     name: string;
+    primaryColor: string;
+    accentColor: string;
+    warnColor: string;
 }
