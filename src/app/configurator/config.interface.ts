@@ -8,5 +8,6 @@ export interface Config {
     allowGuestMode: boolean;
     allowGoogleLogin: boolean;
     allowGithubLogin: boolean;
+    appTheme: string;
     homePages: HomePage[];
 }

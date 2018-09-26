@@ -19,6 +19,7 @@ export class ConfiguratorService {
     public readonly SETTING_ALLOW_GUEST_MODE: string = "allow_guest_mode";
     public readonly SETTING_ALLOW_GOOGLE_AUTH: string = "allow_google_auth";
     public readonly SETTING_ALLOW_GITHUB_AUTH: string = "allow_github_auth";
+    public readonly SETTING_APP_THEME: string = "appTheme";
 
     constructor(private http: HttpClient,
                 private authService: AuthService) {
