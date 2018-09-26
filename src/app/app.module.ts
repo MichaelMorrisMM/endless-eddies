@@ -52,6 +52,7 @@ import {CustomGraphRendererComponent} from "./custom-charts/custom-graph-rendere
 import { DeleteApplicationDialogComponent } from './configurator/delete-application-dialog.component';
 import {ParentPickerComponent} from "./configurator/parent-picker.component";
 import {ThemesService} from './services/themes.service';
+import {ThemePickerComponent} from "./themes/theme-picker.component";
 
 @NgModule({
     declarations: [
@@ -76,6 +77,7 @@ import {ThemesService} from './services/themes.service';
         CustomGraphRendererComponent,
         DeleteApplicationDialogComponent,
         ParentPickerComponent,
+        ThemePickerComponent,
     ],
     imports: [
         BrowserModule,

@@ -1,21 +1,45 @@
 import {Injectable} from '@angular/core';
+import {ConfiguratorService} from "./configurator.service";
+import {Config} from "../configurator/config.interface";
+import {Theme} from "../themes/theme.interface";
 
 @Injectable()
 export class ThemesService {
-    public readonly THEME_BLUE_SUNSET: string = "theme-blue-sunset";
-    public readonly THEME_MEDITERRANEAN: string = "theme-mediterranean";
 
-    public currentTheme: string = this.THEME_MEDITERRANEAN; // TODO remove default
+    public readonly THEMES: Theme[] = [
+        {
+            displayName: "Blue Sunset",
+            name: "theme-blue-sunset",
+        },
+        {
+            displayName: "Mediterranean",
+            name: "theme-mediterranean",
+        },
+    ];
 
-    constructor() {
+    public currentTheme: Theme = this.THEMES[0]; // Default theme
+
+    constructor(private configuratorService: ConfiguratorService) {
+        this.setTheme();
     }
 
-    public switch(): void {
-        // TODO this is only for demo purposes
-        if (this.currentTheme === this.THEME_BLUE_SUNSET) {
-            this.currentTheme = this.THEME_MEDITERRANEAN
+    public getThemeFromName(name: string): Theme {
+        return this.THEMES.filter((theme: Theme) => {
+            return theme.name === name;
+        })[0];
+    }
+
+    public setTheme(theme?: Theme): void {
+        if (theme) {
+            this.currentTheme = theme;
         } else {
-            this.currentTheme = this.THEME_BLUE_SUNSET;
+            this.configuratorService.getConfiguration().subscribe((config: Config) => {
+                if (config && config.appTheme) {
+                    this.currentTheme = this.getThemeFromName(config.appTheme);
+                } else {
+                    this.currentTheme = this.THEMES[0]; // Default theme
+                }
+            });
         }
     }
 
@@ -40,15 +64,15 @@ export class ThemesService {
     }
 
     private getBackgroundColorPrimary(): string {
-        return " " + this.currentTheme + "-background-color-primary ";
+        return " " + this.currentTheme.name + "-background-color-primary ";
     }
 
     private getBackgroundColorAccent(): string {
-        return " " + this.currentTheme + "-background-color-accent ";
+        return " " + this.currentTheme.name + "-background-color-accent ";
     }
 
     private getBackgroundColorWarn(): string {
-        return " " + this.currentTheme + "-background-color-warn ";
+        return " " + this.currentTheme.name + "-background-color-warn ";
     }
 
 }

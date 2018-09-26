@@ -96,7 +96,7 @@ public class ConfigSettings {
                 this.allowGithubLogin = config.getBoolean(ALLOW_GITHUB_LOGIN);
             }
             if (config.get(APP_THEME) != null) {
-                this.appTheme = config.getString(APP_THEME);
+                this.appTheme = Util.getStringSafeNonNull(config, APP_THEME);
             }
 
             JsonArray homePagesArray = Util.getArraySafe(config, HOME_PAGES);

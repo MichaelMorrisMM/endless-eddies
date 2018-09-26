@@ -11,8 +11,8 @@
             <mat-toolbar class="justify-space-between {{this.themesService.getToolbar()}}">
                 <button class="{{this.themesService.getButtonAccent()}}" (click)="sidenav.toggle()"><img src="./assets/icons/icons8-menu-50.png" class="embeddedIcon">Menu</button>
                 <div class="flex-container-row">
-                    <button mat-raised-button (click)="this.themesService.switch()">DEMO change theme</button>
-                    <span class="spacer"></span>
+                    <button *ngIf="this.authService.getCurrentUser().isAdmin" class="{{this.themesService.getButtonAccent()}}" routerLink="/theme-picker"><img src="./assets/icons/icons8-paint-palette-50.png" class="embeddedIcon">Theme</button>
+                    <span *ngIf="this.authService.getCurrentUser().isAdmin" class="spacer"></span>
                     <button class="{{this.themesService.getButtonAccent()}}" routerLink="/my-account" [disabled]="this.authService.getCurrentUser().isGuest"><img src="./assets/icons/icons8-account-50.png" class="embeddedIcon">My Account</button>
                     <span class="spacer"></span>
                     <button class="{{this.themesService.getButtonWarn()}}" (click)="this.authService.logOut()"><img src="./assets/icons/icons8-sign-out-50.png" class="embeddedIcon">Logout</button>
