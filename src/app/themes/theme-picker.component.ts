@@ -20,6 +20,40 @@ import {PostResult} from "../configurator/post-result.interface";
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
+                <span [hidden]="!this.themeControl.dirty">
+                    <button mat-raised-button (click)="this.allowResizing()" [style]="this.themesService.getButtonPrimaryStyles()">Change Sizing</button>
+                </span>
+            </div>
+            <div [hidden]="!this.themeControl.dirty">
+                <h1 class="title"><b>Preview:</b></h1>
+                <hr/>
+                <div>
+                    <h1 class="title">New Request</h1>
+                    <ng-container>
+                        <div class="full-width flex-container-row margin-bottom align-center">
+                            <mat-checkbox class="half-width">Checkbox</mat-checkbox>
+                            <mat-form-field class="half-width">
+                                <input matInput placeholder="parameter">
+                                <mat-select placeholder="parameter">
+                                    <mat-option>None</mat-option>
+                                    <mat-option [value]="'Opt1'">Opt1</mat-option>
+                                    <mat-option [value]="'Opt2'">Opt2</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+                </div>
+                <div>
+                    <h1 class="title">Results</h1>
+                    <label>System Out:</label>
+                    <pre>Example system out</pre>
+                    <div>
+                        <h2 class="subtitle">Result File(s)</h2>
+                        <button mat-button matTooltip="Example tooltip">
+                            <img src="./assets/icons/icons8-download-50.png" class="embeddedIcon">Results File Name
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="flex-container-row padded-top">
                 <button mat-raised-button (click)="this.save()" [style]="this.themesService.getButtonPrimaryStyles()"
@@ -48,6 +82,10 @@ export class ThemePickerComponent implements OnInit {
 
     ngOnInit() {
         this.reset();
+    }
+
+    public allowResizing(): void {
+        // TODO: turn on or off resizing of elements when this function is called
     }
 
     private reset(): void {
