@@ -1,28 +1,30 @@
 #!/bin/bash
-# tested with ubuntu-16.04.4-server
+# tested with ubuntu-16.04.5-server
 
-# install java
-sudo apt-get -y update
-sudo apt-get -y install openjdk-8-jdk-headless
+# install tomcat8
+apt-get -y update
+apt-get -y install tomcat8
 
-# install tomcat 9
-cd $HOME
-wget ftp://apache.cs.utah.edu/apache.org/tomcat/tomcat-9/v9.0.12/bin/apache-tomcat-9.0.12.tar.gz
-tar xzf apache-tomcat-9.0.12.tar.gz
-mv apache-tomcat-9.0.12 apache-tomcat-9
-export CATALINA_HOME=$HOME"/apache-tomcat9"
-
-# install node.js and npm
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt-get -y install nodejs
-
-# clone and build endless-eddies
-cd $HOME
-sudo apt-get -y install git
-git clone https://github.com/MichaelMorrisMM/endless-eddies.git
+# get the latest endless-eddies release bundle which includes:
+#  - endless_eddies.db # sqlite database with empty tables
+#  - endless-eddies.war # java web archive for tomcat
+#  - setenv.sh # tomcat environment setup file
+cd $(mktemp -d)
+wget https://github.com/MichaelMorrisMM/endless-eddies/releases/download/v0.0.1/endless-eddies.tar.gz
+tar xf endless-eddies.tar.gz
 cd endless-eddies
-mkdir conf
-export ENDLESS_EDDIES_CONFIG_DIR=$HOME"/endless-eddies/conf"
-chmod u+x gradlew
-./gradlew makeDatabase
-./gradlew deployWar
+
+# setup the sqlite database
+export ENDLESS_EDDIES_CONFIG_DIR=/var/lib/endless-eddies/
+mkdir -p $ENDLESS_EDDIES_CONFIG_DIR
+mv endless_eddies.db $ENDLESS_EDDIES_CONFIG_DIR
+chown -R tomcat8:tomcat8 $ENDLESS_EDDIES_CONFIG_DIR
+
+# setup the endless-eddies tomcat environment
+mv setenv.sh /usr/share/tomcat8/bin/
+
+# install the tomcat webapp
+mv endless-eddies.war /var/lib/tomcat8/webapps/
+
+# restart the tomcat service
+systemctl restart tomcat8
