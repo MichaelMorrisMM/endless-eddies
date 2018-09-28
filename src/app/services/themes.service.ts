@@ -50,6 +50,12 @@ export class ThemesService {
         }
     }
 
+    public getButtonPrimaryStylesFromName(name: string): SafeStyle {
+        return this.sanitizer.bypassSecurityTrustStyle(" background-color: " + this.THEMES.filter((theme: Theme) => {
+            return theme.name === name;
+        })[0].primaryColor + "; ");
+    }
+
     public getButtonPrimaryStyles(): SafeStyle {
         return this.sanitizer.bypassSecurityTrustStyle(" background-color: " + this.currentTheme.primaryColor + "; ");
     }
