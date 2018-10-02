@@ -30,12 +30,6 @@ export class ThemesService {
         this.setTheme();
     }
 
-    public getThemeFromName(name: string): Theme {
-        return this.THEMES.filter((theme: Theme) => {
-            return theme.name === name;
-        })[0];
-    }
-
     public setTheme(theme?: Theme): void {
         if (theme) {
             this.currentTheme = theme;
@@ -50,10 +44,8 @@ export class ThemesService {
         }
     }
 
-    public getButtonPrimaryStylesFromName(name: string): SafeStyle {
-        return this.sanitizer.bypassSecurityTrustStyle(" background-color: " + this.THEMES.filter((theme: Theme) => {
-            return theme.name === name;
-        })[0].primaryColor + "; ");
+    public getBackgroundColorFromColor(color: string): SafeStyle {
+        return this.sanitizer.bypassSecurityTrustStyle(" background-color: " + color + "; ");
     }
 
     public getButtonPrimaryStyles(): SafeStyle {

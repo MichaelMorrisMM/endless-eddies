@@ -53,6 +53,7 @@ import { DeleteApplicationDialogComponent } from './configurator/delete-applicat
 import {ParentPickerComponent} from "./configurator/parent-picker.component";
 import {ThemesService} from './services/themes.service';
 import {ThemePickerComponent} from "./themes/theme-picker.component";
+import {ColorPickerModule} from "ngx-color-picker";
 
 @NgModule({
     declarations: [
@@ -100,6 +101,7 @@ import {ThemePickerComponent} from "./themes/theme-picker.component";
         NgxChartsModule,
         AppRoutingModule,
         AgGridModule.withComponents([]),
+        ColorPickerModule,
     ],
     providers: [
         ConfiguratorService,

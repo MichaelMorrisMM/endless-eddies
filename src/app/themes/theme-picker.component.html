@@ -1,15 +1,40 @@
 <ng-container *ngIf="this.authService.getCurrentUser() && this.authService.getCurrentUser().isAdmin">
-    <h1 class="title">Theme - {{this.themesService.currentTheme.name}}</h1>
-    <div>
-        <mat-form-field>
-            <mat-select placeholder="Change Theme" [formControl]="this.themeControl" (change)="changeSelectedTheme()">
-                <mat-option *ngFor="let theme of this.themesService.THEMES" [value]="theme">
-                    {{theme.name}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+    <h1 class="title">Theme</h1>
+    <form [formGroup]="this.form" class="margin-bottom">
+        <div class="margin-bottom">
+            <mat-form-field class="margin-right">
+                <mat-select placeholder="Select Theme" (change)="selectTheme($event)">
+                    <mat-option>None</mat-option>
+                    <mat-option *ngFor="let theme of this.themesService.THEMES" [value]="theme">
+                        {{theme.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="Name" [formControlName]="'name'">
+            </mat-form-field>
+        </div>
+        <div>
+            <label>Primary</label>
+            <input [style.background]="this.form.controls['primary'].value" class="preview margin-right"
+                   [colorPicker]="this.form.controls['primary'].value" [cpOutputFormat]="'hex'" [value]="this.form.controls['primary'].value"
+                   (colorPickerChange)="this.onColorChange('primary', $event)"/>
+            <label>Accent</label>
+            <input [style.background]="this.form.controls['accent'].value" class="preview margin-right"
+                   [colorPicker]="this.form.controls['accent'].value" [cpOutputFormat]="'hex'" [value]="this.form.controls['accent'].value"
+                   (colorPickerChange)="this.onColorChange('accent', $event)"/>
+            <label>Warn</label>
+            <input [style.background]="this.form.controls['warn'].value" class="preview"
+                   [colorPicker]="this.form.controls['warn'].value" [cpOutputFormat]="'hex'" [value]="this.form.controls['warn'].value"
+                   (colorPickerChange)="this.onColorChange('warn', $event)"/>
+        </div>
+    </form>
+    <div class="margin-bottom">
+        <button mat-raised-button (click)="this.toggleFullPreview()" [style]="this.themesService.getButtonAccentStyles()">
+            <img src="./assets/icons/icons8-search-50.png" class="embeddedIcon">{{this.showFullPreview ? 'Hide' : 'Show'}} Preview
+        </button>
     </div>
-    <div [hidden]="!this.themeControl.dirty">
+    <div [hidden]="!this.showFullPreview">
         <h1 class="title"><b>Preview:</b></h1>
         <hr/>
         <div class="flex-container-col full-width margin-bottom">
@@ -27,7 +52,7 @@
                     </div>
                 </div>
             </ng-container>
-            <button mat-raised-button [style]="this.themesService.getButtonPrimaryStylesFromName(this.themeControl.value.name)">
+            <button mat-raised-button [style]="this.themesService.getBackgroundColorFromColor(this.form.controls['primary'].value)">
                 <img src="./assets/icons/icons8-upload-to-cloud-50.png" class="embeddedIcon">Submit
             </button>
         </div>
@@ -44,13 +69,13 @@
         </div>
         <hr/>
     </div>
-    <div class="flex-container-row padded-top">
+    <div class="flex-container-row padded-top margin-top margin-bottom">
         <button mat-raised-button (click)="this.save()" [style]="this.themesService.getButtonPrimaryStyles()"
-                [disabled]="this.themeControl.invalid || !this.themeControl.dirty || !this.config">
+                [disabled]="this.form.invalid || !this.form.dirty || !this.config">
             <img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save
         </button>
         <span class="spacer"></span>
-        <span [hidden]="!this.themeControl.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}">
+        <span [hidden]="!this.form.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}">
             <img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}
         </span>
     </div>
