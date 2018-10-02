@@ -5,6 +5,7 @@ plugins {
     id 'com.github.gmazzo.sqlite' version '0.2'
     id 'com.moowork.node' version '1.2.0'
     id 'war'
+    id 'org.jetbrains.kotlin.jvm' version '1.2.71'
 }
 
 def confDir = System.getenv('ENDLESS_EDDIES_CONFIG_DIR')
@@ -21,8 +22,13 @@ repositories {
 
 dependencies {
     implementation 'com.auth0:java-jwt:3.4.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
     implementation 'org.glassfish:javax.json:1.1.2'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     implementation 'org.xerial:sqlite-jdbc:3.23.1'
 }
 
@@ -168,5 +174,15 @@ Add the following Connector tag to $serverDir/conf/server.xml within the <Servic
 
 Detailed Tomcat SSL Documentation: https://tomcat.apache.org/tomcat-9.0-doc/ssl-howto.html
     """
+    }
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }

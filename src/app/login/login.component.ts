@@ -6,6 +6,7 @@ import {HttpParams} from "@angular/common/http";
 import {ConfiguratorService} from "../services/configurator.service";
 import {Config} from "../configurator/config.interface";
 import {ThemesService} from "../services/themes.service";
+import {ConstantsService} from "../services/constants.service";
 
 @Component({
     selector: 'app-login',
@@ -42,6 +43,10 @@ export class LoginComponent implements OnInit {
         if (this.config && this.config.allowGuestMode) {
             this.authService.guestLogIn();
         }
+    }
+
+    public startGithubLogIn() {
+        location.href = ConstantsService.URL_PREFIX + '/github-login';
     }
 
     public toggleSignup() {
