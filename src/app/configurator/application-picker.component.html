@@ -6,6 +6,6 @@
         </div>
     </ng-container>
     <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" *ngIf="this.showAdder" (click)="this.submit(null)">
-        <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add New Application
+        <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add New Application
     </button>
 </mat-dialog-content>

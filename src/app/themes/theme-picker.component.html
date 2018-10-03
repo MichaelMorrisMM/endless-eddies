@@ -16,22 +16,25 @@
         </div>
         <div>
             <label>Primary</label>
-            <input [style.background]="this.form.controls['primary'].value" class="preview margin-right"
+            <input class="preview" [style]="this.themesService.getBackgroundColorFromColor(this.form.controls['primary'].value, this.form.controls['invertPrimary'].value)"
                    [colorPicker]="this.form.controls['primary'].value" [cpOutputFormat]="'hex'" [value]="this.form.controls['primary'].value"
                    (colorPickerChange)="this.onColorChange('primary', $event)"/>
+            <mat-checkbox [formControlName]="'invertPrimary'" class="margin-right">Invert text/icon</mat-checkbox>
             <label>Accent</label>
-            <input [style.background]="this.form.controls['accent'].value" class="preview margin-right"
+            <input class="preview" [style]="this.themesService.getBackgroundColorFromColor(this.form.controls['accent'].value, this.form.controls['invertAccent'].value)"
                    [colorPicker]="this.form.controls['accent'].value" [cpOutputFormat]="'hex'" [value]="this.form.controls['accent'].value"
                    (colorPickerChange)="this.onColorChange('accent', $event)"/>
+            <mat-checkbox [formControlName]="'invertAccent'" class="margin-right">Invert text/icon</mat-checkbox>
             <label>Warn</label>
-            <input [style.background]="this.form.controls['warn'].value" class="preview"
+            <input class="preview" [style]="this.themesService.getBackgroundColorFromColor(this.form.controls['warn'].value, this.form.controls['invertWarn'].value)"
                    [colorPicker]="this.form.controls['warn'].value" [cpOutputFormat]="'hex'" [value]="this.form.controls['warn'].value"
                    (colorPickerChange)="this.onColorChange('warn', $event)"/>
+            <mat-checkbox [formControlName]="'invertWarn'">Invert text/icon</mat-checkbox>
         </div>
     </form>
     <div class="margin-bottom">
         <button mat-raised-button (click)="this.toggleFullPreview()" [style]="this.themesService.getButtonAccentStyles()">
-            <img src="./assets/icons/icons8-search-50.png" class="embeddedIcon">{{this.showFullPreview ? 'Hide' : 'Show'}} Preview
+            <img src="./assets/icons/icons8-search-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">{{this.showFullPreview ? 'Hide' : 'Show'}} Preview
         </button>
     </div>
     <div [hidden]="!this.showFullPreview">
@@ -52,8 +55,8 @@
                     </div>
                 </div>
             </ng-container>
-            <button mat-raised-button [style]="this.themesService.getBackgroundColorFromColor(this.form.controls['primary'].value)">
-                <img src="./assets/icons/icons8-upload-to-cloud-50.png" class="embeddedIcon">Submit
+            <button mat-raised-button [style]="this.themesService.getBackgroundColorFromColor(this.form.controls['primary'].value, this.form.controls['invertPrimary'].value)">
+                <img src="./assets/icons/icons8-upload-to-cloud-50.png" class="embeddedIcon" [style]="this.themesService.getInvertIconStyles(this.form.controls['invertPrimary'].value)">Submit
             </button>
         </div>
         <div>
@@ -72,11 +75,11 @@
     <div class="flex-container-row padded-top margin-top margin-bottom">
         <button mat-raised-button (click)="this.save()" [style]="this.themesService.getButtonPrimaryStyles()"
                 [disabled]="this.form.invalid || !this.form.dirty || !this.config">
-            <img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save
+            <img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Save
         </button>
         <span class="spacer"></span>
         <span [hidden]="!this.form.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}">
-            <img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}
+            <img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon" [style]="this.themesService.getIconDirtyNoteStyles()">{{this.constantsService.DIRTY_NOTE_MESSAGE}}
         </span>
     </div>
 </ng-container>

@@ -19,7 +19,7 @@
                         </mat-form-field>
                         <div class="flex-one">
                             <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteCommandGroup(group)">
-                                <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete Executable
+                                <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete Executable
                             </button>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                             </mat-form-field>
                             <div class="flex-one">
                                 <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteParameter(parameter, group)">
-                                    <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete Parameter
+                                    <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete Parameter
                                 </button>
                             </div>
                         </div>
@@ -60,20 +60,20 @@
                     </div>
                     <div class="flex-container-row full-width justify-center">
                         <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addParameter(group)">
-                            <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add Parameter
+                            <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add Parameter
                         </button>
                     </div>
                 </div>
-                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addCommandGroup()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add Executable</button>
+                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addCommandGroup()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add Executable</button>
             </mat-expansion-panel>
         </mat-accordion>
         <div class="flex-container-row margin-top justify-space-between">
             <div>
-                <button mat-raised-button [style]="this.themesService.getButtonPrimaryStyles()" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
-                <span *ngIf="this.form.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
+                <button mat-raised-button [style]="this.themesService.getButtonPrimaryStyles()" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Save</button>
+                <span *ngIf="this.form.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon" [style]="this.themesService.getIconDirtyNoteStyles()">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
             </div>
             <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteApplication()">
-                <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete Application
+                <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete Application
             </button>
         </div>
     </form>

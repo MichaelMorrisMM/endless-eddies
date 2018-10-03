@@ -13,15 +13,15 @@
     </div>
     <div class="flex-container-row">
         <button mat-raised-button [disabled]="!this.selectedRequest" [style]="this.themesService.getButtonPrimaryStyles()" (click)="this.viewRequest()">
-            <img src="./assets/icons/icons8-search-50.png" class="embeddedIcon">View
+            <img src="./assets/icons/icons8-search-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">View
         </button>
         <span class="spacer"></span>
         <button mat-raised-button [disabled]="!this.selectedRequest" [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteRequest()">
-            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
+            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete
         </button>
         <span *ngIf="this.authService.getCurrentUser().isAdmin" class="spacer"></span>
         <button mat-raised-button *ngIf="this.authService.getCurrentUser().isAdmin" [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteExpiredResults()">
-            <img src="./assets/icons/icons8-expired-50.png" class="embeddedIcon">Delete Expired Results
+            <img src="./assets/icons/icons8-expired-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete Expired Results
         </button>
     </div>
 </div>

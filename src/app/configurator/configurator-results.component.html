@@ -22,11 +22,11 @@
                             <input matInput placeholder="Description" [formControlName]="rf.keyTooltip">
                         </mat-form-field>
                         <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" class="flex-one" (click)="this.deleteResultFile(rf)">
-                            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
+                            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete
                         </button>
                     </div>
                 </div>
-                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addResultFile()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add</button>
+                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addResultFile()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add</button>
             </mat-expansion-panel>
         </mat-accordion>
         <mat-accordion class="margin-bottom">
@@ -70,17 +70,17 @@
                     <div class="flex-container-row full-width">
                         <div class="flex-one">
                             <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteGraph(g)">
-                                <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
+                                <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete
                             </button>
                         </div>
                     </div>
                 </div>
-                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addGraph()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon">Add</button>
+                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addGraph()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add</button>
             </mat-expansion-panel>
         </mat-accordion>
         <div class="flex-container-row">
-            <button mat-raised-button [style]="this.themesService.getButtonPrimaryStyles()" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save</button>
-            <span *ngIf="this.form.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
+            <button mat-raised-button [style]="this.themesService.getButtonPrimaryStyles()" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Save</button>
+            <span *ngIf="this.form.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon" [style]="this.themesService.getIconDirtyNoteStyles()">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
         </div>
     </form>
 </ng-container>

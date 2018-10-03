@@ -17,14 +17,14 @@
     <div class="flex-container-row padded-top">
         <button mat-raised-button (click)="this.save()" [style]="this.themesService.getButtonPrimaryStyles()"
                 [disabled]="this.form.invalid || !this.form.dirty">
-            <img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon">Save
+            <img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Save
         </button>
         <span class="spacer"></span>
         <button mat-raised-button (click)="this.deleteAccount()" [style]="this.themesService.getButtonWarnStyles()">
-            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete Account
+            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete Account
         </button>
         <span [hidden]="!this.form.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}">
-            <img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon">{{this.constantsService.DIRTY_NOTE_MESSAGE}}
+            <img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon" [style]="this.themesService.getIconDirtyNoteStyles()">{{this.constantsService.DIRTY_NOTE_MESSAGE}}
         </span>
     </div>
 </ng-container>

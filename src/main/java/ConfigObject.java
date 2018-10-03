@@ -27,8 +27,11 @@ public abstract class ConfigObject {
     public static final String PARENT_STRING = "parentString";
     public static final String PARENT_OPTION = "parentOption";
     public static final String PRIMARY_COLOR = "primaryColor";
+    public static final String INVERT_PRIMARY = "invertPrimary";
     public static final String ACCENT_COLOR = "accentColor";
+    public static final String INVERT_ACCENT = "invertAccent";
     public static final String WARN_COLOR = "warnColor";
+    public static final String INVERT_WARN = "invertWarn";
 
     public static final int DEFAULT_SORT_ORDER = 1;
 

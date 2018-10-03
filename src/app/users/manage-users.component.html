@@ -16,15 +16,15 @@
         <label>{{this.selectedList.length}} selected</label>
         <span class="spacer"></span>
         <button mat-raised-button [disabled]="this.disableNormal" [style]="this.themesService.getButtonPrimaryStyles()" (click)="this.giveNormal()">
-            <img src="./assets/icons/icons8-chevron-down-50.png" class="embeddedIcon">Give Normal Permissions
+            <img src="./assets/icons/icons8-chevron-down-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Give Normal Permissions
         </button>
         <span class="spacer"></span>
         <button mat-raised-button [disabled]="this.disableAdmin" [style]="this.themesService.getButtonAccentStyles()" (click)="this.giveAdmin()">
-            <img src="./assets/icons/icons8-chevron-up-50.png" class="embeddedIcon">Give Admin Permissions
+            <img src="./assets/icons/icons8-chevron-up-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Give Admin Permissions
         </button>
         <span class="spacer"></span>
         <button mat-raised-button [disabled]="this.disableDelete" [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteUsers()">
-            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon">Delete
+            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete
         </button>
     </div>
 </div>
