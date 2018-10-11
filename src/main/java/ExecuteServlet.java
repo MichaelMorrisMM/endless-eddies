@@ -1,17 +1,16 @@
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonValue;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @WebServlet("/execute")
+@MultipartConfig
 public class ExecuteServlet extends HttpServlet {
 
     public static QueueManager queueManager = new QueueManager();
@@ -34,13 +33,9 @@ public class ExecuteServlet extends HttpServlet {
 
         try {
             ConfigSettings config = ConfiguratorServlet.getCurrentConfig();
-            JsonObject requestObject;
-            try (JsonReader reader = Json.createReader(request.getReader())) {
-                requestObject = reader.readObject();
-            }
-            Application application = config.getApplication(Util.getStringSafe(requestObject, ConfigSettings.TARGET_APPLICATION));
+            Application application = config.getApplication(request.getParameter(ConfigSettings.TARGET_APPLICATION));
 
-            if (requestObject != null && application != null) {
+            if (application != null) {
                 String requestName;
                 if (user.isGuest) {
                     requestName = "guest_" + UUID.randomUUID().toString().replace("-", "");
@@ -53,15 +48,15 @@ public class ExecuteServlet extends HttpServlet {
                     CommandGroup commandGroup = application.commandGroups.get(i);
                     List<Input> inputs = new ArrayList<>();
                     for (Parameter param : commandGroup.getParameters()) {
-                        if (isParentNotPresent(param, requestObject)) {
+                        if (isParentNotPresent(param, request)) {
                             continue;
                         }
-                        String validationError = checkParameterValidation(param, requestObject);
+                        String validationError = checkParameterValidation(param, request);
                         if (validationError != null) {
                             HttpUtil.printPOSTResult(response, false, validationError);
                             return;
                         }
-                        inputs.add(new Input(param, requestObject));
+                        inputs.add(new Input(param, request));
                     }
                     commands.add(new Command(commandGroup.command, i, i == application.commandGroups.size() - 1, inputs, application, requestName, user));
                 }
@@ -80,68 +75,78 @@ public class ExecuteServlet extends HttpServlet {
         }
     }
 
-    private static boolean isParentNotPresent(Parameter param, JsonObject requestObject) {
+    private static boolean isParentNotPresent(Parameter param, HttpServletRequest request) {
         if (!param.parentString.equals("")) {
-            JsonValue parentValue = requestObject.get(param.parentString);
-            if (parentValue == null || parentValue.equals(JsonValue.NULL) || !Input.parseStringParameter(parentValue).equals(param.parentOption)) {
+            String parentValue = request.getParameter(param.parentString);
+            if (parentValue == null || parentValue.equals("") || !parentValue.equals(param.parentOption)) {
                 return true;
             }
         }
         return false;
     }
 
-    private static String checkParameterValidation(Parameter param, JsonObject requestObject) {
+    private static String checkParameterValidation(Parameter param, HttpServletRequest request) {
         try {
             if (param.validators.size() > 0) {
-                JsonValue val = requestObject.get(param.name);
-                boolean valIsNull = val == null || val.equals(JsonValue.NULL);
+                String val = request.getParameter(param.name);
+                Part part = request.getPart(param.name);
+                boolean valIsNull;
+                if (param.type.equals(ConfigSettings.TYPE_FILE)) {
+                    valIsNull = part.getSize() == 0;
+                } else {
+                    valIsNull = val.equals("");
+                }
                 if (param.type.equals(ConfigSettings.TYPE_FLAG)) {
                     for (Validator validator : param.validators) {
-                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && (valIsNull || !Input.parseFlagParameter(val))) {
+                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && (valIsNull || !Util.parseFlagParameter(val))) {
                             return printValidationError(param, "Required");
                         }
                     }
                 } else if (param.type.equals(ConfigSettings.TYPE_STRING)) {
-                    String parsedValue = valIsNull ? null : Input.parseStringParameter(val);
                     for (Validator validator : param.validators) {
-                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && (parsedValue == null || parsedValue.equals(""))) {
+                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && valIsNull) {
                             return printValidationError(param, "Required");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN_LENGTH) && (parsedValue == null || parsedValue.length() < Long.parseLong(Input.parseStringParameter(validator.value)))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN_LENGTH) && (val.equals("") || val.length() < Long.parseLong(Util.parseStringParameter(validator.value)))) {
                             return printValidationError(param, "Minimum length not met");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX_LENGTH) && parsedValue != null && parsedValue.length() > Long.parseLong(Input.parseStringParameter(validator.value))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX_LENGTH) && !val.equals("") && val.length() > Long.parseLong(Util.parseStringParameter(validator.value))) {
                             return printValidationError(param, "Maximum length exceeded");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REGEX) && (parsedValue == null || !parsedValue.matches(Input.parseStringParameter(validator.value)))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REGEX) && (val.equals("") || !val.matches(Util.parseStringParameter(validator.value)))) {
                             return printValidationError(param, "Fails to match regular expression");
                         }
                     }
                 } else if (param.type.equals(ConfigSettings.TYPE_INTEGER)) {
-                    Long parsedValue = valIsNull ? null : Input.parseIntegerParameter(val);
+                    Long parsedValue = valIsNull ? null : Long.parseLong(val);
                     for (Validator validator : param.validators) {
                         if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && parsedValue == null) {
                             return printValidationError(param, "Required");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN) && (parsedValue == null || parsedValue < Long.parseLong(Input.parseStringParameter(validator.value)))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN) && (parsedValue == null || parsedValue < Long.parseLong(Util.parseStringParameter(validator.value)))) {
                             return printValidationError(param, "Minimum not met");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX) && parsedValue != null && parsedValue > Long.parseLong(Input.parseStringParameter(validator.value))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX) && parsedValue != null && parsedValue > Long.parseLong(Util.parseStringParameter(validator.value))) {
                             return printValidationError(param, "Maximum exceeded");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MOD) && (parsedValue == null || parsedValue % Long.parseLong(Input.parseStringParameter(validator.value)) != 0)) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MOD) && (parsedValue == null || parsedValue % Long.parseLong(Util.parseStringParameter(validator.value)) != 0)) {
                             return printValidationError(param, "Modulo validation not met");
                         }
                     }
                 } else if (param.type.equals(ConfigSettings.TYPE_FLOAT)) {
-                    Double parsedValue = valIsNull ? null : Input.parseFloatParameter(val);
+                    Double parsedValue = valIsNull ? null : Double.parseDouble(val);
                     for (Validator validator : param.validators) {
                         if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && parsedValue == null) {
                             return printValidationError(param, "Required");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN) && (parsedValue == null || parsedValue < Double.parseDouble(Input.parseStringParameter(validator.value)))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN) && (parsedValue == null || parsedValue < Double.parseDouble(Util.parseStringParameter(validator.value)))) {
                             return printValidationError(param, "Minimum not met");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX) && parsedValue != null && parsedValue > Double.parseDouble(Input.parseStringParameter(validator.value))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX) && parsedValue != null && parsedValue > Double.parseDouble(Util.parseStringParameter(validator.value))) {
                             return printValidationError(param, "Maximum exceeded");
                         }
                     }
                 } else if (param.type.equals(ConfigSettings.TYPE_SELECT)) {
-                    String parsedValue = valIsNull ? null : Input.parseStringParameter(val);
                     for (Validator validator : param.validators) {
-                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && (parsedValue == null || parsedValue.equals(""))) {
+                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && valIsNull) {
+                            return printValidationError(param, "Required");
+                        }
+                    }
+                } else if (param.type.equals(ConfigSettings.TYPE_FILE)) {
+                    for (Validator validator : param.validators) {
+                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && valIsNull) {
                             return printValidationError(param, "Required");
                         }
                     }

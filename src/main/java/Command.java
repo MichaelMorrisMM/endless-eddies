@@ -9,7 +9,7 @@ public class Command {
     public static final String commandDelimiter = " ";
 
     private List<String> command;
-    private List<Input> inputs;
+    public List<Input> inputs;
     public int executeOrder;
     public boolean isLastOfGroup;
 

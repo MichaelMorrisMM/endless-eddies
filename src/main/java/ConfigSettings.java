@@ -12,6 +12,7 @@ public class ConfigSettings {
     public static final String TYPE_INTEGER = "integer";
     public static final String TYPE_FLOAT = "float";
     public static final String TYPE_SELECT = "select";
+    public static final String TYPE_FILE = "file";
     private static Set<String> typeSet;
     static {
         typeSet = new HashSet<>();
@@ -20,6 +21,7 @@ public class ConfigSettings {
         typeSet.add(TYPE_INTEGER);
         typeSet.add(TYPE_FLOAT);
         typeSet.add(TYPE_SELECT);
+        typeSet.add(TYPE_FILE);
     }
 
     public static final String GROUP_USERS = "users";

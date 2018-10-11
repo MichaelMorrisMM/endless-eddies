@@ -119,7 +119,9 @@ export class NewRequestComponent implements OnInit {
                 } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_REGEX) {
                     validatorArray.push(Validators.pattern(validator.value));
                 } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MOD) {
-                    validatorArray.push(NewRequestComponent.moduloValidator(parseInt(validator.value)))
+                    validatorArray.push(NewRequestComponent.moduloValidator(parseInt(validator.value)));
+                } else if (validator.validatorType === ConstantsService.VALIDATOR_TYPE_MAX_SIZE) {
+                    validatorArray.push(NewRequestComponent.maxSizeValidator(parseInt(validator.value)));
                 }
             }
             this.form.controls[param.name].setValidators(validatorArray);
@@ -154,11 +156,25 @@ export class NewRequestComponent implements OnInit {
         this.changeDetector.detectChanges();
     }
 
+    public onFileChange(event: any, param: Parameter): void {
+        let fileList: FileList = event.target.files;
+        if (fileList.length > 0) {
+            this.form.controls[param.name].setValue(fileList[0]);
+        } else {
+            this.form.controls[param.name].setValue(null);
+        }
+    }
+
     public submit(): void {
-        let request: any = {};
-        request.targetApplication = this.application.name;
+        let request: FormData = new FormData();
+        request.append("targetApplication", this.application.name);
         for (let param of this.currentParameters) {
-            request[param.name] = this.form.controls[param.name].value;
+            if (param.type === this.configuratorService.TYPE_FILE && this.form.controls[param.name].value) {
+                let file: File = this.form.controls[param.name].value;
+                request.append(param.name, file, file.name);
+            } else {
+                request.append(param.name, this.form.controls[param.name].value ? "" + this.form.controls[param.name].value : "");
+            }
         }
 
         this.resultsService.submitRequest(this.application, request).subscribe((result: PostResult) => {
@@ -174,6 +190,16 @@ export class NewRequestComponent implements OnInit {
         return (control: AbstractControl): {[key: string]: any} | null => {
             const remainder: number = control.value && !isNaN(value) ? control.value % value : -1;
             return remainder !== 0 ? {'modulo': {value: control.value}} : null;
+        };
+    }
+
+    private static maxSizeValidator(value: number): ValidatorFn {
+        return (control: AbstractControl): {[key: string]: any} | null => {
+            if (control.value && control.value instanceof File) {
+                let file: File = control.value;
+                return file.size > value ? {'maxSize': {value: control.value}} : null;
+            }
+            return null;
         };
     }
 

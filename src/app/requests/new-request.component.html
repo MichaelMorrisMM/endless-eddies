@@ -21,6 +21,10 @@
                         <mat-option *ngFor="let opt of param.selectOptions" [value]="opt">{{opt}}</mat-option>
                     </mat-select>
                 </mat-form-field>
+                <div *ngSwitchCase="this.configuratorService.TYPE_FILE" class="half-width">
+                    <label class="margin-right">{{param.name}}</label>
+                    <input type="file" (change)="onFileChange($event, param)">
+                </div>
                 <span *ngIf="param.toolTip" matTooltip="{{param.toolTip}}" [matTooltipPosition]="'above'" class="margin-left">
                     <img src="./assets/icons/icons8-info-popup-50.png" class="embeddedIconNoMargin">
                 </span>

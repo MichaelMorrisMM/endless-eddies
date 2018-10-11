@@ -1,41 +1,41 @@
-import javax.json.JsonNumber;
-import javax.json.JsonObject;
-import javax.json.JsonString;
-import javax.json.JsonValue;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 
 public class Input {
 
     public String code;
     public String value;
+    public Part part;
     public String type;
 
     public Input() {
         this.code = "";
         this.value = "";
         this.type = "";
+        this.part = null;
     }
 
-    public Input(Parameter param, JsonObject requestObject) {
+    public Input(Parameter param, HttpServletRequest request) throws Exception {
         this();
 
         this.code = param.code.trim();
         this.type = param.type;
-        this.value = parseValue(param, requestObject);
+        if (param.type.equals(ConfigSettings.TYPE_FILE)) {
+            this.value = "";
+            this.part = request.getPart(param.name);
+        } else {
+            this.value = parseValue(param, request);
+        }
     }
 
-    private String parseValue(Parameter param, JsonObject obj) {
+    private String parseValue(Parameter param, HttpServletRequest request) {
         try {
-            JsonValue val = obj.get(param.name);
-            if (val != null && !val.equals(JsonValue.NULL)) {
-                switch (this.type) {
-                    case ConfigSettings.TYPE_FLAG: return parseFlagParameter(val) ? this.code : "";
-                    case ConfigSettings.TYPE_STRING: return parseStringParameter(val);
-                    case ConfigSettings.TYPE_INTEGER: return "" + parseIntegerParameter(val);
-                    case ConfigSettings.TYPE_FLOAT: return "" + parseFloatParameter(val);
-                    case ConfigSettings.TYPE_SELECT: return parseStringParameter(val);
-                }
+            String val = request.getParameter(param.name);
+            if (param.type.equals(ConfigSettings.TYPE_FLAG)) {
+                return Util.parseFlagParameter(val) ? this.code : "";
+            } else {
+                return val;
             }
-            return "";
         } catch (Exception e) {
             return "";
         }
@@ -51,22 +51,6 @@ public class Input {
 
     public boolean hasValue() {
         return Util.isNonEmpty(this.value);
-    }
-
-    public static boolean parseFlagParameter(JsonValue val) {
-        return val.equals(JsonValue.TRUE);
-    }
-
-    public static String parseStringParameter(JsonValue val) {
-        return ((JsonString) val).getString();
-    }
-
-    public static long parseIntegerParameter(JsonValue val) {
-        return ((JsonNumber) val).longValueExact();
-    }
-
-    public static double parseFloatParameter(JsonValue val) {
-        return ((JsonNumber) val).doubleValue();
     }
 
 }

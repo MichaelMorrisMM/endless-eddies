@@ -17,12 +17,14 @@ public class ValidatorsServlet extends HttpServlet {
     public static final String VALIDATOR_TYPE_MAX_LENGTH = "maxlength";
     public static final String VALIDATOR_TYPE_REGEX = "pattern";
     public static final String VALIDATOR_TYPE_MOD = "modulo";
+    public static final String VALIDATOR_TYPE_MAX_SIZE = "maxSize";
 
     public static List<ValidatorBlueprint> blueprints;
     static {
         blueprints = new ArrayList<>();
         blueprints.add(new ValidatorBlueprint("Required", VALIDATOR_TYPE_REQUIRED, false,
-            ConfigSettings.TYPE_FLAG, ConfigSettings.TYPE_FLOAT, ConfigSettings.TYPE_INTEGER, ConfigSettings.TYPE_STRING, ConfigSettings.TYPE_SELECT));
+            ConfigSettings.TYPE_FLAG, ConfigSettings.TYPE_FLOAT, ConfigSettings.TYPE_INTEGER, ConfigSettings.TYPE_STRING, ConfigSettings.TYPE_SELECT,
+            ConfigSettings.TYPE_FILE));
         blueprints.add(new ValidatorBlueprint("Minimum", VALIDATOR_TYPE_MIN, true,
             ConfigSettings.TYPE_INTEGER, ConfigSettings.TYPE_FLOAT));
         blueprints.add(new ValidatorBlueprint("Maximum", VALIDATOR_TYPE_MAX, true,
@@ -34,6 +36,7 @@ public class ValidatorsServlet extends HttpServlet {
         blueprints.add(new ValidatorBlueprint("String must match regex pattern", VALIDATOR_TYPE_REGEX, true,
             ConfigSettings.TYPE_STRING));
         blueprints.add(new ValidatorBlueprint("Modulo", VALIDATOR_TYPE_MOD, true, ConfigSettings.TYPE_INTEGER));
+        blueprints.add(new ValidatorBlueprint("Maximum size", VALIDATOR_TYPE_MAX_SIZE, true, ConfigSettings.TYPE_FILE));
     }
 
     @Override

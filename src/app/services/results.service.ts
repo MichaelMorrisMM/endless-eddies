@@ -17,9 +17,9 @@ export class ResultsService {
                 private authService: AuthService) {
     }
 
-    public submitRequest(application: Application, request: any): Observable<PostResult> {
+    public submitRequest(application: Application, request: FormData): Observable<PostResult> {
         let params: HttpParams = this.authService.setXSRFPayloadToken(new HttpParams());
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/execute', JSON.stringify(request), {params: params});
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/execute', request, {params: params});
     }
 
     public downloadFile(requestName: string, rf: ResultFile): Observable<Blob> {

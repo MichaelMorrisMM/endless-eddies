@@ -2,10 +2,13 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
+import javax.servlet.http.Part;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Util {
@@ -119,6 +122,14 @@ public class Util {
             throw new AssertionError("walkFileTree will not throw IOException if the FileVisitor does not");
         }
         return size.get();
+    }
+
+    public static boolean parseFlagParameter(String val) {
+        return val.equals("true");
+    }
+
+    public static String parseStringParameter(JsonValue val) {
+        return ((JsonString) val).getString();
     }
 
 }

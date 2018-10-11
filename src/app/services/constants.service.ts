@@ -16,6 +16,7 @@ export class ConstantsService {
     public static readonly VALIDATOR_TYPE_MAX_LENGTH: string = "maxlength";
     public static readonly VALIDATOR_TYPE_REGEX = "pattern";
     public static readonly VALIDATOR_TYPE_MOD = "modulo";
+    public static readonly VALIDATOR_TYPE_MAX_SIZE = "maxSize";
     public static readonly XSRF_TOKEN: string = "xsrfToken";
 
     public readonly GRAPH_VERT_BAR: string = "Vertical Bar Chart";
