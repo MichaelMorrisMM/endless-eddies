@@ -31,6 +31,12 @@ export class MyAccountComponent implements OnInit {
         this.form = new FormGroup({
             email: this.emailControl
         });
+
+        if (this.authService.getCurrentUser().isExternal) {
+            this.emailControl.disable();
+            this.passwordControl.disable();
+            this.passwordConfirmControl.disable();
+        }
     }
 
     public save(): void {

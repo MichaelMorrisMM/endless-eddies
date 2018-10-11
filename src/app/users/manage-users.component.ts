@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from "../login/user.interface";
 import {UsersService} from "../services/users.service";
-import {GridReadyEvent, SelectionChangedEvent} from "ag-grid";
+import {GridReadyEvent, SelectionChangedEvent} from "ag-grid-community";
 import {PostResult} from "../configurator/post-result.interface";
 import {ThemesService} from "../services/themes.service";
 

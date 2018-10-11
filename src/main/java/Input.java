@@ -21,8 +21,8 @@ public class Input {
         this.code = param.code.trim();
         this.type = param.type;
         if (param.type.equals(ConfigSettings.TYPE_FILE)) {
-            this.value = "";
             this.part = request.getPart(param.name);
+            this.value = this.part.getSubmittedFileName();
         } else {
             this.value = parseValue(param, request);
         }

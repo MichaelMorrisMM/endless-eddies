@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {GridReadyEvent, SelectionChangedEvent} from "ag-grid";
+import {GridReadyEvent, SelectionChangedEvent} from "ag-grid-community";
 import {ResultsService} from "../services/results.service";
 import {Request} from "../requests/request.interface";
 import {PostResult} from "../configurator/post-result.interface";

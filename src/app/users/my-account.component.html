@@ -5,7 +5,7 @@
             <input matInput placeholder="Email" [formControl]="this.emailControl">
         </mat-form-field>
     </div>
-    <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.toggleChangePassword()">{{this.showChangePassword ? 'Cancel' : 'Change Password'}}</button>
+    <button mat-raised-button [disabled]="this.authService.getCurrentUser().isExternal" [style]="this.themesService.getButtonAccentStyles()" (click)="this.toggleChangePassword()">{{this.showChangePassword ? 'Cancel' : 'Change Password'}}</button>
     <div [hidden]="!this.showChangePassword" class="padded-top">
         <mat-form-field class="half-width">
             <input matInput placeholder="New Password" type="password" [formControl]="this.passwordControl">
@@ -16,7 +16,7 @@
     </div>
     <div class="flex-container-row padded-top">
         <button mat-raised-button (click)="this.save()" [style]="this.themesService.getButtonPrimaryStyles()"
-                [disabled]="this.form.invalid || !this.form.dirty">
+                [disabled]="this.form.invalid || !this.form.dirty || this.authService.getCurrentUser().isExternal">
             <img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Save
         </button>
         <span class="spacer"></span>

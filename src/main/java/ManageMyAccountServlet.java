@@ -18,6 +18,10 @@ public class ManageMyAccountServlet extends HttpServlet {
             HttpUtil.printPOSTResult(response, false, "Invalid XSRF token");
             return;
         }
+        if (user.isExternal) {
+            HttpUtil.printPOSTResult(response, false, "External user cannot manage their account");
+            return;
+        }
 
         if (Util.isNonEmpty(request.getParameter("email"))) {
             String email = request.getParameter("email").trim().toLowerCase();

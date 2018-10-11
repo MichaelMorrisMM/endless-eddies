@@ -4,6 +4,7 @@ export interface User {
     readonly email: string;
     readonly isAdmin: boolean;
     readonly isGuest: boolean;
+    readonly isExternal: boolean;
     readonly storageUsed: number;
     xsrfToken?: string;
 }

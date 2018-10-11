@@ -12,7 +12,7 @@ import {CheckUserSessionResult} from "../users/check-user-session-result.interfa
 export class AuthService {
     private currentUser: User;
 
-    @Output() onUserChange: EventEmitter<User> = new EventEmitter<User>();
+    onUserChange: EventEmitter<User> = new EventEmitter<User>();
 
     constructor(private http: HttpClient,
                 private router: Router) {

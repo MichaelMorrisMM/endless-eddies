@@ -13,6 +13,7 @@ public class User implements DatabaseObject {
     public String salt;
     public boolean isAdmin;
     public boolean isGuest;
+    public boolean isExternal;
     public String currentXSRFToken;
     public long storageUsed;
 
@@ -26,6 +27,7 @@ public class User implements DatabaseObject {
         this.salt = "";
         this.isAdmin = false;
         this.isGuest = false;
+        this.isExternal = false;
         this.currentXSRFToken = "";
         this.storageUsed = 0;
 
@@ -53,6 +55,7 @@ public class User implements DatabaseObject {
             this.password = rs.getString("password");
             this.salt = rs.getString("salt");
         }
+        this.isExternal = rs.getString("password").equals("") && rs.getString("salt").equals("");
         try {
             this.storageUsed = StorageManager.getUserStorageSpaceUsed(this);
         } catch (Exception e) {
@@ -67,6 +70,7 @@ public class User implements DatabaseObject {
             .add("email", this.email)
             .add("isAdmin", this.isAdmin)
             .add("isGuest", this.isGuest)
+            .add("isExternal", this.isExternal)
             .add("storageUsed", this.storageUsed);
         if (!this.liteMode) {
             builder = builder.add("xsrfToken", this.currentXSRFToken);
