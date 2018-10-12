@@ -49,3 +49,6 @@ Thumbs.db
 
 # sqlite database
 *.db
+
+# direnv
+.envrc
