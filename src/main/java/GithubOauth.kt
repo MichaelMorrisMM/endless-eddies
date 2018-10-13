@@ -55,8 +55,8 @@ class Github {
         const val CODE_KEY = "code"
 
         // Environment Variables
-        const val CLIENT_ID_ENV_KEY = "EE_CLIENT_ID"
-        const val CLIENT_SECRET_ENV_KEY = "EE_CLIENT_SECRET"
+        const val CLIENT_ID_ENV_KEY = "EE_GITHUB_CLIENT_ID"
+        const val CLIENT_SECRET_ENV_KEY = "EE_GITHUB_CLIENT_SECRET"
 
         fun getUserAccessToken(code: String): String {
             val githubOauthRequestBody = GithubOauthRequestBody(
