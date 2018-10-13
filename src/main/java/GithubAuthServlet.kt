@@ -64,31 +64,6 @@ class GithubAuthServlet : HttpServlet() {
         val userAccessToken = Github.getUserAccessToken(githubCode)
         val userEmail = Github.getUserPrimaryEmail(userAccessToken)
 
-        // Register the user if not already registered
-        var user = DatabaseConnector.getUserByEmail(userEmail)
-        if (user == null) {
-            if (!DatabaseConnector.createNewUser(userEmail, "", "", false)) {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-                servletContext.log("GITHUB_CALLBACK_ERROR: failed to create new user with github email: $userEmail")
-                return
-            }
-
-            user = DatabaseConnector.getUserByEmail(userEmail)
-            if (user == null) {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-                servletContext.log("GITHUB_CALLBACK_ERROR: failed to get newly created user: $userEmail")
-                return
-            }
-        }
-
-        // The email has been authenticated and registered create a new user session
-        if (!SessionManager.createSession(user, response)) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
-            servletContext.log("GITHUB_CALLBACK_ERROR: failed to create new user session")
-            return
-        }
-
-        // Success
-        response.sendRedirect("/endless-eddies")
+        OauthUser.registerAndCreateSession(userEmail, response, servletContext::log)
     }
 }
