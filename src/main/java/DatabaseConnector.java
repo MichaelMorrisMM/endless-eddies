@@ -269,7 +269,7 @@ public class DatabaseConnector {
     public static List<User> getManageUsersList(int idUser) {
         List<User> users = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT idUser, email, isAdmin FROM user WHERE idUser != ?;");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM user WHERE idUser != ?;");
             pstmt.setInt(1, idUser);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
