@@ -7,6 +7,7 @@ import {ConfiguratorService} from "../services/configurator.service";
 import {Config} from "../configurator/config.interface";
 import {ThemesService} from "../services/themes.service";
 import {ConstantsService} from "../services/constants.service";
+import GoogleUser = gapi.auth2.GoogleUser;
 
 @Component({
     selector: 'app-login',
