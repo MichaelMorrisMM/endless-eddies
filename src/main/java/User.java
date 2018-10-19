@@ -54,8 +54,8 @@ public class User implements DatabaseObject {
         if (!this.liteMode) {
             this.password = rs.getString("password");
             this.salt = rs.getString("salt");
+            this.isExternal = rs.getString("password").equals("") && rs.getString("salt").equals("");
         }
-        this.isExternal = rs.getString("password").equals("") && rs.getString("salt").equals("");
         try {
             this.storageUsed = StorageManager.getUserStorageSpaceUsed(this);
         } catch (Exception e) {
