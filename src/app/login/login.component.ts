@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit} from '@angular/core';
 import {AuthService} from '../services/auth.service';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -7,6 +7,7 @@ import {ConfiguratorService} from "../services/configurator.service";
 import {Config} from "../configurator/config.interface";
 import {ThemesService} from "../services/themes.service";
 import {ConstantsService} from "../services/constants.service";
+import GoogleUser = gapi.auth2.GoogleUser;
 
 @Component({
     selector: 'app-login',
@@ -14,7 +15,8 @@ import {ConstantsService} from "../services/constants.service";
     styles: [`
     `]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit {
+    public auth2: gapi.auth2.GoogleAuth;
     public config: Config;
     public showCreateAccount: boolean = false;
     public form: FormGroup;
@@ -46,7 +48,15 @@ export class LoginComponent implements OnInit {
     }
 
     public startGithubLogIn() {
-        location.href = ConstantsService.URL_PREFIX + '/github-login';
+        location.href = `${ConstantsService.URL_PREFIX}/github-login`;
+    }
+
+    public startGoogleLogIn() {
+        this.auth2.signIn().then(this.googleSignInCallback);
+    }
+
+    public googleSignInCallback(googleUser: GoogleUser) {
+        location.href = `${ConstantsService.URL_PREFIX}/google-callback?idTokenString=${googleUser.getAuthResponse().id_token}`;
     }
 
     public toggleSignup() {
@@ -57,5 +67,12 @@ export class LoginComponent implements OnInit {
         this.configuratorService.getConfiguration().subscribe((result: Config) => {
             this.config = result;
         });
+    }
+
+    ngAfterViewInit(): void {
+        gapi.load('auth2', () => this.auth2 = gapi.auth2.init({
+                client_id: ConstantsService.GOOGLE_OAUTH_CLIENT_ID
+            })
+        );
     }
 }

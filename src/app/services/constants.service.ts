@@ -7,6 +7,7 @@ export class ConstantsService {
     constructor() {
     }
 
+    public static readonly GOOGLE_OAUTH_CLIENT_ID: string = '700225778985-vcmmj9gk7v17rh6app9cak2o70ht4469.apps.googleusercontent.com';
     public static readonly URL_PREFIX: string = '/endless-eddies';
     public readonly DIRTY_NOTE_MESSAGE: string = 'Changes have not been saved';
     public static readonly VALIDATOR_TYPE_REQUIRED: string = "required";
