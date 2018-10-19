@@ -20,6 +20,11 @@
                     <img src="./assets/icons/icons8-github-50.png" class="embeddedIcon">Github Login
                 </button>
             </div>
+            <div *ngIf="this.config?.allowGoogleLogin" class="spacer">
+                <button mat-raised-button (click)="this.startGoogleLogIn()">
+                    <img src="./assets/icons/icons8-google-50.png" class="embeddedIcon">Google Login
+                </button>
+            </div>
         </div>
         <div>
             <button mat-raised-button (click)="this.toggleSignup()" [style]="this.themesService.getButtonAccentStyles()">
