@@ -52,10 +52,10 @@ public class User implements DatabaseObject {
         this.isAdmin = rs.getString("isAdmin").equals("Y");
         this.currentXSRFToken = "";
         if (!this.liteMode) {
-            this.password = rs.getString("password");
-            this.salt = rs.getString("salt");
+            this.password = rs.getString("password") != null ? rs.getString("password") : "";
+            this.salt = rs.getString("salt") != null ? rs.getString("salt") : "";
         }
-        this.isExternal = rs.getString("password").equals("") && rs.getString("salt").equals("");
+        this.isExternal = rs.getString("password") == null && rs.getString("salt") == null;
         try {
             this.storageUsed = StorageManager.getUserStorageSpaceUsed(this);
         } catch (Exception e) {

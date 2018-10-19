@@ -10,21 +10,18 @@
             <button mat-raised-button (click)="this.doLogIn()" [disabled]="this.form.invalid" [style]="this.themesService.getButtonPrimaryStyles()">
                 <img src="./assets/icons/icons8-login-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Login
             </button>
-            <div *ngIf="this.config?.allowGuestMode" class="spacer">
-                <button mat-raised-button (click)="this.doGuestLogIn()">
-                    <img src="./assets/icons/icons8-login-50.png" class="embeddedIcon">Guest Login
-                </button>
-            </div>
-            <div *ngIf="this.config?.allowGithubLogin" class="spacer">
-                <button mat-raised-button (click)="this.startGithubLogIn()">
-                    <img src="./assets/icons/icons8-github-50.png" class="embeddedIcon">Github Login
-                </button>
-            </div>
-            <div *ngIf="this.config?.allowGoogleLogin" class="spacer">
-                <button mat-raised-button (click)="this.startGoogleLogIn()">
-                    <img src="./assets/icons/icons8-google-50.png" class="embeddedIcon">Google Login
-                </button>
-            </div>
+            <span *ngIf="this.config?.allowGuestMode" class="spacer"></span>
+            <button *ngIf="this.config?.allowGuestMode" mat-raised-button (click)="this.doGuestLogIn()">
+                <img src="./assets/icons/icons8-login-50.png" class="embeddedIcon">Guest Login
+            </button>
+            <span *ngIf="this.config?.allowGithubLogin" class="spacer"></span>
+            <button *ngIf="this.config?.allowGithubLogin" mat-raised-button (click)="this.startGithubLogIn()">
+                <img src="./assets/icons/icons8-github-50.png" class="embeddedIcon">Github Login
+            </button>
+            <span *ngIf="this.config?.allowGoogleLogin" class="spacer"></span>
+            <button *ngIf="this.config?.allowGoogleLogin" mat-raised-button (click)="this.startGoogleLogIn()">
+                <img src="./assets/icons/icons8-google-50.png" class="embeddedIcon">Google Login
+            </button>
         </div>
         <div>
             <button mat-raised-button (click)="this.toggleSignup()" [style]="this.themesService.getButtonAccentStyles()">

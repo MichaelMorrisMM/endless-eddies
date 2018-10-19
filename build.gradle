@@ -125,8 +125,8 @@ task makeDatabase {
         db.execute '''CREATE TABLE user(
                         idUser      INTEGER         PRIMARY KEY,
                         email       VARCHAR(320)    NOT NULL UNIQUE,
-                        password    VARCHAR(100)    NOT NULL,
-                        salt        VARCHAR(150)    NOT NULL,
+                        password    VARCHAR(100),
+                        salt        VARCHAR(150),
                         isAdmin     CHAR(1)         NOT NULL
                    )'''
         db.execute 'DROP TABLE IF EXISTS request'
