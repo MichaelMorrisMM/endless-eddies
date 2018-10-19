@@ -24,6 +24,9 @@ export class ConstantsService {
     public readonly GRAPH_PIE: string = "Pie Chart";
     public readonly GRAPH_LINE_CHART: string = "Line Chart";
     public readonly GRAPH_HEAT_MAP: string = "Heat Map";
+    public readonly GRAPH_3D_COLUMN: string = "3D Column Chart";
+    public readonly GRAPH_3D_PIE: string = "3D Pie Chart";
+    public readonly GRAPH_3D_SCATTER: string = "3D Scatter Chart";
 
     public GRAPH_TYPES: string[] = [
         this.GRAPH_VERT_BAR,
@@ -31,6 +34,9 @@ export class ConstantsService {
         this.GRAPH_PIE,
         this.GRAPH_LINE_CHART,
         this.GRAPH_HEAT_MAP,
+        this.GRAPH_3D_COLUMN,
+        this.GRAPH_3D_PIE,
+        this.GRAPH_3D_SCATTER,
     ];
 
     public static readonly GRAPH_TOOLTIP_SINGLE_SERIES: string = 'Data source must be a json file formatted with single series data (e.g. [{"name": "Germany", "value": 100}, {"name": "USA", "value": 200}])';

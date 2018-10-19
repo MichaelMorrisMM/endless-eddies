@@ -11,7 +11,7 @@ class GoogleOauth {
         // API objects
         const val ID_TOKEN_KEY = "idTokenString"
 
-        fun getUserEmail(idTokenString: String) : String {
+        fun getUserEmail(idTokenString: String): String {
             val verifier = GoogleIdTokenVerifier
                 .Builder(
                     GoogleNetHttpTransport.newTrustedTransport(),
@@ -21,27 +21,10 @@ class GoogleOauth {
                 .build()
 
             val idToken = verifier.verify(idTokenString)
-            if (idToken != null) {
-                val payload = idToken.payload
-
-                // Print user identifier
-                val userId = payload.subject
-                println("User ID: $userId")
-
-                // Get profile information from payload
-                val email = payload.email
-                val emailVerified = java.lang.Boolean.valueOf(payload.emailVerified!!)
-                val name = payload["name"] as String
-                val pictureUrl = payload["picture"] as String
-                val locale = payload["locale"] as String
-                val familyName = payload["family_name"] as String
-                val givenName = payload["given_name"] as String
-
-                return email
-
+            return if (idToken != null) {
+                idToken.payload.email
             } else {
-                println("Invalid ID token.")
-                return ""
+                ""
             }
         }
     }

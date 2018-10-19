@@ -22,4 +22,6 @@
                            [xAxis]="true" [xAxisLabel]="this.graph.xAxisLabel" [showXAxisLabel]="true"
                            [yAxis]="true" [yAxisLabel]="this.graph.yAxisLabel" [showYAxisLabel]="true">
     </ngx-charts-heat-map>
+    <div class="full-height full-width" #highchartContainer *ngIf="this.isHighchart">
+    </div>
 </div>
