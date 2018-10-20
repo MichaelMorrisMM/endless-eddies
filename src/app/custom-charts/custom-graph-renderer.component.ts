@@ -39,7 +39,40 @@ export class CustomGraphRendererComponent implements OnInit, AfterViewInit {
         if (this.isHighchart) {
             let options: any = {};
             if (this.graph.type === this.constantsService.GRAPH_3D_COLUMN) {
-                // TODO
+                options = {
+                    chart: {
+                        renderTo: 'container',
+                        type: 'column',
+                        options3d: {
+                            enabled: true,
+                            alpha: 15,
+                            beta: 15,
+                            depth: 50,
+                            viewDistance: 25
+                        }
+                    },
+                    colors: this.constantsService.getGraphColorScheme(this.graph.colorScheme).domain,
+                    title: {
+                        text: this.graph.name
+                    },
+                    yAxis: {
+                        min: null,
+                        max: null,
+                    },
+                    plotOptions: {
+                        column: {
+                            depth: 25
+                        }
+                    },
+                    series: this.data,
+                    responsive: {
+                        rules: [{
+                            condition: {
+                                maxHeight: 300
+                            }
+                        }]
+                    }
+                };
             } else if (this.graph.type === this.constantsService.GRAPH_3D_PIE) {
                 options = {
                     chart: {
@@ -50,6 +83,7 @@ export class CustomGraphRendererComponent implements OnInit, AfterViewInit {
                             beta: 0
                         }
                     },
+                    colors: this.constantsService.getGraphColorScheme(this.graph.colorScheme).domain,
                     title: {
                         text: this.graph.name
                     },
@@ -77,7 +111,63 @@ export class CustomGraphRendererComponent implements OnInit, AfterViewInit {
                     }
                 };
             } else if (this.graph.type === this.constantsService.GRAPH_3D_SCATTER) {
-                // TODO
+                options = {
+                    chart: {
+                        renderTo: 'container',
+                        margin: 100,
+                        type: 'scatter3d',
+                        animation: false,
+                        options3d: {
+                            enabled: true,
+                            alpha: 10,
+                            beta: 30,
+                            depth: 250,
+                            viewDistance: 5,
+                            fitToPlot: false,
+                            frame: {
+                                bottom: { size: 1, color: 'rgba(0,0,0,0.02)' },
+                                back: { size: 1, color: 'rgba(0,0,0,0.04)' },
+                                side: { size: 1, color: 'rgba(0,0,0,0.06)' }
+                            }
+                        }
+                    },
+                    colors: this.constantsService.getGraphColorScheme(this.graph.colorScheme).domain,
+                    title: {
+                        text: this.graph.name
+                    },
+                    plotOptions: {
+                        scatter: {
+                            width: 10,
+                            height: 10,
+                            depth: 10
+                        }
+                    },
+                    yAxis: {
+                        min: null,
+                        max: null,
+                    },
+                    xAxis: {
+                        min: null,
+                        max: null,
+                        gridLineWidth: 1,
+                    },
+                    zAxis: {
+                        min: null,
+                        max: null,
+                        showFirstLabel: false
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: this.data,
+                    responsive: {
+                        rules: [{
+                            condition: {
+                                maxHeight: 300
+                            }
+                        }]
+                    }
+                };
             }
             this.highchart = Highcharts.chart(this.highchartContainer.nativeElement, options);
         }

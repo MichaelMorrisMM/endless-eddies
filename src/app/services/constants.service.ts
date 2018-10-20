@@ -42,6 +42,7 @@ export class ConstantsService {
 
     public static readonly GRAPH_TOOLTIP_SINGLE_SERIES: string = 'Data source must be a json file formatted with single series data (e.g. [{"name": "Germany", "value": 100}, {"name": "USA", "value": 200}])';
     public static readonly GRAPH_TOOLTIP_MULTI_SERIES: string = 'Data source must be a json file formatted with multi series data (e.g. [{"name": "Germany", "series": [{ "name": "2010", "value": 100}, {"name": "2011", "value": 200}]}, {"name": "USA", "series": [{ "name": "2010", "value": 500}, {"name": "2011", "value": 15}]}])';
+    public static readonly GRAPH_TOOLTIP_HIGHCHARTS: string = 'Please reference https://www.highcharts.com/docs/chart-concepts/series. Data source must be a json file parsable as a "series" array for the corresponding graph type';
 
     public readonly GRAPH_COLOR_SCHEMES: any[] = colorSets;
 
@@ -50,6 +51,8 @@ export class ConstantsService {
             return ConstantsService.GRAPH_TOOLTIP_SINGLE_SERIES;
         } else if (type === this.GRAPH_LINE_CHART || type === this.GRAPH_HEAT_MAP) {
             return ConstantsService.GRAPH_TOOLTIP_MULTI_SERIES;
+        } else if (type === this.GRAPH_3D_COLUMN || type === this.GRAPH_3D_PIE || type === this.GRAPH_3D_SCATTER) {
+            return ConstantsService.GRAPH_TOOLTIP_HIGHCHARTS;
         } else {
             return '';
         }

@@ -129,6 +129,8 @@ export class ConfiguratorResultsComponent implements OnInit {
         this.form.addControl(graph.keyYAxisLabel, new FormControl(graph.yAxisLabel));
         this.form.addControl(graph.keyColorScheme, new FormControl(graph.colorScheme));
         this.graphs.push(graph);
+
+        this.onGraphTypeChange(graph);
     }
 
     public deleteGraph(g: GraphTemplate): void {
@@ -144,7 +146,7 @@ export class ConfiguratorResultsComponent implements OnInit {
 
     public onGraphTypeChange(g: GraphTemplate): void {
         let type = this.form.controls[g.keyType].value;
-        if (type === this.constantsService.GRAPH_PIE) {
+        if (type === this.constantsService.GRAPH_PIE || type === this.constantsService.GRAPH_3D_COLUMN || type === this.constantsService.GRAPH_3D_PIE || type === this.constantsService.GRAPH_3D_SCATTER) {
             this.form.controls[g.keyXAxisLabel].setValue('');
             this.form.controls[g.keyXAxisLabel].disable();
             this.form.controls[g.keyYAxisLabel].setValue('');
