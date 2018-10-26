@@ -1,14 +1,14 @@
 # Setting up HTTPS
 
-## Steps
-1. Setup DNS records
-1. Get a SSL certificate
-1. Setup tomcat to use SSL
+### Steps
+1. [Setup DNS records](#setup-dns-records)
+1. [Get a SSL certificate](#get-a-ssl-certificate)
+1. [Setup tomcat to use SSL](#setup-tomcat-to-use-ssl)
 
-### Setup DNS records
+## Setup DNS records
 You can use any domain name registrar you prefer when setting up your DNS records. As long as your domain name resolves to your server ip address you can proceed to the next step.
 
-### Get a SSL certificate
+## Get a SSL certificate
 Prerequistes:
 - Install endless eddies as normal following the instructions in the [README.md](https://github.com/MichaelMorrisMM/endless-eddies#installation-and-deployment-non-developers)
 - Setup tomcat to run as the root user by editing `/etc/default/tomcat8`
@@ -24,7 +24,7 @@ TOMCAT8_GROUP=root
             redirectPort="443" />
 ```
 - Restart tomcat
-  - $ sudo systemctl restart tomcat8
+  - `sudo systemctl restart tomcat8`
 - Verify that everything is working correctly with your doman name on port 80
 
 Let's Encrypt is a free, automated, and open certificate authority. These steps will get a certificate from Let's Encrypt but you can get a certificate from any other certificate authority and skip to the next step. For detailed documentation about Let's Encrypt see:
@@ -32,19 +32,19 @@ Let's Encrypt is a free, automated, and open certificate authority. These steps 
 - https://certbot.eff.org/
 
 Getting a cert:
-- $ sudo apt-get update
-- $ sudo apt-get install software-properties-common
-- $ sudo add-apt-repository ppa:certbot/certbot
-- $ sudo apt-get update
-- $ sudo apt-get install certbot
-- $ sudo certbot certonly --webroot -w /var/lib/tomcat8/webapps/ROOT -d example.com
+- `sudo apt-get update`
+- `sudo apt-get install software-properties-common`
+- `sudo add-apt-repository ppa:certbot/certbot`
+- `sudo apt-get update`
+- `sudo apt-get install certbot`
+- `sudo certbot certonly --webroot -w /var/lib/tomcat8/webapps/ROOT -d example.com`
 
 Renewing a cert:
-- $ sudo certbot renew
+- `sudo certbot renew`
 
-### Setup tomcat to use SSL
+## Setup tomcat to use SSL
 - Install the tomcat native library
-  - $ sudo apt-get install libtcnative-1
+  - sudo apt-get install libtcnative-1
 - Add an ssl `Listener` to your tomcat config by editing `/etc/tomcat8/server.xml`
 ```xml
 <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
@@ -59,7 +59,7 @@ Renewing a cert:
     SSLCertificateKeyFile="/etc/letsencrypt/live/example.com/privkey.pem"
     SSLProtocol="TLSv1+TLSv1.1+TLSv1.2"/>
 ```
-  - NOTE: make sure `SSLCertificateFile` and `SSLCertificateKeyFile` contain the paths to your certificate files
+  - __NOTE: make sure `SSLCertificateFile` and `SSLCertificateKeyFile` contain the paths to your certificate files__
 - Restart tomcat
-  - $ sudo systemctl restart tomcat8 
+  - `sudo systemctl restart tomcat8`
 - Verfiy that everything is working correctly with your doman name and https
