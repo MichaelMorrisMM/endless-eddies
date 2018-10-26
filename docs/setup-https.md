@@ -9,7 +9,7 @@
 You can use any domain name registrar you prefer when setting up your DNS records. As long as your domain name resolves to your server ip address you can proceed to the next step.
 
 ## Get a SSL certificate
-Prerequistes:
+### Prerequistes:
 - Install endless eddies as normal following the instructions in the [README.md](https://github.com/MichaelMorrisMM/endless-eddies#installation-and-deployment-non-developers)
 - Setup tomcat to run as the root user by editing `/etc/default/tomcat8`
 ```s
@@ -31,7 +31,7 @@ Let's Encrypt is a free, automated, and open certificate authority. These steps 
 - https://letsencrypt.org/
 - https://certbot.eff.org/
 
-Getting a cert:
+### Getting a cert:
 - `sudo apt-get update`
 - `sudo apt-get install software-properties-common`
 - `sudo add-apt-repository ppa:certbot/certbot`
@@ -39,7 +39,7 @@ Getting a cert:
 - `sudo apt-get install certbot`
 - `sudo certbot certonly --webroot -w /var/lib/tomcat8/webapps/ROOT -d example.com`
 
-Renewing a cert:
+### Renewing a cert:
 - `sudo certbot renew`
 
 ## Setup tomcat to use SSL
