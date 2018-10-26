@@ -82,6 +82,7 @@ export class NewRequestComponent implements OnInit {
     public setUpForm():void {
         this.parameterCounter = 1;
         this.form = new FormGroup({});
+        this.currentParameters = [];
         let allParameters: Parameter[] = [];
         for (let param of this.application.parameters) {
             let p: Parameter = new Parameter(this.parameterCounter, param);
