@@ -9,7 +9,7 @@
 You can use any domain name registrar you prefer when setting up your DNS records. As long as your domain name resolves to your server ip address you can proceed to the next step.
 
 ## Get a SSL certificate
-### Prerequistes:
+### Prerequisites:
 - Install endless eddies as normal following the instructions in the [README.md](https://github.com/MichaelMorrisMM/endless-eddies#installation-and-deployment-non-developers)
 - Setup tomcat to run as the root user by editing `/etc/default/tomcat8`
 ```s
@@ -25,7 +25,7 @@ TOMCAT8_GROUP=root
 ```
 - Restart tomcat
   - `sudo systemctl restart tomcat8`
-- Verify that everything is working correctly with your doman name on port 80
+- Verify that everything is working correctly with your domain name on port 80
 
 Let's Encrypt is a free, automated, and open certificate authority. These steps will get a certificate from Let's Encrypt but you can get a certificate from any other certificate authority and skip to the next step. For detailed documentation about Let's Encrypt see:
 - https://letsencrypt.org/
@@ -62,4 +62,4 @@ Let's Encrypt is a free, automated, and open certificate authority. These steps 
   - __NOTE: make sure `SSLCertificateFile` and `SSLCertificateKeyFile` contain the paths to your certificate files__
 - Restart tomcat
   - `sudo systemctl restart tomcat8`
-- Verfiy that everything is working correctly with your doman name and https
+- Verify that everything is working correctly with your domain name and https
