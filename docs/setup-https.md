@@ -44,7 +44,7 @@ Let's Encrypt is a free, automated, and open certificate authority. These steps 
 
 ## Setup tomcat to use SSL
 - Install the tomcat native library
-  - sudo apt-get install libtcnative-1
+  - `sudo apt-get install libtcnative-1`
 - Add an ssl `Listener` to your tomcat config by editing `/etc/tomcat8/server.xml`
 ```xml
 <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
