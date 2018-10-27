@@ -297,14 +297,20 @@ public class DatabaseConnector {
             }
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    requests.add(new Request(rs));
+                    try {
+                        requests.add(new Request(rs));
+                    } catch (Exception e) {
+                    }
                 }
             }
             if (user.isAdmin) {
                 pstmt = conn.prepareStatement("SELECT idRequest, name, idGuest, date, expiration FROM request WHERE request.idUser IS NULL;");
                 try (ResultSet rs = pstmt.executeQuery()) {
                     while (rs.next()) {
-                        requests.add(new Request(rs));
+                        try {
+                            requests.add(new Request(rs));
+                        } catch (Exception e) {
+                        }
                     }
                 }
             }
