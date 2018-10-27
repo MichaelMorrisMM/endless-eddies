@@ -31,7 +31,11 @@ public class DatabaseConnector {
         }
     }
 
-    public static boolean createNewUser(String email, String hashedPassword, String salt, boolean isAdmin) {
+    public static boolean createNewUser(String email, String hashedPassword, String salt) {
+        // If this is the very first user created, set as admin
+        // Otherwise, set as non-admin
+        boolean isAdmin = isFirstUser();
+
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO user VALUES (NULL, ?, ?, ?, ?);");
             pstmt.setString(1, email);

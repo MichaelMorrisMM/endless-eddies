@@ -26,13 +26,9 @@ public class RegisterUserServlet extends HttpServlet {
             return;
         }
 
-        // If this is the very first user created, set as admin
-        // Otherwise, set as non-admin
-        boolean isAdmin = DatabaseConnector.isFirstUser();
-
         String salt = PasswordUtil.createSalt();
         String hashedPassword = PasswordUtil.hashPassword(password, salt);
-        if (DatabaseConnector.createNewUser(email, hashedPassword, salt, isAdmin)) {
+        if (DatabaseConnector.createNewUser(email, hashedPassword, salt)) {
             HttpUtil.printPOSTResult(response, true, "User created");
         } else {
             HttpUtil.printPOSTResult(response, false, "An error occurred");

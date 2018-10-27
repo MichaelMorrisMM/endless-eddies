@@ -13,7 +13,7 @@ class OauthUser {
             // Register the user if not already registered
             var user = DatabaseConnector.getUserByEmail(userEmail)
             if (user == null) {
-                if (!DatabaseConnector.createNewUser(userEmail, null, null, false)) {
+                if (!DatabaseConnector.createNewUser(userEmail, null, null)) {
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)
                     logger("OAUTH_USER_ERROR: failed to create new user with email: $userEmail")
                     return
