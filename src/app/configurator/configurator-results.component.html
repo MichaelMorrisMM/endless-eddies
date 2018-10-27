@@ -10,11 +10,11 @@
                 </mat-expansion-panel-header>
                 <div *ngFor="let rf of this.resultFiles" class="flex-container-col full-width margin-bottom">
                     <div class="flex-container-row full-width">
-                        <mat-form-field class="margin-right flex-one">
+                        <mat-form-field class="margin-right flex-one" matTooltip="Display name of the file on the Results screen. Defaults to the Filename Regular Expression" [matTooltipPosition]="'above'">
                             <input matInput placeholder="Name" [formControlName]="rf.keyName">
                         </mat-form-field>
-                        <mat-form-field class="flex-one">
-                            <input matInput placeholder="Filename" [formControlName]="rf.keyFilename">
+                        <mat-form-field class="flex-one" matTooltip="Regular expression matching the name of the file" [matTooltipPosition]="'above'">
+                            <input matInput placeholder="Filename Regular Expression" [formControlName]="rf.keyFilename">
                         </mat-form-field>
                     </div>
                     <div class="flex-container-row full-width">

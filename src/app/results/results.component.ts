@@ -11,6 +11,7 @@ import {Application} from "../configurator/application.model";
 
 import * as html2canvas from "html2canvas";
 import {ThemesService} from "../services/themes.service";
+import {HttpResponse} from "@angular/common/http";
 
 @Component({
     selector: 'app-results',
@@ -63,8 +64,14 @@ export class ResultsComponent implements OnInit {
 
     public downloadFile(rf: ResultFile): void {
         if (this.request) {
-            this.resultsService.downloadFile(this.request.name, rf).subscribe((blob: Blob) => {
-                saveAs(blob, rf.filename);
+            this.resultsService.downloadFile(this.request.name, rf).subscribe((res: HttpResponse<Blob>) => {
+                let contentDisposition: string = res.headers.get("Content-Disposition");
+                if (contentDisposition && contentDisposition.includes('attachment')) {
+                    let filename: string = contentDisposition.substring(contentDisposition.indexOf('"') + 1, contentDisposition.lastIndexOf('"'));
+                    saveAs(res.body, filename);
+                } else {
+                    alert("An error occurred while downloading the file");
+                }
             });
         }
     }

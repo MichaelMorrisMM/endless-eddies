@@ -5,11 +5,11 @@ import javax.json.JsonWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.Files;
 
 public class HttpUtil {
 
     private static final String CONTENT_TYPE_MIME_JSON = "application/json";
-    private static final String CONTENT_TYPE_MIME_OCTET_STREAM = "application/octet-stream";
 
     public static void printJSONResponse(HttpServletResponse response, JsonObject o) throws IOException {
         response.setContentType(CONTENT_TYPE_MIME_JSON);
@@ -41,7 +41,8 @@ public class HttpUtil {
     }
 
     public static void downloadFile(HttpServletResponse response, File file) throws IOException {
-        response.setContentType(CONTENT_TYPE_MIME_OCTET_STREAM);
+        response.setContentType(Files.probeContentType(file.toPath()));
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"");
         response.setContentLength((int) file.length());
         try (OutputStream out = response.getOutputStream()) {
             try (FileInputStream in = new FileInputStream(file)) {

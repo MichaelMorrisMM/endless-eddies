@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {ConstantsService} from './constants.service';
 import {PostResult} from "../configurator/post-result.interface";
@@ -22,11 +22,11 @@ export class ResultsService {
         return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/execute', request, {params: params});
     }
 
-    public downloadFile(requestName: string, rf: ResultFile): Observable<Blob> {
+    public downloadFile(requestName: string, rf: ResultFile): Observable<HttpResponse<Blob>> {
         let params: HttpParams = new HttpParams()
             .set("requestName", requestName)
             .set("filename", rf.filename);
-        return this.http.get(ConstantsService.URL_PREFIX + '/download-file', {params: params, responseType: 'blob'});
+        return this.http.get(ConstantsService.URL_PREFIX + '/download-file', {params: params, responseType: 'blob', observe: 'response'});
     }
 
     public getRequest(idRequest: string): Observable<GetRequestResult> {

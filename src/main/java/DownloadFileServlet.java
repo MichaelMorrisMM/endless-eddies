@@ -4,6 +4,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @WebServlet("/download-file")
 public class DownloadFileServlet extends HttpServlet {
@@ -22,10 +25,18 @@ public class DownloadFileServlet extends HttpServlet {
             String requestName = request.getParameter("requestName");
             String filename = request.getParameter("filename");
             if (Util.isNonEmpty(requestName) && Util.isNonEmpty(filename)) {
-                File file = new File(ConfiguratorServlet.ROOT_PATH + File.separator + requestName + File.separator + filename);
-                if (file.exists() && file.isFile() && file.canRead()) {
-                    HttpUtil.downloadFile(response, file);
-                    return;
+                Pattern pattern = Pattern.compile(filename);
+                Path requestDirPath = Paths.get(ConfiguratorServlet.ROOT_PATH + File.separator + requestName);
+                try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(requestDirPath)) {
+                    for (Path path : directoryStream) {
+                        File file = path.toFile();
+                        String name = file.getName();
+                        Matcher matcher = pattern.matcher(name);
+                        if (matcher.matches() && file.exists() && file.isFile() && file.canRead()) {
+                            HttpUtil.downloadFile(response, file);
+                            return;
+                        }
+                    }
                 }
             }
 
