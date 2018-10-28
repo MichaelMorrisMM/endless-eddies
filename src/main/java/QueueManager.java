@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
@@ -43,7 +44,7 @@ public class QueueManager {
                 errorFile.createNewFile();
                 File applicationDefinitionFile = new File(tmpDir, GetRequestServlet.APPLICATION_DEFINITION_FILE);
                 if (applicationDefinitionFile.createNewFile()) {
-                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(applicationDefinitionFile))) {
+                    try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(applicationDefinitionFile), StandardCharsets.UTF_8)) {
                         writer.write(c.application.toJsonObject().toString());
                     }
                 }

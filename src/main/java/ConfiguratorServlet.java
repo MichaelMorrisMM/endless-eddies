@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.locks.ReentrantLock;
 
 @WebServlet("/configurator")
@@ -38,7 +39,7 @@ public class ConfiguratorServlet extends HttpServlet {
         ConfigSettings config = getCurrentConfig();
         ConfiguratorServlet.configLock.lock();
         try {
-            try (JsonReader reader = Json.createReader(request.getReader())) {
+            try (JsonReader reader = Json.createReader(new InputStreamReader(request.getInputStream(), "UTF-8"))) {
                 config.updateWithConfig(reader.readObject());
             }
 
@@ -47,7 +48,7 @@ public class ConfiguratorServlet extends HttpServlet {
             File configFile = new File(CONFIG_FILE_PATH);
             configFile.createNewFile();
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(CONFIG_FILE_PATH))) {
+            try (OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(configFile), StandardCharsets.UTF_8)) {
                 writer.write(config.getConfig().toString());
             }
         } finally {
@@ -57,7 +58,7 @@ public class ConfiguratorServlet extends HttpServlet {
         HttpUtil.printPOSTResult(response, true, "");
     }
 
-    public static ConfigSettings getCurrentConfig() throws FileNotFoundException {
+    public static ConfigSettings getCurrentConfig() throws IOException {
         ConfigSettings settings;
         ConfiguratorServlet.configLock.lock();
         try {

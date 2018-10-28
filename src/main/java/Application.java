@@ -3,7 +3,8 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Application extends ConfigObject {
@@ -26,7 +27,7 @@ public class Application extends ConfigObject {
 
     public Application(File applicationFile) throws Exception {
         this();
-        try (JsonReader reader = Json.createReader(new FileReader(applicationFile))) {
+        try (JsonReader reader = Json.createReader(new InputStreamReader(new FileInputStream(applicationFile), "UTF-8"))) {
             boolean result = this.updateWith(reader.readObject());
             if (!result) {
                 throw new Exception("Error parsing Application_Def file");

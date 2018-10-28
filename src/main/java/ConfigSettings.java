@@ -1,7 +1,5 @@
 import javax.json.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -62,9 +60,9 @@ public class ConfigSettings {
         this.homePages = new ArrayList<>();
     }
 
-    public ConfigSettings(File configFile) throws FileNotFoundException {
+    public ConfigSettings(File configFile) throws IOException {
         this();
-        try (JsonReader reader = Json.createReader(new FileReader(configFile))) {
+        try (JsonReader reader = Json.createReader(new InputStreamReader(new FileInputStream(configFile), "UTF-8"))) {
             this.updateWithConfig(reader.readObject());
         }
     }

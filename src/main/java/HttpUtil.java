@@ -13,6 +13,7 @@ public class HttpUtil {
 
     public static void printJSONResponse(HttpServletResponse response, JsonObject o) throws IOException {
         response.setContentType(CONTENT_TYPE_MIME_JSON);
+        response.setCharacterEncoding("UTF-8");
         try (PrintWriter out = response.getWriter()) {
             out.print(o.toString());
         }
@@ -20,6 +21,7 @@ public class HttpUtil {
 
     public static void printJSONArray(HttpServletResponse response, JsonArray a) throws IOException {
         response.setContentType(CONTENT_TYPE_MIME_JSON);
+        response.setCharacterEncoding("UTF-8");
         try (JsonWriter writer = Json.createWriter(response.getWriter())) {
             writer.writeArray(a);
         }
@@ -56,7 +58,7 @@ public class HttpUtil {
         }
     }
 
-    public static User checkForUserSessionAllowingForGuest(HttpServletRequest request) throws FileNotFoundException {
+    public static User checkForUserSessionAllowingForGuest(HttpServletRequest request) throws IOException {
         ConfigSettings config = ConfiguratorServlet.getCurrentConfig();
         User user = SessionManager.checkSession(request);
         if (user == null && config.allowGuestMode) {

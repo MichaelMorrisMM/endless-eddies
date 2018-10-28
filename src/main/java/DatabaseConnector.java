@@ -1,5 +1,4 @@
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.*;
 import java.time.Instant;
@@ -117,7 +116,7 @@ public class DatabaseConnector {
                 if (config.resultLifespan > 0) {
                     expiration = now.plus(config.resultLifespan, ChronoUnit.DAYS);
                 }
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
             }
             pstmt.setString(3, Date.from(now).toString());
             if (expiration != null) {

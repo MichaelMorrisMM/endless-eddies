@@ -1,4 +1,4 @@
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class StorageManager {
 
@@ -10,7 +10,7 @@ public class StorageManager {
         return usedSpace;
     }
 
-    public static boolean userStorageLimitExceeded(User user) throws FileNotFoundException {
+    public static boolean userStorageLimitExceeded(User user) throws IOException {
         long limit = ConfiguratorServlet.getCurrentConfig().userStorageLimit;
         if (limit == 0 || user.isAdmin) {
             return false;
