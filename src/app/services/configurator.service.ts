@@ -16,6 +16,7 @@ export class ConfiguratorService {
     public readonly TYPE_FLOAT: string = "float";
     public readonly TYPE_SELECT: string = "select";
     public readonly TYPE_FILE: string = "file";
+    public readonly TYPE_MULTI_SELECT: string = "multiselect";
     public readonly GROUP_USERS: string = "users";
     public readonly SETTING_ALLOW_GUEST_MODE: string = "allow_guest_mode";
     public readonly SETTING_ALLOW_GOOGLE_AUTH: string = "allow_google_auth";
@@ -47,6 +48,7 @@ export class ConfiguratorService {
         types.push(this.TYPE_FLOAT);
         types.push(this.TYPE_SELECT);
         types.push(this.TYPE_FILE);
+        types.push(this.TYPE_MULTI_SELECT);
         return types;
     }
 

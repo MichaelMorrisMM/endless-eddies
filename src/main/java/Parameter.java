@@ -105,7 +105,7 @@ public class Parameter extends ConfigObject {
         if (obj != null) {
             String name = Util.getStringSafe(obj, NAME);
             String type = Util.getStringSafe(obj, TYPE);
-            if (type != null && type.equals(ConfigSettings.TYPE_SELECT)) {
+            if (type != null && (type.equals(ConfigSettings.TYPE_SELECT) || type.equals(ConfigSettings.TYPE_MULTI_SELECT))) {
                 JsonArray optionsArray = Util.getArraySafe(obj, SELECT_OPTIONS);
                 if (optionsArray == null || optionsArray.size() < 1) {
                     return false;

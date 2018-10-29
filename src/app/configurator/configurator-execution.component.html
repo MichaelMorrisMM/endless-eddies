@@ -35,7 +35,7 @@
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
-                            <button *ngIf="this.form.controls[parameter.keyType].value == this.configuratorService.TYPE_SELECT"
+                            <button *ngIf="this.form.controls[parameter.keyType].value == this.configuratorService.TYPE_SELECT || this.form.controls[parameter.keyType].value == this.configuratorService.TYPE_MULTI_SELECT"
                                     mat-raised-button (click)="this.openOptionsDialog(parameter)">Options</button>
                             <mat-form-field class="margin-left margin-right flex-two">
                                 <input matInput placeholder="Code" [formControlName]="parameter.keyCode">

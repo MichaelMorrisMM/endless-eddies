@@ -144,6 +144,12 @@ public class ExecuteServlet extends HttpServlet {
                             return printValidationError(param, "Required");
                         }
                     }
+                } else if (param.type.equals(ConfigSettings.TYPE_MULTI_SELECT)) {
+                    for (Validator validator : param.validators) {
+                        if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && valIsNull) {
+                            return printValidationError(param, "Required");
+                        }
+                    }
                 } else if (param.type.equals(ConfigSettings.TYPE_FILE)) {
                     for (Validator validator : param.validators) {
                         if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && valIsNull) {

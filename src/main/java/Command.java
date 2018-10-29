@@ -29,11 +29,23 @@ public class Command {
 
     private ProcessBuilder getBuilder() {
         for (Input input : inputs) {
-            if (input.hasCodeToInsert()) {
-                this.command.add(input.code);
-            }
-            if (input.hasValue()) {
-                this.command.add(input.value);
+            if (input.type.equals(ConfigSettings.TYPE_MULTI_SELECT)) {
+                if (input.hasValue()) {
+                    String[] inputs = input.value.split(",");
+                    for (String s : inputs) {
+                        if (input.hasCodeToInsert()) {
+                            this.command.add(input.code);
+                        }
+                        this.command.add(s);
+                    }
+                }
+            } else {
+                if (input.hasCodeToInsert()) {
+                    this.command.add(input.code);
+                }
+                if (input.hasValue()) {
+                    this.command.add(input.value);
+                }
             }
         }
 
