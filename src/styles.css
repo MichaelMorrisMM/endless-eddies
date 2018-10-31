@@ -12,6 +12,10 @@ body {
     margin: 0;
 }
 
+circle {
+    stroke: black !important;
+}
+
 .full-height {
     height: 100%;
 }

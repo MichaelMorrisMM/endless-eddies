@@ -50,7 +50,7 @@ export class ResultsComponent implements OnInit {
             this.graphResults = null;
 
             this.resultsService.getRequest(idRequest).subscribe((result: GetRequestResult) => {
-                if (result.success && result.request && result.application && result.systemOut) {
+                if (result.success && result.request && result.application) {
                     this.result = result;
                     this.request = result.request;
                     this.application = result.application;
