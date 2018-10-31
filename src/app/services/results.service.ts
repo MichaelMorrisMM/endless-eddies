@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams, HttpResponse} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {ConstantsService} from './constants.service';
 import {PostResult} from "../configurator/post-result.interface";
@@ -18,8 +18,8 @@ export class ResultsService {
     }
 
     public submitRequest(application: Application, request: FormData): Observable<PostResult> {
-        let params: HttpParams = this.authService.setXSRFPayloadToken(new HttpParams());
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/execute', request, {params: params});
+        let headers: HttpHeaders = this.authService.setXSRFPayloadTokenHeader(new HttpHeaders());
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/execute', request, {headers: headers});
     }
 
     public downloadFile(requestName: string, rf: ResultFile): Observable<HttpResponse<Blob>> {
@@ -43,12 +43,14 @@ export class ResultsService {
             .set("idRequest", idRequest);
         params = this.authService.setXSRFPayloadToken(params);
 
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/delete-request', null, {params: params});
+        let headers: HttpHeaders = new HttpHeaders().set("Content-Type", "application/x-www-form-urlencoded");
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/delete-request', params.toString(), {headers: headers});
     }
 
     public deleteExpiredResults(): Observable<PostResult> {
         let params: HttpParams = this.authService.setXSRFPayloadToken(new HttpParams());
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/manage-expired-results', null, {params: params});
+        let headers: HttpHeaders = new HttpHeaders().set("Content-Type", "application/x-www-form-urlencoded");
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/manage-expired-results', params.toString(), {headers: headers});
     }
 
     public checkStatus(requestName: string): Observable<CheckStatusResult> {

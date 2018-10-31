@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {ConstantsService} from './constants.service';
 import {PostResult} from "../configurator/post-result.interface";
@@ -32,8 +32,8 @@ export class ConfiguratorService {
     }
 
     public saveConfiguration(config: Config): Observable<PostResult> {
-        let params: HttpParams = this.authService.setXSRFPayloadToken(new HttpParams());
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/configurator', JSON.stringify(config), {params: params});
+        let headers: HttpHeaders = this.authService.setXSRFPayloadTokenHeader(new HttpHeaders());
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/configurator', JSON.stringify(config), {headers: headers});
     }
 
     public getValidatorBlueprints(): Observable<ValidatorBlueprint[]> {

@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {PostResult} from "../configurator/post-result.interface";
 import {ConstantsService} from "./constants.service";
@@ -19,11 +19,13 @@ export class AuthService {
     }
 
     public createUser(params: HttpParams): Observable<PostResult> {
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/register-user', null, {params: params});
+        let headers: HttpHeaders = new HttpHeaders().set("Content-Type", "application/x-www-form-urlencoded");
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/register-user', params.toString(), {headers: headers});
     }
 
     public logIn(params: HttpParams): void {
-        this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/login', null, {params: params}).subscribe((pr: PostResult) => {
+        let headers: HttpHeaders = new HttpHeaders().set("Content-Type", "application/x-www-form-urlencoded");
+        this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/login', params.toString(), {headers: headers}).subscribe((pr: PostResult) => {
             if (pr && pr.success && pr.user) {
                 this.currentUser = pr.user;
                 this.onUserChange.emit(this.currentUser);
@@ -67,7 +69,8 @@ export class AuthService {
 
     public updateMyAccount(params: HttpParams): Observable<boolean> {
         params = this.setXSRFPayloadToken(params);
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/manage-my-account', null, {params: params}).pipe(map((result: PostResult) => {
+        let headers: HttpHeaders = new HttpHeaders().set("Content-Type", "application/x-www-form-urlencoded");
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/manage-my-account', params.toString(), {headers: headers}).pipe(map((result: PostResult) => {
             if (result && result.success && result.user) {
                 let xsrfToken: string = this.currentUser.xsrfToken;
                 this.currentUser = result.user;
@@ -82,7 +85,8 @@ export class AuthService {
 
     public deleteAccount(params: HttpParams): Observable<boolean> {
         params = this.setXSRFPayloadToken(params);
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/delete-account', null, {params: params}).pipe(map((result: PostResult) => {
+        let headers: HttpHeaders = new HttpHeaders().set("Content-Type", "application/x-www-form-urlencoded");
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/delete-account', params.toString(), {headers: headers}).pipe(map((result: PostResult) => {
             if (result && result.success) {
                 return true;
             } else {
@@ -98,6 +102,10 @@ export class AuthService {
 
     public setXSRFPayloadToken(params: HttpParams): HttpParams {
         return params.set(ConstantsService.XSRF_TOKEN, this.currentUser ? this.currentUser.xsrfToken : "");
+    }
+
+    public setXSRFPayloadTokenHeader(headers: HttpHeaders): HttpHeaders {
+        return headers.set(ConstantsService.XSRF_TOKEN, this.currentUser ? this.currentUser.xsrfToken : "");
     }
 
 }

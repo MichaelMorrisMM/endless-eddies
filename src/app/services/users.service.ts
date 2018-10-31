@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {ConstantsService} from "./constants.service";
 import {User} from "../login/user.interface";
@@ -34,8 +34,8 @@ export class UsersService {
             .set("action", action)
             .set("idUsers", idUsers);
         params = this.authService.setXSRFPayloadToken(params);
-
-        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/manage-user-accounts', null, {params: params});
+        let headers: HttpHeaders = new HttpHeaders().set("Content-Type", "application/x-www-form-urlencoded");
+        return this.http.post<PostResult>(ConstantsService.URL_PREFIX + '/manage-user-accounts', params.toString(), {headers: headers});
     }
 
     public checkUserStorageUsed(idUser?: string): Observable<CheckUserStorageResult> {

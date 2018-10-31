@@ -118,7 +118,7 @@ public class SessionManager {
     public static boolean checkXSRFToken(HttpServletRequest request) {
         try {
             String jwtToken = getJWT(request).getClaim(XSRF_TOKEN).asString();
-            String payloadToken = request.getParameter(XSRF_TOKEN);
+            String payloadToken = request.getParameter(XSRF_TOKEN) != null ? request.getParameter(XSRF_TOKEN) : request.getHeader(XSRF_TOKEN);
             if (jwtToken != null && payloadToken != null) {
                 return jwtToken.equals(payloadToken);
             }
