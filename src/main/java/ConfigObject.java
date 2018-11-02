@@ -32,6 +32,7 @@ public abstract class ConfigObject {
     public static final String INVERT_ACCENT = "invertAccent";
     public static final String WARN_COLOR = "warnColor";
     public static final String INVERT_WARN = "invertWarn";
+    public static final String DISPLAY = "display";
 
     public static final int DEFAULT_SORT_ORDER = 1;
 

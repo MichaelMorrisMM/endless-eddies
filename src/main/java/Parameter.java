@@ -10,7 +10,7 @@ public class Parameter extends ConfigObject {
     public int sortOrder;
     public String toolTip;
     public List<Validator> validators;
-    public List<String> selectOptions;
+    public List<SelectOption> selectOptions;
     public String parentString;
     public String parentOption;
 
@@ -26,7 +26,7 @@ public class Parameter extends ConfigObject {
         this.parentOption = "";
     }
 
-    public Parameter(String n, String t, String c, int so, String tt, List<Validator> validators, List<String> selectOptions, String ps, String po) {
+    public Parameter(String n, String t, String c, int so, String tt, List<Validator> validators, List<SelectOption> selectOptions, String ps, String po) {
         this.name = n;
         this.type = t;
         this.code = c;
@@ -65,9 +65,11 @@ public class Parameter extends ConfigObject {
             }
             JsonArray optionsArray = Util.getArraySafe(obj, SELECT_OPTIONS);
             if (optionsArray != null) {
-                this.selectOptions = new ArrayList<>();
-                for (JsonString opt : optionsArray.getValuesAs(JsonString.class)) {
-                    this.selectOptions.add(opt.getString());
+                for (JsonObject opt : optionsArray.getValuesAs(JsonObject.class)) {
+                    SelectOption option = new SelectOption();
+                    if (option.updateWith(opt)) {
+                        this.selectOptions.add(option);
+                    }
                 }
             }
             this.parentString = Util.getStringSafeNonNull(obj, PARENT_STRING);
@@ -84,8 +86,8 @@ public class Parameter extends ConfigObject {
         }
 
         JsonArrayBuilder optionsBuilder = Json.createArrayBuilder();
-        for (String opt : this.selectOptions) {
-            optionsBuilder = optionsBuilder.add(opt);
+        for (SelectOption opt : this.selectOptions) {
+            optionsBuilder = optionsBuilder.add(opt.toJsonObject());
         }
 
         return Json.createObjectBuilder()

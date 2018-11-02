@@ -1,4 +1,5 @@
 import {Validator} from "./validator.model";
+import {SelectOption} from "./select-option.model";
 
 export class Parameter {
 
@@ -17,7 +18,7 @@ export class Parameter {
     public sortOrder: number;
     public toolTip: string;
     public validators: Validator[];
-    public selectOptions: string[];
+    public selectOptions: SelectOption[];
 
     public children?: Parameter[];
     public parent?: Parameter;

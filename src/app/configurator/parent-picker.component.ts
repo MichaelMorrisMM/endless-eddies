@@ -18,8 +18,8 @@ import {ThemesService} from "../services/themes.service";
             </mat-form-field>
             <mat-form-field>
                 <mat-select placeholder="Option" [(ngModel)]="this.option">
-                    <mat-option *ngFor="let o of this.parent?.selectOptions" [value]="o">
-                        {{o}}
+                    <mat-option *ngFor="let o of this.parent?.selectOptions" [value]="o.value">
+                        {{o.display ? o.display : o.value}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
