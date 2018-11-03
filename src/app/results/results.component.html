@@ -2,6 +2,11 @@
 <div *ngIf="this.config && this.result && this.request && this.application">
     <label>System Out:</label>
     <pre>{{this.result.systemOut}}</pre>
+    <div *ngIf="this.inlineFiles.length > 0">
+        <div *ngFor="let inlineFile of this.inlineFiles">
+            <img [src]="inlineFile.src" [alt]="inlineFile.name" [title]="inlineFile.toolTip">
+        </div>
+    </div>
     <div *ngIf="this.application.resultFiles && this.application.resultFiles.length > 0">
         <h2 class="subtitle">Result File(s)</h2>
         <button *ngFor="let rf of this.application.resultFiles"

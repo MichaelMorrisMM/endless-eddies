@@ -21,6 +21,9 @@
                         <mat-form-field class="flex-four margin-right">
                             <input matInput placeholder="Description" [formControlName]="rf.keyTooltip">
                         </mat-form-field>
+                        <div class="flex-container-row flex-one margin-right align-center justify-center">
+                            <mat-checkbox [formControlName]="rf.keyDisplayInline">Display as Image</mat-checkbox>
+                        </div>
                         <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" class="flex-one" (click)="this.deleteResultFile(rf)">
                             <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete
                         </button>

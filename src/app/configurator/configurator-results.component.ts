@@ -34,7 +34,6 @@ export class ConfiguratorResultsComponent implements OnInit {
                 public themesService: ThemesService) {
     }
 
-
     ngOnInit() {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
@@ -100,6 +99,7 @@ export class ConfiguratorResultsComponent implements OnInit {
         this.form.addControl(resultFile.keyName, new FormControl(resultFile.name));
         this.form.addControl(resultFile.keyFilename, new FormControl(resultFile.filename, Validators.required));
         this.form.addControl(resultFile.keyTooltip, new FormControl(resultFile.toolTip));
+        this.form.addControl(resultFile.keyDisplayInline, new FormControl(resultFile.displayInline));
         this.resultFiles.push(resultFile);
     }
 
@@ -108,6 +108,7 @@ export class ConfiguratorResultsComponent implements OnInit {
         this.form.removeControl(rf.keyName);
         this.form.removeControl(rf.keyFilename);
         this.form.removeControl(rf.keyTooltip);
+        this.form.removeControl(rf.keyDisplayInline);
         this.form.markAsDirty();
     }
 
@@ -166,6 +167,7 @@ export class ConfiguratorResultsComponent implements OnInit {
             rf.name = this.form.controls[rf.keyName].value;
             rf.filename = this.form.controls[rf.keyFilename].value;
             rf.toolTip = this.form.controls[rf.keyTooltip].value;
+            rf.displayInline = this.form.controls[rf.keyDisplayInline].value;
         });
         this.application.resultFiles = this.resultFiles;
 

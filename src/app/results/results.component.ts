@@ -12,6 +12,7 @@ import {Application} from "../configurator/application.model";
 import * as html2canvas from "html2canvas";
 import {ThemesService} from "../services/themes.service";
 import {HttpResponse} from "@angular/common/http";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-results',
@@ -25,6 +26,8 @@ export class ResultsComponent implements OnInit {
     public application: Application;
     public result: GetRequestResult;
 
+    public inlineFiles: ResultFile[];
+
     @ViewChild("graphContainer") graphContainer: ElementRef;
 
     public graphResults: any[];
@@ -33,7 +36,8 @@ export class ResultsComponent implements OnInit {
                 private resultsService: ResultsService,
                 private route: ActivatedRoute,
                 private router: Router,
-                public themesService: ThemesService) {
+                public themesService: ThemesService,
+                private sanitizer: DomSanitizer) {
     }
 
     ngOnInit() {
@@ -48,6 +52,7 @@ export class ResultsComponent implements OnInit {
             this.application = null;
             this.result = null;
             this.graphResults = null;
+            this.inlineFiles = [];
 
             this.resultsService.getRequest(idRequest).subscribe((result: GetRequestResult) => {
                 if (result.success && result.request && result.application) {
@@ -55,6 +60,21 @@ export class ResultsComponent implements OnInit {
                     this.request = result.request;
                     this.application = result.application;
                     this.graphResults = result.graphResults;
+
+                    let inlineFilesTemp: ResultFile[] = this.application.resultFiles.filter((rf: ResultFile) => {
+                        return rf.displayInline;
+                    });
+                    for (let inlineFile of inlineFilesTemp) {
+                        this.resultsService.downloadFile(this.request.name, inlineFile).subscribe((res: HttpResponse<Blob>) => {
+                            let contentDisposition: string = res.headers.get("Content-Disposition");
+                            if (contentDisposition && contentDisposition.includes('attachment')) {
+                                inlineFile.src = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(res.body));
+                                this.inlineFiles.push(inlineFile);
+                            } else {
+                                alert("An error occurred while downloading an image");
+                            }
+                        });
+                    }
                 } else {
                     alert(result.message);
                 }
