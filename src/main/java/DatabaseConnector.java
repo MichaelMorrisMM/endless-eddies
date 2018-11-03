@@ -323,6 +323,31 @@ public class DatabaseConnector {
         return requests;
     }
 
+    public static List<Request> getUsersRequestsList(User user) {
+        List<Request> requests = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+            PreparedStatement pstmt;
+            if (user.isGuest) {
+                pstmt = conn.prepareStatement("SELECT idRequest, name, idGuest, date, expiration FROM request WHERE request.idGuest = ? AND request.idUser IS NULL;");
+                pstmt.setLong(1, user.idGuest);
+            } else {
+                pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser WHERE request.idUser = ? AND request.idGuest IS NULL;");
+                pstmt.setInt(1, user.idUser);
+            }
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    try {
+                        requests.add(new Request(rs));
+                    } catch (Exception e) {
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            return null;
+        }
+        return requests;
+    }
+
     public static Request getRequest(int idRequest) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("SELECT idRequest, name, user.idUser, email, date, expiration FROM request JOIN user ON request.idUser = user.idUser WHERE idRequest = ? AND request.idGuest IS NULL;");

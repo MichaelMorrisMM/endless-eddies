@@ -5,6 +5,7 @@
             class="ag-theme-material full-height full-width"
             (gridReady)="this.onGridReady($event)"
             (selectionChanged)="this.onGridSelectionChanged($event)"
+            [enableSorting]="true"
             [rowSelection]="'multiple'"
             [rowMultiSelectWithClick]="true"
             [rowData]="this.userList"

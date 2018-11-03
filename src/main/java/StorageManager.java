@@ -4,7 +4,7 @@ public class StorageManager {
 
     public static long getUserStorageSpaceUsed(User user) throws Exception {
         long usedSpace = 0;
-        for (Request req : DatabaseConnector.getRequestsList(user)) {
+        for (Request req : DatabaseConnector.getUsersRequestsList(user)) {
             usedSpace += req.getSize();
         }
         return usedSpace;
