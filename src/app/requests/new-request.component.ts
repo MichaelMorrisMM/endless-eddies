@@ -27,6 +27,7 @@ export class NewRequestComponent implements OnInit {
 
     private parameterCounter: number;
     public currentParameters: Parameter[] = [];
+    public isWaitingForReply: boolean = false;
 
     constructor(public configuratorService: ConfiguratorService,
                 public constantsService: ConstantsService,
@@ -167,6 +168,11 @@ export class NewRequestComponent implements OnInit {
     }
 
     public submit(): void {
+        if (this.isWaitingForReply) {
+            return;
+        }
+
+        this.isWaitingForReply = true;
         let request: FormData = new FormData();
         request.append("targetApplication", this.application.name);
         for (let param of this.currentParameters) {
@@ -183,6 +189,7 @@ export class NewRequestComponent implements OnInit {
                 this.router.navigate(['/loading', result.message]);
             } else {
                 alert(result.message);
+                this.isWaitingForReply = false;
             }
         });
     }

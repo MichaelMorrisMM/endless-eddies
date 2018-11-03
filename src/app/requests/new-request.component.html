@@ -38,8 +38,8 @@
                 </div>
             </div>
         </ng-container>
-        <button mat-raised-button [style]="this.themesService.getButtonPrimaryStyles()" [disabled]="this.form.invalid" (click)="this.submit()">
-            <img src="./assets/icons/icons8-upload-to-cloud-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Submit
+        <button mat-raised-button [style]="this.themesService.getButtonPrimaryStyles()" [disabled]="this.isWaitingForReply || this.form.invalid" (click)="this.submit()">
+            <img src="./assets/icons/icons8-upload-to-cloud-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">{{this.isWaitingForReply ? 'Please Wait' : 'Submit'}}
         </button>
     </form>
 </ng-container>
