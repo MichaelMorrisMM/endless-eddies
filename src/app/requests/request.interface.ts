@@ -4,8 +4,10 @@ export interface Request {
     readonly idUser: string;
     readonly idGuest: string;
     readonly userEmail: string;
-    readonly date: string;
-    readonly expiration: string;
+    readonly date: number;
+    readonly dateDisplay: string;
+    readonly expiration: number;
+    readonly expirationDisplay: string;
     readonly size: number;
     readonly applicationName: string;
 }

@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {GridReadyEvent, SelectionChangedEvent} from "ag-grid-community";
+import {GridReadyEvent, RowDoubleClickedEvent, SelectionChangedEvent} from "ag-grid-community";
 import {ResultsService} from "../services/results.service";
 import {Request} from "../requests/request.interface";
 import {PostResult} from "../configurator/post-result.interface";
 import {AuthService} from "../services/auth.service";
 import {Router} from "@angular/router";
 import {ThemesService} from "../services/themes.service";
+import {ValueFormatterParams} from "ag-grid-community/dist/lib/entities/colDef";
 
 @Component({
     selector: 'all-results',
@@ -30,11 +31,9 @@ export class AllResultsComponent implements OnInit {
 
     ngOnInit() {
         this.gridColumnDefs = [
-            {headerName: 'ID', field: 'idRequest', checkboxSelection: true},
-            {headerName: 'Name', field: 'name'},
-            {headerName: 'Application', field: 'applicationName'},
-            {headerName: 'Date', field: 'date'},
-            {headerName: 'Expires', field: 'expiration'},
+            {headerName: 'Application', field: 'applicationName', checkboxSelection: true},
+            {headerName: 'Date', field: 'date', valueFormatter: this.dateDisplayFormatter},
+            {headerName: 'Expires', field: 'expiration', valueFormatter: this.expirationDisplayFormatter},
             {headerName: 'Size (bytes)', field: 'size', type: "numericColumn"},
         ];
         if (this.authService.getCurrentUser().isAdmin) {
@@ -43,6 +42,14 @@ export class AllResultsComponent implements OnInit {
             );
         }
         this.loadRequests();
+    }
+
+    private dateDisplayFormatter(params: ValueFormatterParams): any {
+        return params.data.dateDisplay;
+    }
+
+    private expirationDisplayFormatter(params: ValueFormatterParams): any {
+        return params.data.expirationDisplay;
     }
 
     private loadRequests(): void {
@@ -66,9 +73,21 @@ export class AllResultsComponent implements OnInit {
         }
     }
 
-    public viewRequest(): void {
-        if (this.selectedRequest) {
-            this.router.navigate(['/results', this.selectedRequest.idRequest]);
+    public onGridRowDoubleClicked(event: RowDoubleClickedEvent): void {
+        if (event && event.node && event.node.data && event.node.data.idRequest) {
+            this.viewRequest(event.node.data.idRequest);
+        }
+    }
+
+    public viewRequest(idRequest?: string): void {
+        let id: string;
+        if (idRequest) {
+            id = idRequest;
+        } else if (this.selectedRequest) {
+            id = this.selectedRequest.idRequest;
+        }
+        if (id) {
+            this.router.navigate(['/results', id]);
         }
     }
 

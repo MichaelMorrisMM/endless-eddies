@@ -135,7 +135,7 @@ task makeDatabase {
                         name        VARCHAR(100)    NOT NULL UNIQUE,
                         idUser      INTEGER,
                         idGuest     INTEGER,
-                        date        VARCHAR(30)     NOT NULL,
+                        date        INTEGER         NOT NULL,
                         expiration  INTEGER,
                         FOREIGN KEY(idUser) REFERENCES user(idUser)
                    )'''

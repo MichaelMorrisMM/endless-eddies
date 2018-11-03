@@ -118,7 +118,7 @@ public class DatabaseConnector {
                 }
             } catch (IOException e) {
             }
-            pstmt.setString(3, Date.from(now).toString());
+            pstmt.setLong(3, now.getEpochSecond());
             if (expiration != null) {
                 pstmt.setLong(4, expiration.getEpochSecond());
             } else {
@@ -140,7 +140,7 @@ public class DatabaseConnector {
 
             Instant now = Instant.now();
             Instant expiration = now.plus(1, ChronoUnit.DAYS);
-            pstmt.setString(3, Date.from(now).toString());
+            pstmt.setLong(3, now.getEpochSecond());
             pstmt.setLong(4, expiration.getEpochSecond());
 
             pstmt.executeUpdate();

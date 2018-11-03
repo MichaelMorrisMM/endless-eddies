@@ -5,6 +5,8 @@
             class="ag-theme-material full-height full-width"
             (gridReady)="this.onGridReady($event)"
             (selectionChanged)="this.onGridSelectionChanged($event)"
+            (rowDoubleClicked)="this.onGridRowDoubleClicked($event)"
+            [enableSorting]="true"
             [rowSelection]="'single'"
             [rowData]="this.requestList"
             [columnDefs]="this.gridColumnDefs"

@@ -12,8 +12,10 @@ public class Request implements DatabaseObject {
     public int idUser;
     public long idGuest;
     public String userEmail;
-    public String date;
-    public String expiration;
+    public long date;
+    public String dateDisplay;
+    public long expiration;
+    public String expirationDisplay;
 
     public Request(ResultSet rs) throws SQLException {
         this.setValues(rs);
@@ -32,12 +34,13 @@ public class Request implements DatabaseObject {
             this.idUser = 0;
             this.userEmail = "Guest User";
         }
-        this.date = rs.getString("date");
-        long exp = rs.getLong("expiration");
-        if (exp > 0) {
-            this.expiration = Date.from(Instant.ofEpochSecond(exp)).toString();
+        this.date = rs.getLong("date");
+        this.dateDisplay = Date.from(Instant.ofEpochSecond(this.date)).toString();
+        this.expiration = rs.getLong("expiration");
+        if (this.expiration > 0) {
+            this.expirationDisplay = Date.from(Instant.ofEpochSecond(this.expiration)).toString();
         } else {
-            this.expiration = "No Expiration";
+            this.expirationDisplay = "No Expiration";
         }
     }
 
@@ -50,7 +53,9 @@ public class Request implements DatabaseObject {
             .add("idGuest", "" + this.idGuest)
             .add("userEmail", this.userEmail)
             .add("date", this.date)
+            .add("dateDisplay", this.dateDisplay)
             .add("expiration", this.expiration)
+            .add("expirationDisplay", this.expirationDisplay)
             .add("size", this.getSize())
             .add("applicationName", this.getApplicationName())
             .build();
