@@ -54,6 +54,7 @@ import {ParentPickerComponent} from "./configurator/parent-picker.component";
 import {ThemesService} from './services/themes.service';
 import {ThemePickerComponent} from "./themes/theme-picker.component";
 import {ColorPickerModule} from "ngx-color-picker";
+import {LogoutComponent} from "./login/logout.component";
 
 @NgModule({
     declarations: [
@@ -79,6 +80,7 @@ import {ColorPickerModule} from "ngx-color-picker";
         DeleteApplicationDialogComponent,
         ParentPickerComponent,
         ThemePickerComponent,
+        LogoutComponent,
     ],
     imports: [
         BrowserModule,

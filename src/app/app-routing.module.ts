@@ -16,6 +16,7 @@ import {AllResultsComponent} from "./results/all-results.component";
 import {AuthGuardNonGuestService} from "./services/auth-guard-non-guest.service";
 import {LoadingComponent} from "./requests/loading.component";
 import {ThemePickerComponent} from "./themes/theme-picker.component";
+import {LogoutComponent} from "./login/logout.component";
 
 const routes: Routes = [
     { path: 'config', component: ConfiguratorOverviewComponent, canActivate: [AuthGuardAdminService] },
@@ -30,6 +31,7 @@ const routes: Routes = [
     { path: 'my-account', component: MyAccountComponent, canActivate: [AuthGuardNonGuestService] },
     { path: 'theme-picker', component: ThemePickerComponent, canActivate: [AuthGuardAdminService] },
     { path: 'home', component: HomeComponent, canActivate: [AuthGuardService] },
+    { path: 'logout', component: LogoutComponent, canActivate: [AuthGuardService] },
     { path: '',   redirectTo: '/home', pathMatch: 'full' },
     { path: '**', component: NotFoundComponent, canActivate: [AuthGuardService] },
 ];

@@ -15,7 +15,7 @@
                     <span *ngIf="this.authService.getCurrentUser().isAdmin" class="spacer"></span>
                     <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" routerLink="/my-account" [disabled]="this.authService.getCurrentUser().isGuest"><img src="./assets/icons/icons8-account-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">My Account</button>
                     <span class="spacer"></span>
-                    <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.authService.logOut()"><img src="./assets/icons/icons8-sign-out-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Logout</button>
+                    <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" routerLink="/logout"><img src="./assets/icons/icons8-sign-out-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Logout</button>
                 </div>
             </mat-toolbar>
             <router-outlet></router-outlet>
