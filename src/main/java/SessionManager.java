@@ -1,4 +1,5 @@
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
@@ -28,17 +29,8 @@ public class SessionManager {
             String xsrfToken = PasswordUtil.createSalt();
             user.currentXSRFToken = xsrfToken;
 
-            Instant now = Instant.now();
-            String jwt = JWT.create()
-                .withIssuedAt(Date.from(now))
-                .withExpiresAt(Date.from(now.plus(1, ChronoUnit.HOURS)))
-                .withClaim("idUser", user.idUser)
-                .withClaim(XSRF_TOKEN, xsrfToken)
-                .sign(ALGORITHM);
-            Cookie sessionCookie = new Cookie(SESSION_COOKIE_NAME, jwt);
-            // TODO add secure when https is working
-            sessionCookie.setHttpOnly(true);
-            response.addCookie(sessionCookie);
+            String jwt = createJWT(user, xsrfToken);
+            setCookie(jwt, false, response);
 
             return true;
         } catch (Exception e) {
@@ -47,42 +39,53 @@ public class SessionManager {
     }
 
     public static void endSession(HttpServletResponse response) {
-        response.setContentType("text/html");
-        Cookie sessionCookie = new Cookie(SESSION_COOKIE_NAME, "");
-        // TODO add secure when https is working
-        sessionCookie.setHttpOnly(true);
-        sessionCookie.setMaxAge(0);
-        response.addCookie(sessionCookie);
+        setCookie("", true, response);
     }
 
     public static boolean createGuestSession(User guest, HttpServletResponse response) {
+        return createSession(guest, response);
+    }
+
+    public static void addTimeToCurrentSession(User user, HttpServletRequest request, HttpServletResponse response) {
         try {
-            String xsrfToken = PasswordUtil.createSalt();
-            guest.currentXSRFToken = xsrfToken;
-
-            Instant now = Instant.now();
-            String jwt = JWT.create()
-                .withIssuedAt(Date.from(now))
-                .withExpiresAt(Date.from(now.plus(1, ChronoUnit.HOURS)))
-                .withClaim("idGuest", guest.idGuest)
-                .withClaim(XSRF_TOKEN, xsrfToken)
-                .sign(ALGORITHM);
-            Cookie sessionCookie = new Cookie(SESSION_COOKIE_NAME, jwt);
-            // TODO add secure when https is working
-            sessionCookie.setHttpOnly(true);
-            response.addCookie(sessionCookie);
-
-            return true;
+            DecodedJWT previousJWT = getJWT(request);
+            String xsrfToken = previousJWT.getClaim(XSRF_TOKEN).asString();
+            String jwt = createJWT(user, xsrfToken);
+            setCookie(jwt, false, response);
         } catch (Exception e) {
-            return false;
         }
+    }
+
+    private static String createJWT(User user, String xsrfToken) throws Exception {
+        Instant now = Instant.now();
+        JWTCreator.Builder builder = JWT.create()
+            .withIssuedAt(Date.from(now))
+            .withExpiresAt(Date.from(now.plus(30, ChronoUnit.MINUTES)))
+            .withClaim(XSRF_TOKEN, xsrfToken);
+        if (user.isGuest) {
+            builder = builder.withClaim("idGuest", user.idGuest);
+        } else {
+            builder = builder.withClaim("idUser", user.idUser);
+        }
+         return builder.sign(ALGORITHM);
+    }
+
+    private static void setCookie(String value, boolean isEndSessionCookie, HttpServletResponse response) {
+        Cookie sessionCookie = new Cookie(SESSION_COOKIE_NAME, value);
+        // TODO uncomment on production build with https support
+        //sessionCookie.setSecure(true);
+        sessionCookie.setHttpOnly(true);
+        if (isEndSessionCookie) {
+            response.setContentType("text/html");
+            sessionCookie.setMaxAge(0);
+        }
+        response.addCookie(sessionCookie);
     }
 
     public static User checkSession(HttpServletRequest request) {
         try {
             DecodedJWT jwt = getJWT(request);
-            Instant now = Instant.now();
-            if (now.compareTo(jwt.getIssuedAt().toInstant()) > 0 && now.compareTo(jwt.getExpiresAt().toInstant()) < 0) {
+            if (isJWTTimeValid(jwt)) {
                 User user = DatabaseConnector.getUserById(jwt.getClaim("idUser").asInt());
                 user.currentXSRFToken = jwt.getClaim(XSRF_TOKEN).asString();
                 return user;
@@ -96,14 +99,25 @@ public class SessionManager {
     public static User checkGuestSession(HttpServletRequest request) {
         try {
             DecodedJWT jwt = getJWT(request);
-            Instant now = Instant.now();
-            if (now.compareTo(jwt.getIssuedAt().toInstant()) > 0 && now.compareTo(jwt.getExpiresAt().toInstant()) < 0) {
+            if (isJWTTimeValid(jwt)) {
                 return User.getGuestUser(jwt.getClaim("idGuest").asLong());
             }
         } catch (Exception e) {
             return null;
         }
         return null;
+    }
+
+    private static boolean isJWTTimeValid(DecodedJWT jwt) {
+        Instant now = Instant.now();
+        return now.compareTo(jwt.getIssuedAt().toInstant()) > 0 && now.compareTo(jwt.getExpiresAt().toInstant()) < 0;
+    }
+
+    public static boolean isSessionTimeAlmostExpired(HttpServletRequest request) throws Exception {
+        DecodedJWT jwt = getJWT(request);
+        Instant now = Instant.now();
+        Instant expiresAt = jwt.getExpiresAt().toInstant();
+        return expiresAt.compareTo(now.plus(5, ChronoUnit.MINUTES)) < 0;
     }
 
     public static User checkAdminSession(HttpServletRequest request) {

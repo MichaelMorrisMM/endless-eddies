@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {EventEmitter, Injectable, OnDestroy} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {PostResult} from "../configurator/post-result.interface";
@@ -7,12 +7,15 @@ import {Router} from "@angular/router";
 import {User} from "../login/user.interface";
 import {map} from "rxjs/operators";
 import {CheckUserSessionResult} from "../users/check-user-session-result.interface";
+import {CheckSessionExpirationResult} from "../users/check-session-expiration-result.interface";
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnDestroy {
     private currentUser: User;
 
     onUserChange: EventEmitter<User> = new EventEmitter<User>();
+
+    private checkSessionExpiredTimer: any = null;
 
     constructor(private http: HttpClient,
                 private router: Router) {
@@ -30,6 +33,7 @@ export class AuthService {
                 this.currentUser = pr.user;
                 this.onUserChange.emit(this.currentUser);
                 this.router.navigateByUrl('/home');
+                this.startCheckingSessionExpired();
             } else {
                 alert(pr.message);
             }
@@ -41,11 +45,16 @@ export class AuthService {
             if (r && r.sessionPresent && r.user) {
                 this.currentUser = r.user;
                 this.onUserChange.emit(this.currentUser);
+                this.startCheckingSessionExpired();
                 return true;
             } else {
                 return false;
             }
         }));
+    }
+
+    public checkSessionExpiration(): Observable<CheckSessionExpirationResult> {
+        return this.http.get<CheckSessionExpirationResult>(ConstantsService.URL_PREFIX + '/check-session-expiration-status');
     }
 
     public guestLogIn(): void {
@@ -54,6 +63,7 @@ export class AuthService {
                 this.currentUser = pr.user;
                 this.onUserChange.emit(this.currentUser);
                 this.router.navigateByUrl('/home');
+                this.startCheckingSessionExpired();
             } else {
                 alert(pr.message);
             }
@@ -62,6 +72,11 @@ export class AuthService {
 
     public logOut(): void {
         this.http.post(ConstantsService.URL_PREFIX + '/logOut', null).subscribe(() => {
+            this.stopCheckingSessionExpired();
+            this.currentUser = null;
+            this.onUserChange.emit(null);
+        }, () => {
+            this.stopCheckingSessionExpired();
             this.currentUser = null;
             this.onUserChange.emit(null);
         });
@@ -106,6 +121,35 @@ export class AuthService {
 
     public setXSRFPayloadTokenHeader(headers: HttpHeaders): HttpHeaders {
         return headers.set(ConstantsService.XSRF_TOKEN, this.currentUser ? this.currentUser.xsrfToken : "");
+    }
+
+    private startCheckingSessionExpired(): void {
+        this.stopCheckingSessionExpired();
+
+        this.checkSessionExpiredTimer = setInterval(() => {
+            this.checkSessionExpiration().subscribe((result: CheckSessionExpirationResult) => {
+                if (!result || !result.sessionPresent) {
+                    this.stopCheckingSessionExpired();
+                    alert("Session expired. Please log in again");
+                    this.router.navigateByUrl('/logout');
+                }
+            }, () => {
+                this.stopCheckingSessionExpired();
+                alert("Session expired. Please log in again");
+                this.router.navigateByUrl('/logout');
+            });
+        }, 60000);
+    }
+
+    private stopCheckingSessionExpired(): void {
+        if (this.checkSessionExpiredTimer) {
+            clearInterval(this.checkSessionExpiredTimer);
+            this.checkSessionExpiredTimer = null;
+        }
+    }
+
+    ngOnDestroy() {
+        this.stopCheckingSessionExpired();
     }
 
 }

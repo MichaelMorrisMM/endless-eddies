@@ -6,29 +6,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
-@WebServlet("/check-user-session-status")
-public class CheckUserSessionServlet extends HttpServlet {
+@WebServlet("/check-session-expiration-status")
+public class CheckSessionExpirationServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        User user = SessionManager.checkSession(request);
-        JsonObject result;
-        if (user != null) {
-            try {
+        boolean sessionFound = false;
+        try {
+            User user = HttpUtil.checkForUserSessionAllowingForGuest(request);
+            if (user != null) {
+                sessionFound = true;
                 if (SessionManager.isSessionTimeAlmostExpired(request)) {
                     SessionManager.addTimeToCurrentSession(user, request, response);
                 }
-            } catch (Exception e) {
             }
-            result = Json.createObjectBuilder()
-                .add("sessionPresent", true)
-                .add("user", user.toJsonObject())
-                .build();
-        } else {
-            result = Json.createObjectBuilder()
-                .add("sessionPresent", false)
-                .build();
+        } catch (Exception e) {
         }
+
+        JsonObject result = Json.createObjectBuilder()
+            .add("sessionPresent", sessionFound)
+            .build();
         HttpUtil.printJSONResponse(response, result);
     }
 
