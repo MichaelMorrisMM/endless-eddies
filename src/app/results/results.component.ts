@@ -65,15 +65,20 @@ export class ResultsComponent implements OnInit {
                         return rf.displayInline;
                     });
                     for (let inlineFile of inlineFilesTemp) {
-                        this.resultsService.downloadFile(this.request.name, inlineFile).subscribe((res: HttpResponse<Blob>) => {
-                            let contentDisposition: string = res.headers.get("Content-Disposition");
-                            if (contentDisposition && contentDisposition.includes('attachment')) {
-                                inlineFile.src = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(res.body));
-                                this.inlineFiles.push(inlineFile);
-                            } else {
-                                alert("An error occurred while downloading an image");
-                            }
-                        });
+                        this.resultsService.downloadFile(this.request.name, inlineFile).subscribe(
+                            (res: HttpResponse<Blob>) => {
+                                let contentDisposition: string = res.headers.get('Content-Disposition');
+                                if (contentDisposition && contentDisposition.includes('attachment')) {
+                                    inlineFile.src = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(res.body));
+                                    this.inlineFiles.push(inlineFile);
+                                } else {
+                                    alert('An error occurred while downloading an image');
+                                }
+                            },
+                            null,
+                            () => {
+                                this.inlineFiles.sort((a, b) => a.sortOrder - b.sortOrder);
+                            });
                     }
                 } else {
                     alert(result.message);

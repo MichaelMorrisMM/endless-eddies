@@ -21,6 +21,9 @@
                         <mat-form-field class="flex-four margin-right">
                             <input matInput placeholder="Description" [formControlName]="rf.keyTooltip">
                         </mat-form-field>
+                        <mat-form-field class="margin-right flex-two">
+                            <input matInput type="number" placeholder="Sort Order" [formControlName]="rf.keySortOrder">
+                        </mat-form-field>
                         <div class="flex-container-row flex-one margin-right align-center justify-center">
                             <mat-checkbox [formControlName]="rf.keyDisplayInline">Display as Image</mat-checkbox>
                         </div>
