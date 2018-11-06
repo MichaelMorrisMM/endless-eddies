@@ -6,19 +6,22 @@ public class ResultFile extends ConfigObject {
     public String fileName;
     public String toolTip;
     public boolean displayInline;
+    public int sortOrder;
 
     public ResultFile() {
         this.name = "";
         this.fileName = "";
         this.toolTip = "";
         this.displayInline = false;
+        this.sortOrder = DEFAULT_SORT_ORDER;
     }
 
-    public ResultFile(String n, String fn, String tt, boolean di) {
+    public ResultFile(String n, String fn, String tt, boolean di, int so) {
         this.name = n;
         this.fileName = fn;
         this.toolTip = tt;
         this.displayInline = di;
+        this.sortOrder = so;
 
         this.updateNameForDisplay();
     }
@@ -37,6 +40,7 @@ public class ResultFile extends ConfigObject {
             if (obj.get(DISPLAY_INLINE) != null) {
                 this.displayInline = obj.getBoolean(DISPLAY_INLINE);
             }
+            this.sortOrder = obj.getInt(SORT_ORDER, DEFAULT_SORT_ORDER);
             return true;
         }
         return false;
@@ -48,6 +52,7 @@ public class ResultFile extends ConfigObject {
             .add(FILE_NAME, this.fileName)
             .add(TOOL_TIP, this.toolTip)
             .add(DISPLAY_INLINE, this.displayInline)
+            .add(SORT_ORDER, this.sortOrder)
             .build();
     }
 
@@ -65,8 +70,11 @@ public class ResultFile extends ConfigObject {
     public boolean equals(Object other) {
         if (other != null && other instanceof ResultFile) {
             ResultFile otherAsRF = (ResultFile) other;
-            return this.name.equals(otherAsRF.name) && this.fileName.equals(otherAsRF.fileName)
-                && this.toolTip.equals(otherAsRF.toolTip) && this.displayInline == otherAsRF.displayInline;
+            return this.name.equals(otherAsRF.name)
+                && this.fileName.equals(otherAsRF.fileName)
+                && this.toolTip.equals(otherAsRF.toolTip)
+                && this.displayInline == otherAsRF.displayInline
+                && this.sortOrder == otherAsRF.sortOrder;
         }
         return false;
     }

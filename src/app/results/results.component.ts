@@ -70,6 +70,7 @@ export class ResultsComponent implements OnInit {
                             if (contentDisposition && contentDisposition.includes('attachment')) {
                                 inlineFile.src = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(res.body));
                                 this.inlineFiles.push(inlineFile);
+                                this.inlineFiles.sort((a, b) => a.sortOrder - b.sortOrder);
                             } else {
                                 alert("An error occurred while downloading an image");
                             }

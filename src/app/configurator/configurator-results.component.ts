@@ -100,6 +100,7 @@ export class ConfiguratorResultsComponent implements OnInit {
         this.form.addControl(resultFile.keyFilename, new FormControl(resultFile.filename, Validators.required));
         this.form.addControl(resultFile.keyTooltip, new FormControl(resultFile.toolTip));
         this.form.addControl(resultFile.keyDisplayInline, new FormControl(resultFile.displayInline));
+        this.form.addControl(resultFile.keySortOrder, new FormControl(resultFile.sortOrder));
         this.resultFiles.push(resultFile);
     }
 
@@ -168,6 +169,7 @@ export class ConfiguratorResultsComponent implements OnInit {
             rf.filename = this.form.controls[rf.keyFilename].value;
             rf.toolTip = this.form.controls[rf.keyTooltip].value;
             rf.displayInline = this.form.controls[rf.keyDisplayInline].value;
+            rf.sortOrder = this.form.controls[rf.keySortOrder].value;
         });
         this.application.resultFiles = this.resultFiles;
 
