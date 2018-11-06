@@ -110,6 +110,7 @@ export class ConfiguratorResultsComponent implements OnInit {
         this.form.removeControl(rf.keyFilename);
         this.form.removeControl(rf.keyTooltip);
         this.form.removeControl(rf.keyDisplayInline);
+        this.form.removeControl(rf.keySortOrder);
         this.form.markAsDirty();
     }
 
