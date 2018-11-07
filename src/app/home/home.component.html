@@ -1,6 +1,6 @@
-<h1 class="title" *ngIf="this.config?.homePages?.length === 0">Home</h1>
-<mat-tab-group *ngIf="this.config?.homePages?.length > 0">
-    <mat-tab *ngFor="let page of this.config.homePages" [label]="page.title">
-        <div [innerHTML]="this.sanitizer.bypassSecurityTrustHtml(this.md.parse(page.content))"></div>
+<h1 class="title" *ngIf="this.parsedHomePages?.length === 0">Home</h1>
+<mat-tab-group id="homePageTabGroup" *ngIf="this.parsedHomePages?.length > 0">
+    <mat-tab *ngFor="let page of this.parsedHomePages" [label]="page.title">
+        <div [innerHTML]="this.sanitizer.bypassSecurityTrustHtml(page.content)"></div>
     </mat-tab>
 </mat-tab-group>
