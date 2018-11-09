@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
         this.configuratorService.getConfiguration().subscribe(config => config.homePages.forEach(page => {
-                page.content = this.md.parse(page.content).replace(/\$\$(.+)\$\$/, HomeComponent.equationReplacer);
+                page.content = this.md.parse(page.content).replace(/\$\$(.+?)\$\$/g, HomeComponent.equationReplacer);
                 this.parsedHomePages.push(page);
             }
         ));
