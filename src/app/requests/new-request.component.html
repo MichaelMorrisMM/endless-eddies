@@ -1,6 +1,6 @@
 <button mat-button (click)="this.showAppPicker()">Pick Application</button>
 <ng-container *ngIf="this.config && this.application">
-    <form [formGroup]="this.form" class="flex-container-col full-width margin-bottom">
+    <form [formGroup]="this.form" class="flex-container-col full-width">
         <h1 class="title">New Request</h1>
         <ng-container *ngFor="let param of this.currentParameters; let i = index">
             <div [ngSwitch]="param.type" class="full-width flex-container-row margin-bottom align-center">
@@ -33,8 +33,8 @@
                 <span *ngIf="param.toolTip" matTooltip="{{param.toolTip}}" [matTooltipPosition]="'above'" class="margin-left">
                     <img src="./assets/icons/icons8-info-popup-50.png" class="embeddedIconNoMargin">
                 </span>
-                <div *ngFor="let validator of param.validators">
-                    <span class="margin-left" *ngIf="validator.message && this.form.controls[param.name].hasError(validator.validatorType)">*{{validator.message}}</span>
+                <div *ngFor="let validator of param.validators" class="margin-left">
+                    <span *ngIf="validator.message && this.form.controls[param.name].hasError(validator.validatorType)">*{{validator.message}}</span>
                 </div>
             </div>
         </ng-container>

@@ -3,18 +3,18 @@
     <label>System Out:</label>
     <pre>{{this.result.systemOut}}</pre>
     <div *ngIf="this.inlineFiles.length > 0">
-        <div *ngFor="let inlineFile of this.inlineFiles">
+        <div *ngFor="let inlineFile of this.inlineFiles" class="margin-bottom">
             <img [src]="inlineFile.src" [alt]="inlineFile.name" [title]="inlineFile.toolTip">
         </div>
     </div>
-    <div *ngIf="this.application.resultFiles && this.application.resultFiles.length > 0">
+    <div *ngIf="this.application.resultFiles && this.application.resultFiles.length > 0" class="margin-bottom">
         <h2 class="subtitle">Result File(s)</h2>
         <button *ngFor="let rf of this.application.resultFiles"
                 mat-button (click)="this.downloadFile(rf)" matTooltip="{{rf.toolTip}}">
             <img src="./assets/icons/icons8-download-50.png" class="embeddedIcon">{{rf.name}}
         </button>
     </div>
-    <div *ngIf="this.application.graphs && this.application.graphs.length > 0 && this.graphResults">
+    <div *ngIf="this.application.graphs && this.application.graphs.length > 0 && this.graphResults" class="margin-bottom">
         <h2 class="subtitle">Graph(s)</h2>
         <button mat-button (click)="this.printGraphs()"><img src="./assets/icons/icons8-print-50.png" class="embeddedIcon">Print</button>
         <div #graphContainer>
@@ -22,6 +22,6 @@
         </div>
     </div>
 </div>
-<div class="margin-bottom">
+<div>
     <button mat-raised-button [style]="this.themesService.getButtonPrimaryStyles()" (click)="this.backToAllResults()"><img src="./assets/icons/icons8-back-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Back</button>
 </div>

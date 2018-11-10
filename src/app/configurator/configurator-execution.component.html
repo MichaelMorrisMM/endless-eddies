@@ -1,6 +1,6 @@
 <button mat-button (click)="this.showAppPicker()">Pick Application</button>
 <ng-container *ngIf="this.config && this.application">
-    <form [formGroup]="this.form" class="flex-container-col full-width margin-bottom">
+    <form [formGroup]="this.form" class="flex-container-col full-width">
         <h1 class="title">Execution</h1>
         <h2 class="subtitle">Application</h2>
         <mat-form-field>
@@ -17,7 +17,7 @@
                         <mat-form-field class="margin-right flex-three">
                             <input matInput placeholder="Command" [formControlName]="group.keyCommand">
                         </mat-form-field>
-                        <div class="flex-one">
+                        <div class="flex-one flex-container-row justify-center align-center">
                             <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteCommandGroup(group)">
                                 <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete Executable
                             </button>
@@ -35,27 +35,33 @@
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
-                            <button *ngIf="this.form.controls[parameter.keyType].value == this.configuratorService.TYPE_SELECT || this.form.controls[parameter.keyType].value == this.configuratorService.TYPE_MULTI_SELECT"
-                                    mat-raised-button (click)="this.openOptionsDialog(parameter)">Options</button>
+                            <div *ngIf="this.form.controls[parameter.keyType].value == this.configuratorService.TYPE_SELECT || this.form.controls[parameter.keyType].value == this.configuratorService.TYPE_MULTI_SELECT"
+                                 class="flex-container-row justify-center align-center">
+                                <button mat-raised-button (click)="this.openOptionsDialog(parameter)">Options</button>
+                            </div>
                             <mat-form-field class="margin-left margin-right flex-two">
                                 <input matInput placeholder="Code" [formControlName]="parameter.keyCode">
                             </mat-form-field>
                             <mat-form-field class="margin-right flex-two">
                                 <input matInput type="number" placeholder="Sort Order" [formControlName]="parameter.keySortOrder">
                             </mat-form-field>
-                            <div class="flex-one">
-                                <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteParameter(parameter, group)">
-                                    <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete Parameter
-                                </button>
-                            </div>
                         </div>
                         <div class="flex-container-row full-width">
                             <mat-form-field class="half-width margin-right">
                                 <input matInput placeholder="Description" [formControlName]="parameter.keyToolTip">
                             </mat-form-field>
-                            <button mat-raised-button (click)="this.openValidatorsDialog(parameter)">Validation</button>
+                            <div class="flex-container-row justify-center align-center">
+                                <button mat-raised-button (click)="this.openValidatorsDialog(parameter)">Validation</button>
+                            </div>
                             <span class="spacer"></span>
-                            <button mat-raised-button (click)="this.openParentDialog(parameter, group)">Parent</button>
+                            <div class="flex-container-row justify-center align-center">
+                                <button mat-raised-button (click)="this.openParentDialog(parameter, group)">Parent</button>
+                            </div>
+                            <div class="flex-one flex-container-row justify-center align-center">
+                                <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteParameter(parameter, group)">
+                                    <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete Parameter
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="flex-container-row full-width justify-center">

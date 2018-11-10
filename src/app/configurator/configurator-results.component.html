@@ -1,6 +1,6 @@
 <button mat-button (click)="this.showAppPicker()">Pick Application</button>
 <ng-container *ngIf="this.config && this.application">
-    <form [formGroup]="this.form" class="flex-container-col full-width margin-bottom">
+    <form [formGroup]="this.form" class="flex-container-col full-width">
         <h1 class="title">Results</h1>
         <mat-accordion class="margin-bottom">
             <mat-expansion-panel>
@@ -27,9 +27,11 @@
                         <div class="flex-container-row flex-one margin-right align-center justify-center">
                             <mat-checkbox [formControlName]="rf.keyDisplayInline">Display as Image</mat-checkbox>
                         </div>
-                        <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" class="flex-one" (click)="this.deleteResultFile(rf)">
-                            <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete
-                        </button>
+                        <div class="flex-one flex-container-row justify-center align-center">
+                            <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteResultFile(rf)">
+                                <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addResultFile()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add</button>
@@ -56,7 +58,9 @@
                         <mat-form-field class="margin-right flex-one">
                             <input matInput placeholder="Data Source" [formControlName]="g.keyFilename">
                         </mat-form-field>
-                        <button mat-button class="flex-one" (click)="this.showDataSourceInfo(g)"><img src="./assets/icons/icons8-info-50.png" class="embeddedIcon"></button>
+                        <div class="flex-one flex-container-row justify-center align-center">
+                            <button mat-button (click)="this.showDataSourceInfo(g)"><img src="./assets/icons/icons8-info-50.png" class="embeddedIcon"></button>
+                        </div>
                     </div>
                     <div class="flex-container-row full-width">
                         <mat-form-field class="margin-right flex-one">

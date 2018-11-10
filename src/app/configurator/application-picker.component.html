@@ -5,7 +5,9 @@
             <button mat-button (click)="this.submit(app)">{{app.name}}</button>
         </div>
     </ng-container>
-    <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" *ngIf="this.showAdder" (click)="this.submit(null)">
-        <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add New Application
-    </button>
+    <div *ngIf="this.showAdder" class="margin-top">
+        <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.submit(null)">
+            <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add New Application
+        </button>
+    </div>
 </mat-dialog-content>
