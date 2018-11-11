@@ -30,11 +30,11 @@
                     <label class="margin-right">{{param.name}}</label>
                     <input type="file" (change)="onFileChange($event, param)">
                 </div>
-                <span *ngIf="param.toolTip" matTooltip="{{param.toolTip}}" [matTooltipPosition]="'above'" class="margin-left">
+                <span *ngIf="param.toolTip" matTooltip="{{param.toolTip}}" [matTooltipPosition]="'above'" class="margin-left margin-right">
                     <img src="./assets/icons/icons8-info-popup-50.png" class="embeddedIconNoMargin">
                 </span>
-                <div *ngFor="let validator of param.validators" class="margin-left">
-                    <span *ngIf="validator.message && this.form.controls[param.name].hasError(validator.validatorType)">*{{validator.message}}</span>
+                <div *ngFor="let validator of param.validators">
+                    <span class="margin-right" *ngIf="validator.message && this.form.controls[param.name].hasError(validator.validatorType)">*{{validator.message}}</span>
                 </div>
             </div>
         </ng-container>

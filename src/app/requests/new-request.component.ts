@@ -191,7 +191,10 @@ export class NewRequestComponent implements OnInit {
 
     private static moduloValidator(value: number): ValidatorFn {
         return (control: AbstractControl): {[key: string]: any} | null => {
-            const remainder: number = control.value && !isNaN(value) ? control.value % value : -1;
+            if (!control.value || isNaN(value)) {
+                return null;
+            }
+            const remainder: number = control.value % value;
             return remainder !== 0 ? {'modulo': {value: control.value}} : null;
         };
     }

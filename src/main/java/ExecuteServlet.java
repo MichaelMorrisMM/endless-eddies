@@ -106,11 +106,11 @@ public class ExecuteServlet extends HttpServlet {
                     for (Validator validator : param.validators) {
                         if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && valIsNull) {
                             return printValidationError(param, "Required");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN_LENGTH) && (val.equals("") || val.length() < Long.parseLong(Util.parseStringParameter(validator.value)))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN_LENGTH) && !valIsNull && val.length() < Long.parseLong(Util.parseStringParameter(validator.value))) {
                             return printValidationError(param, "Minimum length not met");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX_LENGTH) && !val.equals("") && val.length() > Long.parseLong(Util.parseStringParameter(validator.value))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX_LENGTH) && !valIsNull && val.length() > Long.parseLong(Util.parseStringParameter(validator.value))) {
                             return printValidationError(param, "Maximum length exceeded");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REGEX) && (val.equals("") || !val.matches(Util.parseStringParameter(validator.value)))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REGEX) && !valIsNull && !val.matches(Util.parseStringParameter(validator.value))) {
                             return printValidationError(param, "Fails to match regular expression");
                         }
                     }
@@ -119,11 +119,11 @@ public class ExecuteServlet extends HttpServlet {
                     for (Validator validator : param.validators) {
                         if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && parsedValue == null) {
                             return printValidationError(param, "Required");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN) && (parsedValue == null || parsedValue < Long.parseLong(Util.parseStringParameter(validator.value)))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN) && parsedValue != null && parsedValue < Long.parseLong(Util.parseStringParameter(validator.value))) {
                             return printValidationError(param, "Minimum not met");
                         } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX) && parsedValue != null && parsedValue > Long.parseLong(Util.parseStringParameter(validator.value))) {
                             return printValidationError(param, "Maximum exceeded");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MOD) && (parsedValue == null || parsedValue % Long.parseLong(Util.parseStringParameter(validator.value)) != 0)) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MOD) && parsedValue != null && parsedValue % Long.parseLong(Util.parseStringParameter(validator.value)) != 0) {
                             return printValidationError(param, "Modulo validation not met");
                         }
                     }
@@ -132,7 +132,7 @@ public class ExecuteServlet extends HttpServlet {
                     for (Validator validator : param.validators) {
                         if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_REQUIRED) && parsedValue == null) {
                             return printValidationError(param, "Required");
-                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN) && (parsedValue == null || parsedValue < Double.parseDouble(Util.parseStringParameter(validator.value)))) {
+                        } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MIN) && parsedValue != null && parsedValue < Double.parseDouble(Util.parseStringParameter(validator.value))) {
                             return printValidationError(param, "Minimum not met");
                         } else if (validator.validatorType.equals(ValidatorsServlet.VALIDATOR_TYPE_MAX) && parsedValue != null && parsedValue > Double.parseDouble(Util.parseStringParameter(validator.value))) {
                             return printValidationError(param, "Maximum exceeded");
