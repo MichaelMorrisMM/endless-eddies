@@ -45,7 +45,7 @@ public class CommandGroup extends ConfigObject {
 
     public JsonObject toJsonObject() {
         return Json.createObjectBuilder()
-            .add(PARAMETERS, ConfigSettings.getNode(this.parameters))
+            .add(PARAMETERS, ConfigSettings.getNode(this.getParameters()))
             .add(COMMAND, this.command)
             .build();
     }

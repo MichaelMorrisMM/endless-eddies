@@ -35,18 +35,23 @@ export class ConfiguratorResultsComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.refresh();
+    }
+
+    private refresh(preselectApplication?: string): void {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
-            this.showAppPicker();
+            this.showAppPicker(preselectApplication);
         });
     }
 
-    public showAppPicker(): void {
+    public showAppPicker(preselectApplication?: string): void {
         if (this.config) {
             let dialog: MatDialogRef<ApplicationPickerComponent> = this.dialog.open(ApplicationPickerComponent, {
                 data: {
                     config: this.config,
                     showAdder: false,
+                    preselectApplication: preselectApplication
                 }
             });
 
@@ -182,6 +187,7 @@ export class ConfiguratorResultsComponent implements OnInit {
         this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
             if (response.success) {
                 this.form.markAsPristine();
+                this.refresh(this.application.name);
             }
         });
     }

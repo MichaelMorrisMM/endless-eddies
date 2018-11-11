@@ -89,7 +89,7 @@
             </mat-expansion-panel>
         </mat-accordion>
         <div class="flex-container-row">
-            <button mat-raised-button [style]="this.themesService.getButtonPrimaryStyles()" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Save</button>
+            <button mat-raised-button [disabled]="this.form.invalid" [style]="this.themesService.getButtonPrimaryStyles()" (click)="this.save()"><img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Save</button>
             <span *ngIf="this.form.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}"><img src="./assets/icons/icons8-exclamation-mark-50.png" class="embeddedIcon" [style]="this.themesService.getIconDirtyNoteStyles()">{{this.constantsService.DIRTY_NOTE_MESSAGE}}</span>
         </div>
     </form>

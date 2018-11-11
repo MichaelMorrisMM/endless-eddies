@@ -85,14 +85,28 @@ public class Application extends ConfigObject {
         return list;
     }
 
+    public List<ResultFile> getResultFiles() {
+        List<ResultFile> list = new ArrayList<>(this.resultFiles);
+        list.sort(new ResultFileSortOrderComparator());
+        return list;
+    }
+
     public JsonObject toJsonObject() {
         return Json.createObjectBuilder()
             .add(NAME, this.name)
             .add(NODE_COMMAND_GROUPS, ConfigSettings.getNode(this.commandGroups))
-            .add(NODE_RESULT_FILES, ConfigSettings.getNode(this.resultFiles))
+            .add(NODE_RESULT_FILES, ConfigSettings.getNode(this.getResultFiles()))
             .add(NODE_GRAPHS, ConfigSettings.getNode(this.graphs))
             .add(PARAMETERS, ConfigSettings.getNode(this.getParameters()))
             .build();
+    }
+
+    public static class ResultFileSortOrderComparator implements Comparator<ResultFile> {
+
+        public int compare(ResultFile a, ResultFile b) {
+            return a.sortOrder - b.sortOrder;
+        }
+
     }
 
 }
