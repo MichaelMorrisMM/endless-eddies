@@ -50,12 +50,7 @@ export class NewRequestComponent implements OnInit {
         });
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
-            if(this.config.applications.length > 1) { // If there is more than one app, show the dialog
-                this.showAppPicker();
-            } else { // Otherwise, choose the only app by default
-                this.application = this.config.applications[0];
-                this.setUpForm();
-            }
+            this.showAppPicker();
         });
     }
 

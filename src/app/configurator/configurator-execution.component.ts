@@ -48,19 +48,20 @@ export class ConfiguratorExecutionComponent implements OnInit {
         this.refresh();
     }
 
-    private refresh(): void {
+    private refresh(preselectApplication?: string): void {
         this.configuratorService.getConfiguration().subscribe((response: Config) => {
             this.config = response;
-            this.showAppPicker();
+            this.showAppPicker(preselectApplication);
         });
     }
 
-    public showAppPicker(): void {
+    public showAppPicker(preselectApplication?: string): void {
         if (this.config) {
             let dialog: MatDialogRef<ApplicationPickerComponent> = this.dialog.open(ApplicationPickerComponent, {
                 data: {
                     config: this.config,
                     showAdder: true,
+                    preselectApplication: preselectApplication
                 }
             });
 
@@ -215,7 +216,7 @@ export class ConfiguratorExecutionComponent implements OnInit {
         this.configuratorService.saveConfiguration(this.config).subscribe((response: PostResult) => {
             if (response.success) {
                 this.form.markAsPristine();
-                this.refresh();
+                this.refresh(this.application.name);
             }
         });
     }

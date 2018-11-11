@@ -23,6 +23,23 @@ export class ApplicationPickerComponent implements OnInit {
     ngOnInit() {
         this.config = this.data.config;
         this.showAdder = this.data.showAdder;
+        if (this.config.applications.length === 1 && !this.showAdder) {
+            setTimeout(() => {
+                this.submit(this.config.applications[0]);
+            });
+            return;
+        }
+        if (this.data.preselectApplication) {
+            for (let app of this.config.applications) {
+                if (app.name === this.data.preselectApplication) {
+                    setTimeout(() => {
+                        this.submit(app);
+                    });
+                    break;
+                }
+            }
+            return;
+        }
     }
 
     public submit(app: Application) {
