@@ -22,7 +22,7 @@
             <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete
         </button>
         <span *ngIf="this.authService.getCurrentUser().isAdmin" class="spacer"></span>
-        <button mat-raised-button *ngIf="this.authService.getCurrentUser().isAdmin" [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteExpiredResults()">
+        <button mat-raised-button *ngIf="this.authService.getCurrentUser().isAdmin" [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteExpiredResults()" matTooltip="Automatically delete all request data set to expire before now">
             <img src="./assets/icons/icons8-expired-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete Expired Results
         </button>
     </div>

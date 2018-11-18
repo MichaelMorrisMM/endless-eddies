@@ -1,6 +1,8 @@
 # EndlessEddies
 Some programmers want to make their applications available online, but don’t have the time or knowledge to build a robust website to host them.  Endless Eddies, designed in collaboration with Professor Tony Saad from the Department of Chemical Engineering, is a framework which allows users to build a web server and application without writing any HTML, CSS, or Javascript.  Fully configurable, it dynamically builds a local database, web pages, and request forms so that the user’s program can be shared online. Account administration and authentication is provided by the framework as well, allowing users to log in and view past results from the application.  With Endless Eddies, an unlimited number of applications can be shared with little effort on the part of the programmer.
 
+Additional user help is available in the project `Wiki`.
+
 ## Installation and Deployment (Non-Developers)
 1. Download and execute [Endless Eddies installer](https://github.com/MichaelMorrisMM/endless-eddies/blob/master/scripts/install-endless-eddies.sh)
     - `curl https://raw.githubusercontent.com/MichaelMorrisMM/endless-eddies/master/scripts/install-endless-eddies.sh | sudo bash`

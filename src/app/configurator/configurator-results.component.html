@@ -25,7 +25,7 @@
                             <input matInput type="number" placeholder="Sort Order" [formControlName]="rf.keySortOrder">
                         </mat-form-field>
                         <div class="flex-container-row flex-one margin-right align-center justify-center">
-                            <mat-checkbox [formControlName]="rf.keyDisplayInline">Display as Image</mat-checkbox>
+                            <mat-checkbox [formControlName]="rf.keyDisplayInline" matTooltip="In addition to being downloadable, display the contents of the file as an image on the Results screen">Display as Image</mat-checkbox>
                         </div>
                         <div class="flex-one flex-container-row justify-center align-center">
                             <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteResultFile(rf)">
@@ -34,7 +34,8 @@
                         </div>
                     </div>
                 </div>
-                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addResultFile()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add</button>
+                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addResultFile()" matTooltip="A local file created during the runtime of the executable. Users will be able to download the file on the Results screen" [matTooltipPosition]="'right'">
+                    <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add</button>
             </mat-expansion-panel>
         </mat-accordion>
         <mat-accordion class="margin-bottom">
@@ -85,7 +86,8 @@
                         </div>
                     </div>
                 </div>
-                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addGraph()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add</button>
+                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addGraph()" matTooltip="A visual representation of data created during the runtime of the executable. Graph(s) are rendered on the client-side" [matTooltipPosition]="'right'">
+                    <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add</button>
             </mat-expansion-panel>
         </mat-accordion>
         <div class="flex-container-row">

@@ -39,7 +39,7 @@
                                  class="flex-container-row justify-center align-center">
                                 <button mat-raised-button (click)="this.openOptionsDialog(parameter)">Options</button>
                             </div>
-                            <mat-form-field class="margin-left margin-right flex-two">
+                            <mat-form-field class="margin-left margin-right flex-two" matTooltip="A string to append as a command line parameter before the user-submitted value">
                                 <input matInput placeholder="Code" [formControlName]="parameter.keyCode">
                             </mat-form-field>
                             <mat-form-field class="margin-right flex-two">
@@ -55,7 +55,7 @@
                             </div>
                             <span class="spacer"></span>
                             <div class="flex-container-row justify-center align-center">
-                                <button mat-raised-button (click)="this.openParentDialog(parameter, group)">Parent</button>
+                                <button mat-raised-button (click)="this.openParentDialog(parameter, group)" matTooltip="Hide this parameter if another select parameter does not have a qualifying value">Parent</button>
                             </div>
                             <div class="flex-one flex-container-row justify-center align-center">
                                 <button mat-raised-button [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteParameter(parameter, group)">
@@ -65,12 +65,13 @@
                         </div>
                     </div>
                     <div class="flex-container-row full-width justify-center">
-                        <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addParameter(group)">
+                        <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addParameter(group)" matTooltip="Add a field on New Request form for users to fill out when submitting a request. The value of the field will be fed in as a command line parameter for the executable">
                             <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add Parameter
                         </button>
                     </div>
                 </div>
-                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addCommandGroup()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add Executable</button>
+                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addCommandGroup()" matTooltip="An executable program or script to be run with user-submitted parameters. Executables will be called in order when processing a request for an application" [matTooltipPosition]="'right'">
+                    <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add Executable</button>
             </mat-expansion-panel>
         </mat-accordion>
         <div class="flex-container-row margin-top justify-space-between">

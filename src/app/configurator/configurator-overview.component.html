@@ -24,7 +24,8 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addHomePage()"><img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add</button>
+                <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="this.addHomePage()" matTooltip="Adds a new tab on Home with customizable content" [matTooltipPosition]="'right'">
+                    <img src="./assets/icons/icons8-plus-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Add</button>
             </mat-expansion-panel>
         </mat-accordion>
         <div class="flex-container-row">

@@ -24,7 +24,7 @@
             <img src="./assets/icons/icons8-chevron-up-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Give Admin Permissions
         </button>
         <span class="spacer"></span>
-        <button mat-raised-button [disabled]="this.disableDelete" [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteUsers()">
+        <button mat-raised-button [disabled]="this.disableDelete" [style]="this.themesService.getButtonWarnStyles()" (click)="this.deleteUsers()" matTooltip="Delete user account(s) and all associated request data">
             <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete
         </button>
     </div>

@@ -11,7 +11,7 @@
             <mat-toolbar [style]="this.themesService.getToolbarStyles()" class="toolbar">
                 <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" (click)="sidenav.toggle()"><img src="./assets/icons/icons8-menu-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Menu</button>
                 <div class="flex-container-row">
-                    <button mat-raised-button *ngIf="this.authService.getCurrentUser().isAdmin" [style]="this.themesService.getButtonAccentStyles()" routerLink="/theme-picker"><img src="./assets/icons/icons8-paint-palette-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Theme</button>
+                    <button mat-raised-button *ngIf="this.authService.getCurrentUser().isAdmin" [style]="this.themesService.getButtonAccentStyles()" routerLink="/theme-picker" matTooltip="Change color palette for all users"><img src="./assets/icons/icons8-paint-palette-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">Theme</button>
                     <span *ngIf="this.authService.getCurrentUser().isAdmin" class="spacer"></span>
                     <button mat-raised-button [style]="this.themesService.getButtonAccentStyles()" routerLink="/my-account" [disabled]="this.authService.getCurrentUser().isGuest"><img src="./assets/icons/icons8-account-50.png" class="embeddedIcon" [style]="this.themesService.getIconAccentStyles()">My Account</button>
                     <span class="spacer"></span>

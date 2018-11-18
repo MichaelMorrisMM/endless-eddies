@@ -20,7 +20,7 @@
             <img src="./assets/icons/icons8-save-as-50.png" class="embeddedIcon" [style]="this.themesService.getIconPrimaryStyles()">Save
         </button>
         <span class="spacer"></span>
-        <button mat-raised-button (click)="this.deleteAccount()" [style]="this.themesService.getButtonWarnStyles()">
+        <button mat-raised-button (click)="this.deleteAccount()" [style]="this.themesService.getButtonWarnStyles()" matTooltip="Delete user account and all request data associated with it">
             <img src="./assets/icons/icons8-trash-can-50.png" class="embeddedIcon" [style]="this.themesService.getIconWarnStyles()">Delete Account
         </button>
         <span [hidden]="!this.form.dirty" [style]="this.themesService.getDirtyNoteStyles()" class="{{this.themesService.getDirtyNoteClasses()}}">
