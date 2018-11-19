@@ -10,7 +10,7 @@ apt-get -y install tomcat8
 #  - endless-eddies.war # java web archive for tomcat
 #  - setenv.sh # tomcat environment setup file
 cd $(mktemp -d)
-wget https://github.com/MichaelMorrisMM/endless-eddies/releases/download/v0.0.1/endless-eddies.tar.gz
+wget https://github.com/MichaelMorrisMM/endless-eddies/releases/download/v0.0.2/endless-eddies.tar.gz
 tar xf endless-eddies.tar.gz
 cd endless-eddies
 
