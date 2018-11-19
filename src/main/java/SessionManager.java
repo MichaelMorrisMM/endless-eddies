@@ -56,7 +56,7 @@ public class SessionManager {
         }
     }
 
-    private static String createJWT(User user, String xsrfToken) throws Exception {
+    private static String createJWT(User user, String xsrfToken) {
         Instant now = Instant.now();
         JWTCreator.Builder builder = JWT.create()
             .withIssuedAt(Date.from(now))
@@ -72,8 +72,7 @@ public class SessionManager {
 
     private static void setCookie(String value, boolean isEndSessionCookie, HttpServletResponse response) {
         Cookie sessionCookie = new Cookie(SESSION_COOKIE_NAME, value);
-        // TODO uncomment on production build with https support
-        //sessionCookie.setSecure(true);
+        sessionCookie.setSecure(true);
         sessionCookie.setHttpOnly(true);
         if (isEndSessionCookie) {
             response.setContentType("text/html");
@@ -91,7 +90,6 @@ public class SessionManager {
                 return user;
             }
         } catch (Exception e) {
-            return null;
         }
         return null;
     }

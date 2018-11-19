@@ -11,21 +11,21 @@ public class Application extends ConfigObject {
 
     public String name;
 
-    public static final String NODE_COMMAND_GROUPS = "commandGroups";
+    private static final String NODE_COMMAND_GROUPS = "commandGroups";
     public List<CommandGroup> commandGroups;
-    public static final String NODE_RESULT_FILES = "resultFiles";
-    public List<ResultFile> resultFiles;
-    public static final String NODE_GRAPHS = "graphs";
+    private static final String NODE_RESULT_FILES = "resultFiles";
+    private List<ResultFile> resultFiles;
+    private static final String NODE_GRAPHS = "graphs";
     public List<GraphTemplate> graphs;
 
-    public Application() {
+    Application() {
         this.name = "";
         this.commandGroups = new ArrayList<>();
         this.resultFiles = new ArrayList<>();
         this.graphs = new ArrayList<>();
     }
 
-    public Application(File applicationFile) throws Exception {
+    Application(File applicationFile) throws Exception {
         this();
         try (JsonReader reader = Json.createReader(new InputStreamReader(new FileInputStream(applicationFile), "UTF-8"))) {
             boolean result = this.updateWith(reader.readObject());
@@ -77,7 +77,7 @@ public class Application extends ConfigObject {
         return false;
     }
 
-    public List<Parameter> getParameters() {
+    private List<Parameter> getParameters() {
         List<Parameter> list = new ArrayList<>();
         for (CommandGroup group : this.commandGroups) {
             list.addAll(group.getParameters());
@@ -85,7 +85,7 @@ public class Application extends ConfigObject {
         return list;
     }
 
-    public List<ResultFile> getResultFiles() {
+    private List<ResultFile> getResultFiles() {
         List<ResultFile> list = new ArrayList<>(this.resultFiles);
         list.sort(new ResultFileSortOrderComparator());
         return list;

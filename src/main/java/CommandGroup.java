@@ -7,14 +7,9 @@ public class CommandGroup extends ConfigObject {
     private Map<String, Parameter> parameters;
     public String command;
 
-    public CommandGroup() {
+    CommandGroup() {
         this.parameters = new HashMap<>();
         this.command = "";
-    }
-
-    public CommandGroup(JsonObject obj) {
-        this();
-        this.updateWith(obj);
     }
 
     public boolean updateWith(JsonObject obj) {

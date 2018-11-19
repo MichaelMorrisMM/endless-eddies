@@ -13,7 +13,7 @@ import java.util.UUID;
 @MultipartConfig
 public class ExecuteServlet extends HttpServlet {
 
-    public static QueueManager queueManager = new QueueManager();
+    private static QueueManager queueManager = new QueueManager();
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -78,9 +78,7 @@ public class ExecuteServlet extends HttpServlet {
     private static boolean isParentNotPresent(Parameter param, HttpServletRequest request) {
         if (!param.parentString.equals("")) {
             String parentValue = request.getParameter(param.parentString);
-            if (parentValue == null || parentValue.equals("") || !parentValue.equals(param.parentOption)) {
-                return true;
-            }
+            return parentValue == null || parentValue.equals("") || !parentValue.equals(param.parentOption);
         }
         return false;
     }

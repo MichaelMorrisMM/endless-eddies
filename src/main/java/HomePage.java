@@ -2,22 +2,12 @@ import javax.json.*;
 
 public class HomePage extends ConfigObject {
 
-    public String title;
-    public String content;
+    private String title;
+    private String content;
 
-    public HomePage() {
+    HomePage() {
         this.title = "";
         this.content = "";
-    }
-
-    public HomePage(String t, String c) {
-        this.title = t;
-        this.content = c;
-    }
-
-    public HomePage(JsonObject obj) {
-        this();
-        this.updateWith(obj);
     }
 
     public boolean updateWith(JsonObject obj) {
@@ -36,7 +26,7 @@ public class HomePage extends ConfigObject {
             .build();
     }
 
-    public static boolean isValidObject(JsonObject obj) {
+    private static boolean isValidObject(JsonObject obj) {
         return obj != null && Util.getStringSafe(obj, TITLE) != null && Util.getStringSafe(obj, CONTENT) != null && !Util.getStringSafe(obj, TITLE).equals("") && !Util.getStringSafe(obj, CONTENT).equals("");
     }
 

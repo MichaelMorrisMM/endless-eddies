@@ -2,13 +2,10 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonString;
 import javax.json.JsonValue;
-import javax.servlet.http.Part;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Util {
@@ -26,10 +23,6 @@ public class Util {
     public static String getStringSafeNonNull(JsonObject obj, String key) {
         String val = getStringSafe(obj, key);
         return val != null ? val : "";
-    }
-
-    public static String stringNonNull(String s) {
-        return s != null ? s : "";
     }
 
     public static boolean isNonEmpty(String s) {
@@ -66,7 +59,7 @@ public class Util {
      *
      * CREDIT: http://roufid.com/how-to-delete-folder-recursively-in-java/
      */
-    public static void deleteFile(String pathString) throws IOException {
+    private static void deleteFile(String pathString) throws IOException {
         Path directory = Paths.get(pathString);
         Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
             @Override

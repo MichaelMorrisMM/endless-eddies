@@ -3,17 +3,12 @@ import javax.json.JsonObject;
 
 public class SelectOption extends ConfigObject {
 
-    public String value;
-    public String display;
+    private String value;
+    private String display;
 
-    public SelectOption() {
+    SelectOption() {
         this.value = "";
         this.display = "";
-    }
-
-    public SelectOption(JsonObject obj) {
-        this();
-        this.updateWith(obj);
     }
 
     public JsonObject toJsonObject() {
@@ -32,7 +27,7 @@ public class SelectOption extends ConfigObject {
         return false;
     }
 
-    public static boolean isValidObject(JsonObject obj) {
+    private static boolean isValidObject(JsonObject obj) {
         if (obj != null) {
             String value = Util.getStringSafeNonNull(obj, VALUE);
             return !value.trim().equals("");

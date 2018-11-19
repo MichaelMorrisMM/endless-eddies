@@ -14,9 +14,9 @@ public class ConfiguratorServlet extends HttpServlet {
     private static ConfigSettings currentConfig;
     private static ReentrantLock configLock = new ReentrantLock(true);
 
-    public static final String ENV_VAR_CONFIG_DIR = "ENDLESS_EDDIES_CONFIG_DIR";
+    private static final String ENV_VAR_CONFIG_DIR = "ENDLESS_EDDIES_CONFIG_DIR";
     public static final String ROOT_PATH = System.getenv(ENV_VAR_CONFIG_DIR);
-    public static final String CONFIG_FILE_PATH = ROOT_PATH + File.separator + "config.json";
+    private static final String CONFIG_FILE_PATH = ROOT_PATH + File.separator + "config.json";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -5,7 +5,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
 
 public class DatabaseConnector {
     private static final String connectionUrl = "jdbc:sqlite:" + ConfiguratorServlet.ROOT_PATH + File.separator + "endless_eddies.db";
@@ -103,7 +102,7 @@ public class DatabaseConnector {
         }
     }
 
-    public static boolean createNewRequest(String name, int idUser) {
+    public static void createNewRequest(String name, int idUser) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, ?, NULL, ?, ?);");
             pstmt.setString(1, name);
@@ -126,13 +125,11 @@ public class DatabaseConnector {
             }
 
             pstmt.executeUpdate();
-            return true;
         } catch (SQLException e) {
-            return false;
         }
     }
 
-    public static boolean createNewGuestRequest(String name, long idGuest) {
+    public static void createNewGuestRequest(String name, long idGuest) {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO request VALUES (NULL, ?, NULL, ?, ?, ?);");
             pstmt.setString(1, name);
@@ -144,13 +141,11 @@ public class DatabaseConnector {
             pstmt.setLong(4, expiration.getEpochSecond());
 
             pstmt.executeUpdate();
-            return true;
         } catch (SQLException e) {
-            return false;
         }
     }
 
-    public static boolean isFirstUser() {
+    private static boolean isFirstUser() {
         try (Connection conn = DriverManager.getConnection(connectionUrl)) {
             Statement stmt = conn.createStatement();
             try (ResultSet rs = stmt.executeQuery("SELECT idUser FROM user;")) {

@@ -17,9 +17,9 @@ public class ValidatorsServlet extends HttpServlet {
     public static final String VALIDATOR_TYPE_MAX_LENGTH = "maxlength";
     public static final String VALIDATOR_TYPE_REGEX = "pattern";
     public static final String VALIDATOR_TYPE_MOD = "modulo";
-    public static final String VALIDATOR_TYPE_MAX_SIZE = "maxSize";
+    private static final String VALIDATOR_TYPE_MAX_SIZE = "maxSize";
 
-    public static List<ValidatorBlueprint> blueprints;
+    private static List<ValidatorBlueprint> blueprints;
     static {
         blueprints = new ArrayList<>();
         blueprints.add(new ValidatorBlueprint("Required", VALIDATOR_TYPE_REQUIRED, false,

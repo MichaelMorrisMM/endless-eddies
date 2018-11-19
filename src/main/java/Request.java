@@ -7,17 +7,17 @@ import java.time.Instant;
 import java.util.Date;
 
 public class Request implements DatabaseObject {
-    public int idRequest;
+    private int idRequest;
     public String name;
-    public int idUser;
-    public long idGuest;
-    public String userEmail;
-    public long date;
-    public String dateDisplay;
-    public long expiration;
-    public String expirationDisplay;
+    private int idUser;
+    private long idGuest;
+    private String userEmail;
+    private long date;
+    private String dateDisplay;
+    private long expiration;
+    private String expirationDisplay;
 
-    public Request(ResultSet rs) throws SQLException {
+    Request(ResultSet rs) throws SQLException {
         this.setValues(rs);
     }
 
@@ -70,8 +70,8 @@ public class Request implements DatabaseObject {
         return size;
     }
 
-    public String getApplicationName() {
+    private String getApplicationName() {
         Application application = GetRequestServlet.getApplicationForRequest(this.name);
-        return application.name;
+        return application != null ? application.name : "";
     }
 }

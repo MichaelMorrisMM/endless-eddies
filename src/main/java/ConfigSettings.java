@@ -1,7 +1,6 @@
 import javax.json.*;
 import java.io.*;
 import java.util.*;
-import java.util.Map.Entry;
 
 public class ConfigSettings {
 
@@ -24,31 +23,24 @@ public class ConfigSettings {
         typeSet.add(TYPE_MULTI_SELECT);
     }
 
-    public static final String GROUP_USERS = "users";
-    private static Set<String> groupSet;
-    static {
-        groupSet = new HashSet<>(1);
-        groupSet.add(GROUP_USERS);
-    }
-
-    public static final String NODE_APPLICATIONS = "applications";
+    private static final String NODE_APPLICATIONS = "applications";
     public static final String TARGET_APPLICATION = "targetApplication";
 
     private List<Application> applications;
-    public static final String RESULT_LIFESPAN = "resultLifespanInDays";
+    private static final String RESULT_LIFESPAN = "resultLifespanInDays";
     public int resultLifespan;
-    public static final String USER_STORAGE_LIMIT = "userStorageLimit";
+    private static final String USER_STORAGE_LIMIT = "userStorageLimit";
     public long userStorageLimit;
-    public static final String ALLOW_GUEST_MODE = "allowGuestMode";
+    private static final String ALLOW_GUEST_MODE = "allowGuestMode";
     public boolean allowGuestMode;
-    public static final String ALLOW_GOOGLE_LOGIN = "allowGoogleLogin";
-    public boolean allowGoogleLogin;
-    public static final String ALLOW_GITHUB_LOGIN = "allowGithubLogin";
-    public boolean allowGithubLogin;
-    public static final String APP_THEME = "appTheme";
-    public Theme appTheme;
+    private static final String ALLOW_GOOGLE_LOGIN = "allowGoogleLogin";
+    private boolean allowGoogleLogin;
+    private static final String ALLOW_GITHUB_LOGIN = "allowGithubLogin";
+    private boolean allowGithubLogin;
+    private static final String APP_THEME = "appTheme";
+    private Theme appTheme;
 
-    public static final String HOME_PAGES = "homePages";
+    private static final String HOME_PAGES = "homePages";
     private List<HomePage> homePages;
 
     public ConfigSettings() {
@@ -150,20 +142,8 @@ public class ConfigSettings {
         return builder.build();
     }
 
-    public static <T extends ConfigObject> JsonArray getNode(Map<String, T> node) {
-        JsonArrayBuilder builder = Json.createArrayBuilder();
-        for (Entry<String, T> e : node.entrySet()) {
-            builder = builder.add(e.getValue().toJsonObject());
-        }
-        return builder.build();
-    }
-
     public static boolean isValidType(String s) {
         return s != null && typeSet.contains(s);
-    }
-
-    public static boolean isValidGroup(String s) {
-        return s != null && groupSet.contains(s);
     }
 
 }

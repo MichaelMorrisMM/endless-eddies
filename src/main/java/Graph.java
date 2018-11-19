@@ -7,7 +7,7 @@ public class Graph {
 
     public JsonArray results;
 
-    public Graph(String requestName, GraphTemplate template) {
+    Graph(String requestName, GraphTemplate template) {
         this.results = Json.createArrayBuilder().build();
         File file = new File(ConfiguratorServlet.ROOT_PATH + File.separator + requestName + File.separator + template.filename);
         if (file.exists() && file.isFile() && file.canRead()) {

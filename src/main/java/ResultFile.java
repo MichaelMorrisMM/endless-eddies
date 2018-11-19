@@ -3,32 +3,17 @@ import javax.json.*;
 public class ResultFile extends ConfigObject {
 
     public String name;
-    public String fileName;
-    public String toolTip;
-    public boolean displayInline;
+    private String fileName;
+    private String toolTip;
+    private boolean displayInline;
     public int sortOrder;
 
-    public ResultFile() {
+    ResultFile() {
         this.name = "";
         this.fileName = "";
         this.toolTip = "";
         this.displayInline = false;
         this.sortOrder = DEFAULT_SORT_ORDER;
-    }
-
-    public ResultFile(String n, String fn, String tt, boolean di, int so) {
-        this.name = n;
-        this.fileName = fn;
-        this.toolTip = tt;
-        this.displayInline = di;
-        this.sortOrder = so;
-
-        this.updateNameForDisplay();
-    }
-
-    public ResultFile(JsonObject obj) {
-        this();
-        this.updateWith(obj);
     }
 
     public boolean updateWith(JsonObject obj) {
@@ -62,7 +47,7 @@ public class ResultFile extends ConfigObject {
         }
     }
 
-    public static boolean isValidObject(JsonObject obj) {
+    private static boolean isValidObject(JsonObject obj) {
         return obj != null && Util.getStringSafe(obj, FILE_NAME) != null;
     }
 

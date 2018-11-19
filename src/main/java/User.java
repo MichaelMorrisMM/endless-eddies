@@ -15,7 +15,7 @@ public class User implements DatabaseObject {
     public boolean isGuest;
     public boolean isExternal;
     public String currentXSRFToken;
-    public long storageUsed;
+    private long storageUsed;
 
     private boolean liteMode;
 

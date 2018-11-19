@@ -3,14 +3,14 @@ import javax.json.*;
 public class Theme extends ConfigObject {
 
     public String name;
-    public String primaryColor;
-    public boolean invertPrimary;
-    public String accentColor;
-    public boolean invertAccent;
-    public String warnColor;
-    public boolean invertWarn;
+    private String primaryColor;
+    private boolean invertPrimary;
+    private String accentColor;
+    private boolean invertAccent;
+    private String warnColor;
+    private boolean invertWarn;
 
-    public Theme() {
+    Theme() {
         this.name = "";
         this.primaryColor = "";
         this.invertPrimary = false;
@@ -18,21 +18,6 @@ public class Theme extends ConfigObject {
         this.invertAccent = false;
         this.warnColor = "";
         this.invertWarn = false;
-    }
-
-    public Theme(String n, String pc, boolean ip, String ac, boolean ia, String wc, boolean iw) {
-        this.name = n;
-        this.primaryColor = pc;
-        this.invertPrimary = ip;
-        this.accentColor = ac;
-        this.invertAccent = ia;
-        this.warnColor = wc;
-        this.invertWarn = iw;
-    }
-
-    public Theme(JsonObject obj) {
-        this();
-        this.updateWith(obj);
     }
 
     public boolean updateWith(JsonObject obj) {
@@ -61,7 +46,7 @@ public class Theme extends ConfigObject {
             .build();
     }
 
-    public static boolean isValidObject(JsonObject obj) {
+    private static boolean isValidObject(JsonObject obj) {
         return obj != null && !Util.getStringSafeNonNull(obj, PRIMARY_COLOR).equals("") && !Util.getStringSafeNonNull(obj, ACCENT_COLOR).equals("")
             && !Util.getStringSafeNonNull(obj, WARN_COLOR).equals("") && obj.get(INVERT_PRIMARY) != null && obj.get(INVERT_ACCENT) != null
             && obj.get(INVERT_WARN) != null;

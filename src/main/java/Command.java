@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Command {
 
-    public static final String commandDelimiter = " ";
+    private static final String commandDelimiter = " ";
 
     private List<String> command;
     public List<Input> inputs;
@@ -17,7 +17,7 @@ public class Command {
     public String requestName;
     public User user;
 
-    public Command(String commandString, int order, boolean isLast, List<Input> inputs, Application application, String requestName, User user) {
+    Command(String commandString, int order, boolean isLast, List<Input> inputs, Application application, String requestName, User user) {
         this.command = new ArrayList<>(Arrays.asList(commandString.split(commandDelimiter)));
         this.executeOrder = order;
         this.isLastOfGroup = isLast;

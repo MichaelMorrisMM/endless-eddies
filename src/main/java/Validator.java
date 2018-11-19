@@ -6,15 +6,15 @@ public class Validator extends ConfigObject {
 
     public String validatorType;
     public JsonValue value;
-    public String message;
+    private String message;
 
-    public Validator() {
+    private Validator() {
         this.validatorType = "";
         this.value = JsonValue.NULL;
         this.message = "";
     }
 
-    public Validator(JsonObject obj) {
+    Validator(JsonObject obj) {
         this();
         this.updateWith(obj);
     }
@@ -37,11 +37,9 @@ public class Validator extends ConfigObject {
         return false;
     }
 
-    public static boolean isValidObject(JsonObject obj) {
+    private static boolean isValidObject(JsonObject obj) {
         if (obj != null) {
             String validatorType = Util.getStringSafe(obj, VALIDATOR_TYPE);
-            JsonValue value = obj.get(VALUE);
-            String message = Util.getStringSafe(obj, MESSAGE);
             return validatorType != null && ValidatorsServlet.isValidValidatorType(validatorType);
         }
         return false;

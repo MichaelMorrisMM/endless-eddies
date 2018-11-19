@@ -8,14 +8,14 @@ public class Input {
     public Part part;
     public String type;
 
-    public Input() {
+    private Input() {
         this.code = "";
         this.value = "";
         this.type = "";
         this.part = null;
     }
 
-    public Input(Parameter param, HttpServletRequest request) throws Exception {
+    Input(Parameter param, HttpServletRequest request) throws Exception {
         this();
 
         this.code = param.code.trim();

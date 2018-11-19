@@ -9,7 +9,7 @@ public class QueueManager {
     private ArrayBlockingQueue<Command> queue;
     private ReentrantLock executionLock = new ReentrantLock(true);
 
-    public QueueManager() {
+    QueueManager() {
         this.queue = new ArrayBlockingQueue<>(100, true);
     }
 
@@ -53,7 +53,7 @@ public class QueueManager {
                     if (i.part != null && i.part.getSize() > 0) {
                         try (OutputStream out = new FileOutputStream(new File(tmpDir, i.part.getSubmittedFileName()))) {
                             try (InputStream in = i.part.getInputStream()) {
-                                int read = 0;
+                                int read;
                                 final byte[] buffer = new byte[1024];
                                 while ((read = in.read(buffer)) != -1) {
                                     out.write(buffer, 0, read);

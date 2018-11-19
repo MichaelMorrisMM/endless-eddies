@@ -3,33 +3,19 @@ import javax.json.*;
 public class GraphTemplate extends ConfigObject {
 
     public String name;
-    public String type;
+    private String type;
     public String filename;
-    public String xAxisLabel;
-    public String yAxisLabel;
-    public String colorScheme;
+    private String xAxisLabel;
+    private String yAxisLabel;
+    private String colorScheme;
 
-    public GraphTemplate() {
+    GraphTemplate() {
         this.name = "";
         this.type = "";
         this.filename = "";
         this.xAxisLabel = "";
         this.yAxisLabel = "";
         this.colorScheme = "";
-    }
-
-    public GraphTemplate(String n, String t, String df, String xal, String yal, String cs) {
-        this.name = n;
-        this.type = t;
-        this.filename = df;
-        this.xAxisLabel = xal;
-        this.yAxisLabel = yal;
-        this.colorScheme = cs;
-    }
-
-    public GraphTemplate(JsonObject obj) {
-        this();
-        this.updateWith(obj);
     }
 
     public boolean updateWith(JsonObject obj) {
@@ -56,7 +42,7 @@ public class GraphTemplate extends ConfigObject {
             .build();
     }
 
-    public static boolean isValidObject(JsonObject obj) {
+    private static boolean isValidObject(JsonObject obj) {
         return obj != null && Util.getStringSafe(obj, TYPE) != null && Util.getStringSafe(obj, FILE_NAME) != null && !Util.getStringSafe(obj, FILE_NAME).equals("");
     }
 

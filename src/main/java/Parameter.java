@@ -8,13 +8,13 @@ public class Parameter extends ConfigObject {
     public String type;
     public String code;
     public int sortOrder;
-    public String toolTip;
+    private String toolTip;
     public List<Validator> validators;
-    public List<SelectOption> selectOptions;
+    private List<SelectOption> selectOptions;
     public String parentString;
     public String parentOption;
 
-    public Parameter() {
+    Parameter() {
         this.name = "";
         this.type = "";
         this.code = "";
@@ -24,27 +24,6 @@ public class Parameter extends ConfigObject {
         this.selectOptions = new ArrayList<>();
         this.parentString = "";
         this.parentOption = "";
-    }
-
-    public Parameter(String n, String t, String c, int so, String tt, List<Validator> validators, List<SelectOption> selectOptions, String ps, String po) {
-        this.name = n;
-        this.type = t;
-        this.code = c;
-        this.sortOrder = so;
-        this.toolTip = tt;
-        if (validators != null) {
-            this.validators = validators;
-        }
-        if (selectOptions != null) {
-            this.selectOptions = selectOptions;
-        }
-        this.parentString = ps;
-        this.parentOption = po;
-    }
-
-    public Parameter(JsonObject obj) {
-        this();
-        this.updateWith(obj);
     }
 
     public boolean updateWith(JsonObject obj) {
@@ -103,7 +82,7 @@ public class Parameter extends ConfigObject {
             .build();
     }
 
-    public static boolean isValidObject(JsonObject obj) {
+    private static boolean isValidObject(JsonObject obj) {
         if (obj != null) {
             String name = Util.getStringSafe(obj, NAME);
             String type = Util.getStringSafe(obj, TYPE);
