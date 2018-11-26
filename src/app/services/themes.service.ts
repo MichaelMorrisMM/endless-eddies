@@ -72,6 +72,34 @@ export class ThemesService {
             warnColor: "#F3E4C6",
             invertWarn: false,
         },
+        // Credit to themes below https://www.canva.com/learn/website-color-schemes/
+        {
+            name: "Cool and Calm",
+            primaryColor: "#6BBAA7",
+            invertPrimary: true,
+            accentColor: "#6C648B",
+            invertAccent: true,
+            warnColor: "#FBA100",
+            invertWarn: true,
+        },
+        {
+            name: "Earthy and Fresh",
+            primaryColor: "#626E60",
+            invertPrimary: true,
+            accentColor: "#3C3C3C",
+            invertAccent: true,
+            warnColor: "#AF473C",
+            invertWarn: true,
+        },
+        {
+            name: "Luxurious and Modern",
+            primaryColor: "#0F1626",
+            invertPrimary: true,
+            accentColor: "#AB987A",
+            invertAccent: true,
+            warnColor: "#FF533D",
+            invertWarn: true,
+        }
     ];
 
     public currentTheme: Theme = this.THEMES[0]; // Default theme
