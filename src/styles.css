@@ -203,3 +203,7 @@ div.home-page {
     padding: 10px;
     margin-left: 20px;
 }
+
+.margin-bottom-children > *:not(:last-child) {
+    margin-bottom: 20px;
+}

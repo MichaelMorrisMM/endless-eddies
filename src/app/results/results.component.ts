@@ -17,7 +17,12 @@ import {DomSanitizer} from "@angular/platform-browser";
 @Component({
     selector: 'app-results',
     templateUrl: './results.component.html',
-    styles: []
+    styles: [`
+        div.graph-container {
+            width: 80%;
+            height: 300px;
+        }
+    `]
 })
 
 export class ResultsComponent implements OnInit {

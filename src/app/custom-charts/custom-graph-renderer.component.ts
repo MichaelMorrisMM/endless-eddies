@@ -8,10 +8,6 @@ declare var Highcharts: any;
     selector: 'custom-graph-renderer',
     templateUrl: './custom-graph-renderer.component.html',
     styles: [`
-        div.graph-div {
-            width: 50%;
-            height: 300px;
-        }
     `]
 })
 

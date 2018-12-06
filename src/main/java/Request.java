@@ -38,7 +38,13 @@ public class Request implements DatabaseObject {
         this.dateDisplay = Date.from(Instant.ofEpochSecond(this.date)).toString();
         this.expiration = rs.getLong("expiration");
         if (this.expiration > 0) {
-            this.expirationDisplay = Date.from(Instant.ofEpochSecond(this.expiration)).toString();
+            Instant now = Instant.now();
+            Instant expire = Instant.ofEpochSecond(this.expiration);
+            if (now.isBefore(expire)) {
+                this.expirationDisplay = Date.from(expire).toString();
+            } else {
+                this.expirationDisplay = "Expired";
+            }
         } else {
             this.expirationDisplay = "No Expiration";
         }

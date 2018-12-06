@@ -1,4 +1,4 @@
-<div class="graph-div">
+<div class="full-width full-height" #highchartContainer>
     <ngx-charts-bar-vertical *ngIf="this.graph.type === this.constantsService.GRAPH_VERT_BAR"
                              [results]="this.data" [legend]="true" [legendTitle]="this.graph.name" [scheme]="this.constantsService.getGraphColorScheme(this.graph.colorScheme)"
                              [xAxis]="true" [xAxisLabel]="this.graph.xAxisLabel" [showXAxisLabel]="true"
@@ -13,15 +13,13 @@
                           [results]="this.data" [legend]="true" [legendTitle]="this.graph.name" [labels]="true" [scheme]="this.constantsService.getGraphColorScheme(this.graph.colorScheme)">
     </ngx-charts-pie-chart>
     <ngx-charts-line-chart *ngIf="this.graph.type === this.constantsService.GRAPH_LINE_CHART"
-                             [results]="this.data" [legend]="true" [legendTitle]="this.graph.name" [scheme]="this.constantsService.getGraphColorScheme(this.graph.colorScheme)"
-                             [xAxis]="true" [xAxisLabel]="this.graph.xAxisLabel" [showXAxisLabel]="true"
-                             [yAxis]="true" [yAxisLabel]="this.graph.yAxisLabel" [showYAxisLabel]="true">
-    </ngx-charts-line-chart>
-    <ngx-charts-heat-map *ngIf="this.graph.type === this.constantsService.GRAPH_HEAT_MAP"
                            [results]="this.data" [legend]="true" [legendTitle]="this.graph.name" [scheme]="this.constantsService.getGraphColorScheme(this.graph.colorScheme)"
                            [xAxis]="true" [xAxisLabel]="this.graph.xAxisLabel" [showXAxisLabel]="true"
                            [yAxis]="true" [yAxisLabel]="this.graph.yAxisLabel" [showYAxisLabel]="true">
+    </ngx-charts-line-chart>
+    <ngx-charts-heat-map *ngIf="this.graph.type === this.constantsService.GRAPH_HEAT_MAP"
+                         [results]="this.data" [legend]="true" [legendTitle]="this.graph.name" [scheme]="this.constantsService.getGraphColorScheme(this.graph.colorScheme)"
+                         [xAxis]="true" [xAxisLabel]="this.graph.xAxisLabel" [showXAxisLabel]="true"
+                         [yAxis]="true" [yAxisLabel]="this.graph.yAxisLabel" [showYAxisLabel]="true">
     </ngx-charts-heat-map>
-    <div class="full-height full-width" #highchartContainer *ngIf="this.isHighchart">
-    </div>
 </div>
